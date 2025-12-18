@@ -1,0 +1,773 @@
+{
+    "summary_counts": {
+        "message": "총 $1개 | 표시 $2개 | 선택 $3개"
+    },
+    "label_discovery_stats": {
+        "message": "새항목 $1개 | 기존 $2개"
+    },
+    "button_preview": {
+        "message": "미리보기"
+    },
+    "hint_select_items": {
+        "message": "먼저 항목을 선택하세요."
+    },
+    "hint_download_requested": {
+        "message": "$1개 다운로드를 요청했습니다."
+    },
+    "hint_convert_requested": {
+        "message": "$1개 파일을 변환하고 다운로드를 요청했습니다."
+    },
+    "hint_zip_no_items": {
+        "message": "ZIP에 추가할 파일이 없습니다."
+    },
+    "hint_zip_failed": {
+        "message": "ZIP 생성에 실패했습니다."
+    },
+    "hint_zip_success": {
+        "message": "$1개 항목으로 ZIP 파일이 생성되었습니다."
+    },
+    "hint_zip_download_failed": {
+        "message": "ZIP 다운로드 요청에 실패했습니다."
+    },
+    "label_footer_logs_empty": {
+        "message": "최근 메시지가 없습니다."
+    },
+    "button_hide_messages": {
+        "message": "메시지 숨기기"
+    },
+    "button_show_messages": {
+        "message": "메시지 표시"
+    },
+    "label_no_results": {
+        "message": "이 필터와 일치하는 캡처가 없습니다. 스캔하거나 필터를 조정해 보세요."
+    },
+    "prompt_rename_start": {
+        "message": "시작 번호:"
+    },
+    "prompt_rename_default": {
+        "message": "1"
+    },
+    "hint_rename_success": {
+        "message": "$2부터 시작하여 $1개 항목의 이름을 변경했습니다."
+    },
+    "hint_no_active_tab": {
+        "message": "활성 탭이 없습니다."
+    },
+    "hint_connect_retry": {
+        "message": "페이지에 연결할 수 없습니다 (새로고침을 시도하세요)."
+    },
+    "hint_connect_failed": {
+        "message": "페이지에 연결할 수 없습니다."
+    },
+    "hint_permission_cancelled": {
+        "message": "권한 요청이 취소되었습니다."
+    },
+    "hint_permission_denied": {
+        "message": "Chrome이 이 사이트에 대한 접근 권한을 부여하지 않았습니다."
+    },
+    "hint_tab_not_supported": {
+        "message": "먼저 메인 브라우저 창에서 웹페이지(http/https/file)를 열어주세요."
+    },
+    "label_scanning": {
+        "message": "스캔 중..."
+    },
+    "hint_scan_failed": {
+        "message": "스캔에 실패했습니다."
+    },
+    "hint_auto_canvas_on": {
+        "message": "자동 캔버스가 활성화되었습니다."
+    },
+    "hint_auto_images_on": {
+        "message": "자동 이미지가 활성화되었습니다."
+    },
+    "label_overlay_threshold_value": {
+        "message": "$1%"
+    },
+    "hint_enable_success": {
+        "message": "우클릭 및 드래그가 활성화되었습니다; 오버레이가 완화되었습니다."
+    },
+    "hint_overlay_removed": {
+        "message": "오버레이 정리가 $1개 요소에 영향을 미쳤습니다."
+    },
+    "button_delete": {
+        "message": "삭제"
+    },
+    "hint_overlay_preview": {
+        "message": "$1개의 잠재적 오버레이를 미리보는 중입니다."
+    },
+    "hint_overlay_undo": {
+        "message": "$1개 오버레이 요소를 복원했습니다."
+    },
+    "hint_overlay_nothing_to_undo": {
+        "message": "실행 취소할 오버레이 정리가 없습니다."
+    },
+    "hint_enter_keywords": {
+        "message": "먼저 키워드를 입력하세요."
+    },
+    "confirm_keyword_remove": {
+        "message": "키워드로 오버레이를 제거하면 사이트 기능이 손상될 수 있습니다. 계속하시겠습니까?"
+    },
+    "hint_keywords_removed": {
+        "message": "키워드로 $1개 요소를 제거했습니다."
+    },
+    "label_progress_preparing": {
+        "message": "준비 중…"
+    },
+    "hint_download_failed": {
+        "message": "다운로드 요청에 실패했습니다."
+    },
+    "label_processing_blob": {
+        "message": "blob 미리보기 준비 중..."
+    },
+    "button_advanced_collapse": {
+        "message": "고급 [v]"
+    },
+    "button_advanced_expand": {
+        "message": "고급 [>]"
+    },
+    "hint_sidepanel_enabled": {
+        "message": "사이드 패널이 기본으로 활성화되었습니다."
+    },
+    "hint_popup_enabled": {
+        "message": "팝업이 기본으로 활성화되었습니다."
+    },
+    "tooltip_settings": {
+        "message": "설정"
+    },
+    "tooltip_open_mode": {
+        "message": "확장 아이콘 클릭 시 UI 열기 방식 선택"
+    },
+    "label_popup": {
+        "message": "팝업"
+    },
+    "label_side_panel": {
+        "message": "사이드 패널"
+    },
+    "aria_toggle_mode": {
+        "message": "팝업과 사이드 패널 간 전환"
+    },
+    "note_toggle_mode": {
+        "message": "팝업 창 모드를 사용하려면 끄세요."
+    },
+    "button_scan": {
+        "message": "스캔"
+    },
+    "tooltip_scan": {
+        "message": "이미지 스캔: 직접, 배경, Data URI, Blob, SVG"
+    },
+    "button_canvas": {
+        "message": "캔버스"
+    },
+    "tooltip_canvas": {
+        "message": "동일 출처 캔버스 캡처"
+    },
+    "label_auto_images": {
+        "message": "자동 이미지"
+    },
+    "label_auto_canvas": {
+        "message": "자동 캔버스"
+    },
+    "button_advanced_plain": {
+        "message": "고급"
+    },
+    "aria_advanced_section": {
+        "message": "고급 옵션"
+    },
+    "heading_advanced": {
+        "message": "고급 옵션"
+    },
+    "button_enable_interactions": {
+        "message": "우클릭 활성화"
+    },
+    "button_overlay_preview": {
+        "message": "영향받는 오버레이 미리보기"
+    },
+    "button_overlay_remove": {
+        "message": "정리 적용"
+    },
+    "button_overlay_undo": {
+        "message": "오버레이 정리 실행 취소"
+    },
+    "label_overlay_threshold": {
+        "message": "표면 적용 범위 임계값"
+    },
+    "placeholder_overlay_keywords": {
+        "message": "제거할 키워드 (쉼표로 구분)"
+    },
+    "button_overlay_keywords": {
+        "message": "키워드 적용"
+    },
+    "button_overlay_keyword_preview": {
+        "message": "키워드 미리보기"
+    },
+    "label_overlay_mode": {
+        "message": "모드:"
+    },
+    "label_overlay_mode_soft": {
+        "message": "완화"
+    },
+    "label_overlay_mode_hard": {
+        "message": "제거"
+    },
+    "aria_overlay_mode": {
+        "message": "오버레이 정리 모드 선택"
+    },
+    "label_overlay_z": {
+        "message": "최소 z-index"
+    },
+    "label_overlay_preview_idle": {
+        "message": "아직 미리보기가 없습니다."
+    },
+    "label_overlay_preview_running": {
+        "message": "오버레이 강조 표시 중..."
+    },
+    "label_overlay_preview_match": {
+        "message": "$1개 오버레이가 강조 표시되었습니다."
+    },
+    "label_overlay_preview_none": {
+        "message": "임계값을 충족하는 오버레이 후보가 없습니다."
+    },
+    "label_overlay_preview_failed": {
+        "message": "오버레이 미리보기에 실패했습니다."
+    },
+    "hint_overlay_preview_match": {
+        "message": "$1개 오버레이 요소가 강조 표시되었습니다."
+    },
+    "hint_overlay_preview_none": {
+        "message": "임계값을 충족하는 오버레이 후보가 없습니다."
+    },
+    "hint_overlay_preview_failed": {
+        "message": "오버레이 미리보기에 실패했습니다."
+    },
+    "hint_keywords_preview": {
+        "message": "$1개 요소가 해당 키워드와 일치합니다."
+    },
+    "hint_keywords_preview_none": {
+        "message": "해당 키워드와 일치하는 오버레이 요소가 없습니다."
+    },
+    "hint_keywords_preview_failed": {
+        "message": "키워드 미리보기에 실패했습니다."
+    },
+    "hint_keywords_softened": {
+        "message": "$1개 키워드 오버레이를 완화했습니다."
+    },
+    "label_overlay_recent_tags": {
+        "message": "최근 태그"
+    },
+    "label_overlay_suggested_tags": {
+        "message": "추천 태그"
+    },
+    "label_overlay_no_recent": {
+        "message": "최근 태그가 없습니다."
+    },
+    "label_min_width": {
+        "message": "최소 너비:"
+    },
+    "label_min_height": {
+        "message": "최소 높이:"
+    },
+    "label_format": {
+        "message": "형식:"
+    },
+    "option_format_any": {
+        "message": "모두"
+    },
+    "option_format_png": {
+        "message": "PNG"
+    },
+    "option_format_jpg": {
+        "message": "JPG"
+    },
+    "option_format_webp": {
+        "message": "WEBP"
+    },
+    "option_format_gif": {
+        "message": "GIF"
+    },
+    "option_format_svg": {
+        "message": "SVG"
+    },
+    "button_select_all": {
+        "message": "전체 선택"
+    },
+    "button_select_none": {
+        "message": "선택 해제"
+    },
+    "label_convert": {
+        "message": "변환:"
+    },
+    "option_convert_original": {
+        "message": "원본"
+    },
+    "button_download_selected": {
+        "message": "선택 다운로드"
+    },
+    "button_zip_selected": {
+        "message": "선택 ZIP"
+    },
+    "button_rename_serial": {
+        "message": "일련 번호 이름 변경"
+    },
+    "tooltip_rename_serial": {
+        "message": "감지 순서대로 항목 이름 변경"
+    },
+    "label_sort": {
+        "message": "정렬:"
+    },
+    "option_sort_detected": {
+        "message": "감지 순서"
+    },
+    "option_sort_name": {
+        "message": "이름 (A-Z)"
+    },
+    "option_sort_pixels": {
+        "message": "픽셀 크기 (최대)"
+    },
+    "option_sort_filesize": {
+        "message": "파일 크기 (최대)"
+    },
+    "link_tip": {
+        "message": "후원"
+    },
+    "link_contact": {
+        "message": "문의하기"
+    },
+    "link_help": {
+        "message": "도움말 및 모드 가이드"
+    },
+    "confirm_host_permission": {
+        "message": "Unshackle은 스캔을 클릭한 후에만 접근 권한을 요청합니다.\n이미지를 읽으려면 $1에 대한 임시 접근이 필요합니다. 계속하시겠습니까?"
+    },
+    "menu_enable_context": {
+        "message": "이 사이트에서 우클릭 및 드래그 활성화"
+    },
+    "button_progress_cancel": {
+        "message": "취소"
+    },
+    "tooltip_telemetry": {
+        "message": "스캔 및 오버레이 조정에 대한 로컬 카운터 저장"
+    },
+    "label_telemetry_toggle": {
+        "message": "진단 카운터 (로컬 전용)"
+    },
+    "aria_toggle_telemetry": {
+        "message": "원격 측정 옵트인 전환"
+    },
+    "label_telemetry_off": {
+        "message": "원격 측정이 비활성화되었습니다 (로컬 전용)."
+    },
+    "label_telemetry_stats": {
+        "message": "스캔: $1 | 오버레이 조정: $2"
+    },
+    "button_show_onboarding": {
+        "message": "온보딩 보기"
+    },
+    "tooltip_permission_prompt": {
+        "message": "스캔 전 사이트 접근 요청 방법 선택"
+    },
+    "label_permission_prompt": {
+        "message": "스캔할 때마다 사이트 접근 요청"
+    },
+    "aria_toggle_permission_prompt": {
+        "message": "사이트 권한 프롬프트 전환"
+    },
+    "note_permission_prompt": {
+        "message": "프롬프트 없이 접근 권한을 유지하려면 비활성화하세요."
+    },
+    "toast_permission_prompt_disabled": {
+        "message": "사이트 접근 권한이 유지됩니다; 더 이상 프롬프트가 표시되지 않습니다."
+    },
+    "toast_permission_prompt_enabled": {
+        "message": "사이트별로 접근 권한을 요청합니다."
+    },
+    "toast_permission_prompt_denied": {
+        "message": "사이트 접근 요청이 거부되었습니다."
+    },
+    "hint_permission_global_required": {
+        "message": "사이트 접근 권한이 부여되지 않았습니다. 프롬프트를 다시 활성화하거나 설정에서 접근을 허용하세요."
+    },
+    "badge_download_queued": {
+        "message": "대기 중"
+    },
+    "badge_download_done": {
+        "message": "다운로드됨"
+    },
+    "badge_download_failed": {
+        "message": "다운로드 실패"
+    },
+    "toast_downloads": {
+        "message": "$1개 다운로드를 요청했습니다."
+    },
+    "toast_downloads_link": {
+        "message": "다운로드 열기"
+    },
+    "toast_downloads_partial": {
+        "message": "$1개 다운로드 대기 중, $2개 실패."
+    },
+    "toast_zip": {
+        "message": "$1개 항목으로 ZIP이 대기열에 추가되었습니다."
+    },
+    "toast_first_run": {
+        "message": "Unshackle은 스캔이나 캡처를 실행할 때만 사이트 접근 권한을 요청합니다."
+    },
+    "toast_first_run_link": {
+        "message": "자세히 알아보기"
+    },
+    "hint_progress_cancelled": {
+        "message": "작업이 취소되었습니다."
+    },
+    "label_progress_cancelled": {
+        "message": "취소됨"
+    },
+    "label_progress_done": {
+        "message": "완료"
+    },
+    "label_progress_converting": {
+        "message": "변환 중..."
+    },
+    "label_progress_converting_step": {
+        "message": "$1 / $2 변환 중"
+    },
+    "label_progress_download": {
+        "message": "$1 / $2 다운로드 요청 중"
+    },
+    "hint_download_complete": {
+        "message": "$1 / $2개 다운로드를 요청했습니다."
+    },
+    "label_staging_items": {
+        "message": "$1 / $2 준비 중"
+    },
+    "label_zip_packing": {
+        "message": "ZIP 압축 중..."
+    },
+    "label_zip_packing_progress": {
+        "message": "ZIP 압축 중 $1%"
+    },
+    "label_zip_finalizing": {
+        "message": "ZIP 완료 중..."
+    },
+    "notice_first_run": {
+        "message": "Unshackle은 스캔이나 캡처를 시작할 때만 사이트 접근 권한을 요청합니다."
+    },
+    "notice_first_run_help": {
+        "message": "빠른 가이드 읽기"
+    },
+    "notice_first_run_dismiss": {
+        "message": "확인"
+    },
+    "tooltip_help": {
+        "message": "Unshackle 가이드 열기"
+    },
+    "option_kind_gv": {
+        "message": "GigaViewer"
+    },
+    "option_kind_speedbinb": {
+        "message": "Speedbinb"
+    },
+    "option_kind_bellaciao": {
+        "message": "BellaCiao"
+    },
+    "option_kind_lezhin": {
+        "message": "Lezhin"
+    },
+    "option_theme_lightdark": {
+        "message": "어둠 속의 빛"
+    },
+    "toast_theme_applied": {
+        "message": "테마가 업데이트되었습니다."
+    },
+    "label_locale": {
+        "message": "언어"
+    },
+    "toast_locale_applied": {
+        "message": "언어가 업데이트되었습니다."
+    },
+    "toast_help_opened": {
+        "message": "새 탭에서 도움말이 열렸습니다."
+    },
+    "gv_option_only_first": {
+        "message": "첫 페이지만"
+    },
+    "gv_option_save_metadata": {
+        "message": "metadata.json 저장"
+    },
+    "gv_option_purchase_guard": {
+        "message": "구매하지 않으면 중지"
+    },
+    "gv_option_zip": {
+        "message": "ZIP으로 다운로드"
+    },
+    "label_gv_gallery_hidden": {
+        "message": "뷰어 다운로드는 메인 그리드에 표시됩니다. 여기서는 썸네일이 숨겨집니다."
+    },
+    "heading_chapters": {
+        "message": "챕터"
+    },
+    "button_chapter_refresh": {
+        "message": "목록 새로고침"
+    },
+    "label_chapter_idle": {
+        "message": "챕터가 아직 로드되지 않았습니다."
+    },
+    "label_chapter_loading": {
+        "message": "챕터 로딩 중..."
+    },
+    "label_chapter_empty": {
+        "message": "이 페이지에서 사용 가능한 챕터가 없습니다."
+    },
+    "label_chapter_error": {
+        "message": "챕터를 로드할 수 없습니다. 만화 개요를 열고 다시 시도하세요."
+    },
+    "label_chapter_loaded": {
+        "message": "$1개 챕터가 로드되었습니다."
+    },
+    "label_chapter_free": {
+        "message": "무료"
+    },
+    "label_chapter_locked": {
+        "message": "잠김"
+    },
+    "label_chapter_purchased": {
+        "message": "구매함"
+    },
+    "label_chapter_added": {
+        "message": "챕터가 그리드에 추가되었습니다."
+    },
+    "aria_chapter_add": {
+        "message": "$1을(를) 패널 그리드에 추가"
+    },
+    "option_hk_loader_auto": {
+        "message": "자동 (Runner + Manager)"
+    },
+    "option_hk_loader_runner": {
+        "message": "호환성 (Runner만)"
+    },
+    "option_hk_loader_manager": {
+        "message": "Manager만 (실험적)"
+    },
+    "note_hk_loader": {
+        "message": "자동은 두 경로를 모두 시도하고 이미지 모드를 안전하게 유지합니다. 디버깅할 때만 Manager를 사용하세요."
+    },
+    "button_reset_manga_defaults": {
+        "message": "안전 기본값으로 재설정"
+    },
+    "note_reset_manga_defaults": {
+        "message": "만화 모드를 비활성화하고 원래 시리즈/로더 설정을 복원합니다."
+    },
+    "toast_reset_safe_defaults": {
+        "message": "설정이 안전 기본값으로 복원되었습니다."
+    },
+    "toast_reset_safe_defaults_failed": {
+        "message": "설정을 재설정할 수 없습니다. 다시 시도하세요."
+    },
+    "confirm_reset_manga_defaults": {
+        "message": "안전 기본값으로 재설정하시겠습니까? 다시 활성화할 때까지 만화 모드가 비활성화됩니다."
+    },
+    "button_download": {
+        "message": "다운로드"
+    },
+    "button_zip": {
+        "message": "ZIP"
+    },
+    "button_select_invert": {
+        "message": "선택 반전"
+    },
+    "label_search": {
+        "message": "검색:"
+    },
+    "placeholder_search": {
+        "message": "파일명 또는 URL"
+    },
+    "label_kind": {
+        "message": "종류:"
+    },
+    "option_kind_all": {
+        "message": "모두"
+    },
+    "option_kind_img": {
+        "message": "이미지"
+    },
+    "option_kind_background": {
+        "message": "배경"
+    },
+    "option_kind_blob": {
+        "message": "Blob"
+    },
+    "option_kind_data": {
+        "message": "Data URI"
+    },
+    "option_kind_canvas": {
+        "message": "캔버스"
+    },
+    "option_kind_svg": {
+        "message": "SVG"
+    },
+    "label_discovery": {
+        "message": "발견:"
+    },
+    "option_discovery_all": {
+        "message": "모두"
+    },
+    "option_discovery_new": {
+        "message": "이번 세션에서 새로 발견"
+    },
+    "option_discovery_seen": {
+        "message": "이전에 본 것"
+    },
+    "label_overlay_aggressiveness": {
+        "message": "적극성"
+    },
+    "heading_quick_settings": {
+        "message": "빠른 설정"
+    },
+    "label_theme": {
+        "message": "테마"
+    },
+    "option_theme_contrast": {
+        "message": "고대비"
+    },
+    "option_theme_dark": {
+        "message": "다크"
+    },
+    "heading_manga_settings": {
+        "message": "만화 모드"
+    },
+    "label_enable_manga": {
+        "message": "만화 모드 활성화"
+    },
+    "tooltip_enable_manga": {
+        "message": "HakuNeko 커넥터가 있는 만화 베타 패널 활성화"
+    },
+    "aria_toggle_manga_mode": {
+        "message": "만화 모드 전환"
+    },
+    "label_hk_loader": {
+        "message": "로더"
+    },
+    "tooltip_hk_loader": {
+        "message": "HakuNeko 커넥터 로드 방법 선택 (runner, manager 또는 auto)"
+    },
+    "heading_privacy": {
+        "message": "개인정보"
+    },
+    "button_open_bookmarks": {
+        "message": "북마크 열기"
+    },
+    "heading_donation_prompt": {
+        "message": "Unshackle 지원하기"
+    },
+    "label_donation_frequency": {
+        "message": "많은 파일을 다운로드할 때 월 최대 1회 표시됩니다."
+    },
+    "onboarding_title": {
+        "message": "Unshackle에 오신 것을 환영합니다"
+    },
+    "onboarding_step_language": {
+        "message": "언어 선택"
+    },
+    "onboarding_step_theme": {
+        "message": "테마 선택"
+    },
+    "onboarding_step_features": {
+        "message": "빠른 둘러보기"
+    },
+    "onboarding_btn_next": {
+        "message": "다음"
+    },
+    "onboarding_btn_back": {
+        "message": "뒤로"
+    },
+    "onboarding_btn_start": {
+        "message": "시작하기"
+    },
+    "onboarding_btn_skip": {
+        "message": "건너뛰기"
+    },
+    "onboarding_feature_scan_title": {
+        "message": "이미지 스캔"
+    },
+    "onboarding_feature_scan_desc": {
+        "message": "배경, 캔버스, Blob을 포함한 모든 웹페이지에서 이미지 추출"
+    },
+    "onboarding_feature_overlay_title": {
+        "message": "오버레이 제거"
+    },
+    "onboarding_feature_overlay_desc": {
+        "message": "우클릭 차단기를 비활성화하고 방해되는 오버레이 제거"
+    },
+    "onboarding_feature_manga_title": {
+        "message": "만화 모드"
+    },
+    "onboarding_feature_manga_desc": {
+        "message": "HakuNeko 커넥터로 만화 사이트에서 챕터 다운로드"
+    },
+    "onboarding_feature_download_title": {
+        "message": "대량 다운로드"
+    },
+    "onboarding_feature_download_desc": {
+        "message": "여러 이미지를 한 번에 다운로드하거나 ZIP 파일로 압축"
+    },
+    "onboarding_lang_en": {
+        "message": "English"
+    },
+    "onboarding_lang_de": {
+        "message": "Deutsch"
+    },
+    "onboarding_lang_es": {
+        "message": "Español"
+    },
+    "onboarding_lang_fr": {
+        "message": "Français"
+    },
+    "onboarding_lang_ja": {
+        "message": "日本語"
+    },
+    "onboarding_lang_ko": {
+        "message": "한국어"
+    },
+    "onboarding_lang_zh_CN": {
+        "message": "简体中文"
+    },
+    "onboarding_lang_zh_TW": {
+        "message": "繁體中文"
+    },
+    "option_theme_blueberry": {
+        "message": "블루베리"
+    },
+    "onboarding_feature_network_title": {
+        "message": "네트워크 캡처"
+    },
+    "onboarding_feature_network_desc": {
+        "message": "네트워크 요청을 통해 동적으로 로드된 이미지를 캡처"
+    },
+    "onboarding_feature_convert_title": {
+        "message": "이미지 변환"
+    },
+    "onboarding_feature_convert_desc": {
+        "message": "다운로드 전 PNG, JPEG, WebP 등 형식 간 변환"
+    },
+    "tooltip_delete": {
+        "message": "선택한 이미지를 목록에서 삭제"
+    },
+    "hint_deleted": {
+        "message": "목록에서 $1개 항목이 삭제되었습니다."
+    },
+    "heading_stats": {
+        "message": "통계"
+    },
+    "label_stats_scans": {
+        "message": "스캔 횟수:"
+    },
+    "label_stats_images_scanned": {
+        "message": "스캔된 이미지:"
+    },
+    "label_stats_overlays_nuked": {
+        "message": "제거된 오버레이:"
+    },
+    "label_stats_overlay_tweaks": {
+        "message": "오버레이 조정:"
+    },
+    "label_stats_images_downloaded": {
+        "message": "다운로드된 이미지:"
+    }
+}

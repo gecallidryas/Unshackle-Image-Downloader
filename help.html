@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unshackle Help &amp; Guide</title>
+  <link rel="stylesheet" href="help.css" />
+  <script defer src="help.js"></script>
+</head>
+<body data-theme="contrast">
+  <div class="help-page">
+    <header class="help-hero">
+      <p class="hero-tag">Unshackle Guide</p>
+      <h1>Make the most of Image and Manga mode</h1>
+      <p class="hero-lede">
+        This help center lives inside the extension, so you can review onboarding, permissions,
+        and download flows without leaving your workflow. Everything respects your selected theme.
+      </p>
+      <div class="hero-actions">
+        <button class="primary-btn" type="button" data-scroll="#gettingStarted">Get started</button>
+        <button class="ghost-btn" type="button" data-scroll="#mangaMode">Manga tips</button>
+      </div>
+    </header>
+    <main class="help-main">
+      <section id="gettingStarted" class="help-section">
+        <div class="section-header">
+          <h2>Quick start checklist</h2>
+          <p>Follow these steps whenever you install Unshackle on a new profile.</p>
+        </div>
+        <div class="card-grid">
+          <article class="help-card">
+            <h3>Choose a mode</h3>
+            <p>Pick Image or Manga at the top of the panel to load the right scanners and UI.</p>
+            <ul>
+              <li>Image mode focuses on DOM, canvas, and background captures.</li>
+              <li>Manga mode unlocks the HakuNeko panel plus bookmarks.</li>
+            </ul>
+          </article>
+          <article class="help-card">
+            <h3>Review permissions</h3>
+            <p>Unshackle only asks for site access when you run scans. Use the <em>Advanced</em> menu to reset prompts.</p>
+            <ul>
+              <li>Allow access for the active tab when prompted.</li>
+              <li>Revoke via the lock icon in Chrome if needed.</li>
+            </ul>
+          </article>
+          <article class="help-card">
+            <h3>Pick a theme</h3>
+            <p>All Unshackle surfaces—including this page—sync your theme choice across popup, bookmarks, and help.</p>
+            <ul>
+              <li>Open the ⚙ button in the panel header.</li>
+              <li>Select Contrast, Dark, or Light-in-the-Dark.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+      <section id="mangaMode" class="help-section">
+        <div class="section-header">
+          <h2>Manga mode essentials</h2>
+          <p>Delegate runners, cookies, and loader fallbacks keep downloads reliable.</p>
+        </div>
+        <div class="card-grid">
+          <article class="help-card">
+            <h3>Loader selection</h3>
+            <p>Auto mode switches between Runner and Manager. Force a loader from Settings &gt; Manga &gt; Loader.</p>
+            <ul>
+              <li>Runner favors compatibility with more sites.</li>
+              <li>Manager reuses delegates injected into the page for speed.</li>
+            </ul>
+          </article>
+          <article class="help-card">
+            <h3>Cookies &amp; auth</h3>
+            <p>Capture login cookies with the Manga cookie UI before scanning paywalled chapters.</p>
+            <ul>
+              <li>HTTPS only—your data stays on-device.</li>
+              <li>Each request shows host, label, and last-updated time.</li>
+            </ul>
+          </article>
+          <article class="help-card">
+            <h3>Bookmarks &amp; updates</h3>
+            <p>Save detected series from the Manga panel and revisit them via the Bookmark tab from the context menu.</p>
+            <ul>
+              <li>Bookmarks store connector ID, URL, and family.</li>
+              <li>The “Recent updates” drawer fetches new chapters on demand.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+      <section class="help-section">
+        <div class="section-header">
+          <h2>Handy controls</h2>
+          <p>Use these shortcuts for faster extractions.</p>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>Advanced overlay tools</h3>
+            <p>Open the Advanced menu to trigger CSS background scans, rename jobs, and launch viewer-specific helpers.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Canvas capture</h3>
+            <p>Use the Canvas button for same-origin drawing buffers. Combine with page bridge fetches for protected viewers.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Download status</h3>
+            <p>The footer shows current job progress with cancel controls, mirroring notifications from the service worker.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Need more help?</h3>
+            <p>Join the discussion on the Unshackle community channel or check the roadmap docs inside the repository.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="help-footer">
+      <p>&copy; <span id="helpYear"></span> Unshackle Tools</p>
+      <p class="footer-note">Theme aware · On-device tips · Version safe</p>
+    </footer>
+  </div>
+</body>
+</html>

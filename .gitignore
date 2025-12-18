@@ -1,0 +1,20 @@
+﻿# Node / tooling
+node_modules/
+dist/
+out/
+*.log
+*.map
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build artifacts
+*.zip
+*.cbz
+*.epub
+
+# Tests/artifacts
+test-artifacts/
