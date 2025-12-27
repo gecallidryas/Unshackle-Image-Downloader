@@ -12,10 +12,10 @@
         "message": "Primero selecciona algunos elementos."
     },
     "hint_download_requested": {
-        "message": "Se solicitaron $1 descarga(s)."
+        "message": "$1 descarga(s) solicitada(s)."
     },
     "hint_convert_requested": {
-        "message": "Se convirtieron y solicitaron $1 descarga(s)."
+        "message": "$1 archivo(s) convertido(s) y descarga(s) solicitada(s)."
     },
     "hint_zip_no_items": {
         "message": "No se pudieron agregar archivos al ZIP."
