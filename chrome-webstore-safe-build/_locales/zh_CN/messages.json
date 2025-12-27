@@ -1,0 +1,773 @@
+{
+    "summary_counts": {
+        "message": "共 $1 个 | 可见 $2 个 | 已选 $3 个"
+    },
+    "label_discovery_stats": {
+        "message": "新增 $1 个 | 已见 $2 个"
+    },
+    "button_preview": {
+        "message": "预览"
+    },
+    "hint_select_items": {
+        "message": "请先选择一些项目。"
+    },
+    "hint_download_requested": {
+        "message": "已请求下载 $1 个文件。"
+    },
+    "hint_convert_requested": {
+        "message": "已转换并请求下载 $1 个文件。"
+    },
+    "hint_zip_no_items": {
+        "message": "没有文件可添加到 ZIP。"
+    },
+    "hint_zip_failed": {
+        "message": "ZIP 创建失败。"
+    },
+    "hint_zip_success": {
+        "message": "ZIP 文件已创建，包含 $1 个项目。"
+    },
+    "hint_zip_download_failed": {
+        "message": "ZIP 下载请求失败。"
+    },
+    "label_footer_logs_empty": {
+        "message": "暂无消息。"
+    },
+    "button_hide_messages": {
+        "message": "隐藏消息"
+    },
+    "button_show_messages": {
+        "message": "显示消息"
+    },
+    "label_no_results": {
+        "message": "没有匹配这些过滤器的捕获。尝试扫描或调整过滤器。"
+    },
+    "prompt_rename_start": {
+        "message": "从以下数字开始编号："
+    },
+    "prompt_rename_default": {
+        "message": "1"
+    },
+    "hint_rename_success": {
+        "message": "已重命名 $1 个项目，起始编号 $2。"
+    },
+    "hint_no_active_tab": {
+        "message": "没有活动标签页。"
+    },
+    "hint_connect_retry": {
+        "message": "无法连接到页面（请尝试刷新）。"
+    },
+    "hint_connect_failed": {
+        "message": "无法连接到页面。"
+    },
+    "hint_permission_cancelled": {
+        "message": "权限请求已取消。"
+    },
+    "hint_permission_denied": {
+        "message": "Chrome 未授予对此网站的访问权限。"
+    },
+    "hint_tab_not_supported": {
+        "message": "请先在主浏览器窗口中打开网页（http/https/file）。"
+    },
+    "label_scanning": {
+        "message": "正在扫描..."
+    },
+    "hint_scan_failed": {
+        "message": "扫描失败。"
+    },
+    "hint_auto_canvas_on": {
+        "message": "自动画布已启用。"
+    },
+    "hint_auto_images_on": {
+        "message": "自动图片已启用。"
+    },
+    "label_overlay_threshold_value": {
+        "message": "$1%"
+    },
+    "hint_enable_success": {
+        "message": "右键菜单和拖拽已启用；遮罩层已软化。"
+    },
+    "hint_overlay_removed": {
+        "message": "遮罩层清理影响了 $1 个元素。"
+    },
+    "button_delete": {
+        "message": "删除"
+    },
+    "hint_overlay_preview": {
+        "message": "正在预览 $1 个潜在遮罩层。"
+    },
+    "hint_overlay_undo": {
+        "message": "已恢复 $1 个遮罩层元素。"
+    },
+    "hint_overlay_nothing_to_undo": {
+        "message": "没有可撤销的遮罩层清理。"
+    },
+    "hint_enter_keywords": {
+        "message": "请先输入关键词。"
+    },
+    "confirm_keyword_remove": {
+        "message": "按关键词移除遮罩层可能会破坏网站功能。是否继续？"
+    },
+    "hint_keywords_removed": {
+        "message": "已按关键词移除 $1 个元素。"
+    },
+    "label_progress_preparing": {
+        "message": "正在准备…"
+    },
+    "hint_download_failed": {
+        "message": "下载请求失败。"
+    },
+    "label_processing_blob": {
+        "message": "正在准备 blob 预览..."
+    },
+    "button_advanced_collapse": {
+        "message": "高级选项 [v]"
+    },
+    "button_advanced_expand": {
+        "message": "高级选项 [>]"
+    },
+    "hint_sidepanel_enabled": {
+        "message": "侧边栏模式已默认启用。"
+    },
+    "hint_popup_enabled": {
+        "message": "弹出式模式已默认启用。"
+    },
+    "tooltip_settings": {
+        "message": "设置"
+    },
+    "tooltip_open_mode": {
+        "message": "选择点击扩展图标时的打开方式"
+    },
+    "label_popup": {
+        "message": "弹出窗口"
+    },
+    "label_side_panel": {
+        "message": "侧边栏"
+    },
+    "aria_toggle_mode": {
+        "message": "在弹出窗口和侧边栏之间切换"
+    },
+    "note_toggle_mode": {
+        "message": "关闭以使用弹出窗口模式。"
+    },
+    "button_scan": {
+        "message": "扫描"
+    },
+    "tooltip_scan": {
+        "message": "扫描图片：直接图片、背景图、Data URI、Blob、SVG"
+    },
+    "button_canvas": {
+        "message": "画布"
+    },
+    "tooltip_canvas": {
+        "message": "捕获同源画布"
+    },
+    "label_auto_images": {
+        "message": "自动图片"
+    },
+    "label_auto_canvas": {
+        "message": "自动画布"
+    },
+    "button_advanced_plain": {
+        "message": "高级"
+    },
+    "aria_advanced_section": {
+        "message": "高级选项"
+    },
+    "heading_advanced": {
+        "message": "高级选项"
+    },
+    "button_enable_interactions": {
+        "message": "启用右键菜单"
+    },
+    "button_overlay_preview": {
+        "message": "预览受影响的遮罩层"
+    },
+    "button_overlay_remove": {
+        "message": "应用清理"
+    },
+    "button_overlay_undo": {
+        "message": "撤销遮罩层清理"
+    },
+    "label_overlay_threshold": {
+        "message": "表面覆盖阈值"
+    },
+    "placeholder_overlay_keywords": {
+        "message": "要移除的关键词（逗号分隔）"
+    },
+    "button_overlay_keywords": {
+        "message": "应用关键词"
+    },
+    "button_overlay_keyword_preview": {
+        "message": "预览关键词"
+    },
+    "label_overlay_mode": {
+        "message": "模式："
+    },
+    "label_overlay_mode_soft": {
+        "message": "软化"
+    },
+    "label_overlay_mode_hard": {
+        "message": "移除"
+    },
+    "aria_overlay_mode": {
+        "message": "选择遮罩层清理模式"
+    },
+    "label_overlay_z": {
+        "message": "最小 z-index"
+    },
+    "label_overlay_preview_idle": {
+        "message": "暂无预览。"
+    },
+    "label_overlay_preview_running": {
+        "message": "正在高亮遮罩层..."
+    },
+    "label_overlay_preview_match": {
+        "message": "已高亮 $1 个遮罩层。"
+    },
+    "label_overlay_preview_none": {
+        "message": "没有遮罩层候选项满足阈值。"
+    },
+    "label_overlay_preview_failed": {
+        "message": "遮罩层预览失败。"
+    },
+    "hint_overlay_preview_match": {
+        "message": "已高亮 $1 个遮罩层元素。"
+    },
+    "hint_overlay_preview_none": {
+        "message": "没有遮罩层候选项满足阈值。"
+    },
+    "hint_overlay_preview_failed": {
+        "message": "遮罩层预览失败。"
+    },
+    "hint_keywords_preview": {
+        "message": "有 $1 个元素匹配这些关键词。"
+    },
+    "hint_keywords_preview_none": {
+        "message": "没有遮罩层元素匹配这些关键词。"
+    },
+    "hint_keywords_preview_failed": {
+        "message": "关键词预览失败。"
+    },
+    "hint_keywords_softened": {
+        "message": "已软化 $1 个关键词遮罩层。"
+    },
+    "label_overlay_recent_tags": {
+        "message": "最近使用的标签"
+    },
+    "label_overlay_suggested_tags": {
+        "message": "建议标签"
+    },
+    "label_overlay_no_recent": {
+        "message": "暂无最近标签。"
+    },
+    "label_min_width": {
+        "message": "最小宽度："
+    },
+    "label_min_height": {
+        "message": "最小高度："
+    },
+    "label_format": {
+        "message": "格式："
+    },
+    "option_format_any": {
+        "message": "任意"
+    },
+    "option_format_png": {
+        "message": "PNG"
+    },
+    "option_format_jpg": {
+        "message": "JPG"
+    },
+    "option_format_webp": {
+        "message": "WEBP"
+    },
+    "option_format_gif": {
+        "message": "GIF"
+    },
+    "option_format_svg": {
+        "message": "SVG"
+    },
+    "button_select_all": {
+        "message": "全选"
+    },
+    "button_select_none": {
+        "message": "取消"
+    },
+    "label_convert": {
+        "message": "转换："
+    },
+    "option_convert_original": {
+        "message": "原格式"
+    },
+    "button_download_selected": {
+        "message": "下载所选"
+    },
+    "button_zip_selected": {
+        "message": "ZIP 所选"
+    },
+    "button_rename_serial": {
+        "message": "序列重命名"
+    },
+    "tooltip_rename_serial": {
+        "message": "按检测顺序重命名项目"
+    },
+    "label_sort": {
+        "message": "排序："
+    },
+    "option_sort_detected": {
+        "message": "检测顺序"
+    },
+    "option_sort_name": {
+        "message": "名称 (A-Z)"
+    },
+    "option_sort_pixels": {
+        "message": "像素大小（最大）"
+    },
+    "option_sort_filesize": {
+        "message": "文件大小（最大）"
+    },
+    "link_tip": {
+        "message": "打赏"
+    },
+    "link_contact": {
+        "message": "联系我们"
+    },
+    "link_help": {
+        "message": "帮助与模式指南"
+    },
+    "confirm_host_permission": {
+        "message": "Unshackle 只在您点击扫描后请求访问权限。\n我们需要临时访问 $1 以读取图片。是否继续？"
+    },
+    "menu_enable_context": {
+        "message": "在此网站启用右键菜单和拖拽"
+    },
+    "button_progress_cancel": {
+        "message": "取消"
+    },
+    "tooltip_telemetry": {
+        "message": "存储扫描和遮罩层调整的本地计数器"
+    },
+    "label_telemetry_toggle": {
+        "message": "诊断计数器（仅本地）"
+    },
+    "aria_toggle_telemetry": {
+        "message": "切换遥测数据选项"
+    },
+    "label_telemetry_off": {
+        "message": "遥测数据已禁用（仅本地）。"
+    },
+    "label_telemetry_stats": {
+        "message": "扫描次数：$1 | 遮罩层调整：$2"
+    },
+    "button_show_onboarding": {
+        "message": "显示引导"
+    },
+    "tooltip_permission_prompt": {
+        "message": "选择扫描前如何请求网站访问权限"
+    },
+    "label_permission_prompt": {
+        "message": "每次扫描都请求网站访问权限"
+    },
+    "aria_toggle_permission_prompt": {
+        "message": "切换网站权限提示"
+    },
+    "note_permission_prompt": {
+        "message": "禁用以保持访问权限而不显示提示。"
+    },
+    "toast_permission_prompt_disabled": {
+        "message": "网站访问权限已保持；不再显示提示。"
+    },
+    "toast_permission_prompt_enabled": {
+        "message": "将按网站请求访问权限。"
+    },
+    "toast_permission_prompt_denied": {
+        "message": "网站访问请求被拒绝。"
+    },
+    "hint_permission_global_required": {
+        "message": "未授予网站访问权限。请重新启用提示或在设置中允许访问。"
+    },
+    "badge_download_queued": {
+        "message": "已排队"
+    },
+    "badge_download_done": {
+        "message": "已下载"
+    },
+    "badge_download_failed": {
+        "message": "下载失败"
+    },
+    "toast_downloads": {
+        "message": "已请求下载 $1 个文件。"
+    },
+    "toast_downloads_link": {
+        "message": "打开下载"
+    },
+    "toast_downloads_partial": {
+        "message": "$1 个下载已排队，$2 个失败。"
+    },
+    "toast_zip": {
+        "message": "ZIP 已排队，包含 $1 个项目。"
+    },
+    "toast_first_run": {
+        "message": "Unshackle 只在您运行扫描或捕获时请求网站访问权限。"
+    },
+    "toast_first_run_link": {
+        "message": "了解更多"
+    },
+    "hint_progress_cancelled": {
+        "message": "操作已取消。"
+    },
+    "label_progress_cancelled": {
+        "message": "已取消"
+    },
+    "label_progress_done": {
+        "message": "完成"
+    },
+    "label_progress_converting": {
+        "message": "正在转换..."
+    },
+    "label_progress_converting_step": {
+        "message": "正在转换 $1 / $2"
+    },
+    "label_progress_download": {
+        "message": "正在请求下载 $1 / $2"
+    },
+    "hint_download_complete": {
+        "message": "已请求下载 $1 / $2 个文件。"
+    },
+    "label_staging_items": {
+        "message": "正在准备 $1 / $2"
+    },
+    "label_zip_packing": {
+        "message": "正在打包 ZIP..."
+    },
+    "label_zip_packing_progress": {
+        "message": "正在打包 ZIP $1%"
+    },
+    "label_zip_finalizing": {
+        "message": "正在完成 ZIP..."
+    },
+    "notice_first_run": {
+        "message": "Unshackle 只在您开始扫描或捕获时请求网站访问权限。"
+    },
+    "notice_first_run_help": {
+        "message": "阅读快速指南"
+    },
+    "notice_first_run_dismiss": {
+        "message": "知道了"
+    },
+    "tooltip_help": {
+        "message": "打开 Unshackle 指南"
+    },
+    "option_kind_gv": {
+        "message": "GigaViewer"
+    },
+    "option_kind_speedbinb": {
+        "message": "Speedbinb"
+    },
+    "option_kind_bellaciao": {
+        "message": "BellaCiao"
+    },
+    "option_kind_lezhin": {
+        "message": "Lezhin"
+    },
+    "option_theme_lightdark": {
+        "message": "暗夜微光"
+    },
+    "toast_theme_applied": {
+        "message": "主题已更新。"
+    },
+    "label_locale": {
+        "message": "语言"
+    },
+    "toast_locale_applied": {
+        "message": "语言已更新。"
+    },
+    "toast_help_opened": {
+        "message": "帮助已在新标签页中打开。"
+    },
+    "gv_option_only_first": {
+        "message": "仅第一页"
+    },
+    "gv_option_save_metadata": {
+        "message": "保存 metadata.json"
+    },
+    "gv_option_purchase_guard": {
+        "message": "未购买时停止"
+    },
+    "gv_option_zip": {
+        "message": "下载为 ZIP"
+    },
+    "label_gv_gallery_hidden": {
+        "message": "查看器下载会显示在主网格中。此处隐藏缩略图。"
+    },
+    "heading_chapters": {
+        "message": "章节"
+    },
+    "button_chapter_refresh": {
+        "message": "刷新列表"
+    },
+    "label_chapter_idle": {
+        "message": "章节尚未加载。"
+    },
+    "label_chapter_loading": {
+        "message": "正在加载章节..."
+    },
+    "label_chapter_empty": {
+        "message": "此页面没有可用章节。"
+    },
+    "label_chapter_error": {
+        "message": "无法加载章节。请打开漫画概览页面重试。"
+    },
+    "label_chapter_loaded": {
+        "message": "已加载 $1 个章节。"
+    },
+    "label_chapter_free": {
+        "message": "免费"
+    },
+    "label_chapter_locked": {
+        "message": "已锁定"
+    },
+    "label_chapter_purchased": {
+        "message": "已购买"
+    },
+    "label_chapter_added": {
+        "message": "章节已添加到网格。"
+    },
+    "aria_chapter_add": {
+        "message": "将 $1 添加到面板网格"
+    },
+    "option_hk_loader_auto": {
+        "message": "自动（Runner + Manager）"
+    },
+    "option_hk_loader_runner": {
+        "message": "兼容模式（仅 Runner）"
+    },
+    "option_hk_loader_manager": {
+        "message": "仅 Manager（实验性）"
+    },
+    "note_hk_loader": {
+        "message": "自动模式尝试两种路径并保持图片模式安全。仅在调试时使用 Manager。"
+    },
+    "button_reset_manga_defaults": {
+        "message": "重置为安全默认值"
+    },
+    "note_reset_manga_defaults": {
+        "message": "禁用漫画模式并恢复原始系列/加载器设置。"
+    },
+    "toast_reset_safe_defaults": {
+        "message": "设置已恢复为安全默认值。"
+    },
+    "toast_reset_safe_defaults_failed": {
+        "message": "无法重置设置。请重试。"
+    },
+    "confirm_reset_manga_defaults": {
+        "message": "重置为安全默认值？这将禁用漫画模式直到您重新启用。"
+    },
+    "button_download": {
+        "message": "下载"
+    },
+    "button_zip": {
+        "message": "ZIP"
+    },
+    "button_select_invert": {
+        "message": "反选"
+    },
+    "label_search": {
+        "message": "搜索："
+    },
+    "placeholder_search": {
+        "message": "文件名或 URL"
+    },
+    "label_kind": {
+        "message": "类型："
+    },
+    "option_kind_all": {
+        "message": "全部"
+    },
+    "option_kind_img": {
+        "message": "图片"
+    },
+    "option_kind_background": {
+        "message": "背景"
+    },
+    "option_kind_blob": {
+        "message": "Blob"
+    },
+    "option_kind_data": {
+        "message": "Data URI"
+    },
+    "option_kind_canvas": {
+        "message": "画布"
+    },
+    "option_kind_svg": {
+        "message": "SVG"
+    },
+    "label_discovery": {
+        "message": "发现："
+    },
+    "option_discovery_all": {
+        "message": "全部"
+    },
+    "option_discovery_new": {
+        "message": "本次会话新发现"
+    },
+    "option_discovery_seen": {
+        "message": "之前已见"
+    },
+    "label_overlay_aggressiveness": {
+        "message": "激进程度"
+    },
+    "heading_quick_settings": {
+        "message": "快捷设置"
+    },
+    "label_theme": {
+        "message": "主题"
+    },
+    "option_theme_contrast": {
+        "message": "高对比度"
+    },
+    "option_theme_dark": {
+        "message": "深色"
+    },
+    "heading_manga_settings": {
+        "message": "漫画模式"
+    },
+    "label_enable_manga": {
+        "message": "启用漫画模式"
+    },
+    "tooltip_enable_manga": {
+        "message": "启用带有 HakuNeko 连接器的漫画测试版面板"
+    },
+    "aria_toggle_manga_mode": {
+        "message": "切换漫画模式"
+    },
+    "label_hk_loader": {
+        "message": "加载器"
+    },
+    "tooltip_hk_loader": {
+        "message": "选择 HakuNeko 连接器的加载方式（runner、manager 或自动）"
+    },
+    "heading_privacy": {
+        "message": "隐私"
+    },
+    "button_open_bookmarks": {
+        "message": "打开书签"
+    },
+    "heading_donation_prompt": {
+        "message": "支持 Unshackle"
+    },
+    "label_donation_frequency": {
+        "message": "每月最多显示一次，当您下载大量文件时显示。"
+    },
+    "onboarding_title": {
+        "message": "欢迎使用 Unshackle"
+    },
+    "onboarding_step_language": {
+        "message": "选择语言"
+    },
+    "onboarding_step_theme": {
+        "message": "选择主题"
+    },
+    "onboarding_step_features": {
+        "message": "快速浏览"
+    },
+    "onboarding_btn_next": {
+        "message": "下一步"
+    },
+    "onboarding_btn_back": {
+        "message": "返回"
+    },
+    "onboarding_btn_start": {
+        "message": "开始使用"
+    },
+    "onboarding_btn_skip": {
+        "message": "跳过"
+    },
+    "onboarding_feature_scan_title": {
+        "message": "扫描图片"
+    },
+    "onboarding_feature_scan_desc": {
+        "message": "从任何网页提取图片，包括背景、画布和Blob"
+    },
+    "onboarding_feature_overlay_title": {
+        "message": "移除遮罩层"
+    },
+    "onboarding_feature_overlay_desc": {
+        "message": "禁用右键阻止器并移除烦人的遮罩层"
+    },
+    "onboarding_feature_manga_title": {
+        "message": "漫画模式"
+    },
+    "onboarding_feature_manga_desc": {
+        "message": "使用 HakuNeko 连接器从漫画网站下载章节"
+    },
+    "onboarding_feature_download_title": {
+        "message": "批量下载"
+    },
+    "onboarding_feature_download_desc": {
+        "message": "一次下载多张图片或打包成 ZIP 文件"
+    },
+    "onboarding_lang_en": {
+        "message": "English"
+    },
+    "onboarding_lang_de": {
+        "message": "Deutsch"
+    },
+    "onboarding_lang_es": {
+        "message": "Español"
+    },
+    "onboarding_lang_fr": {
+        "message": "Français"
+    },
+    "onboarding_lang_ja": {
+        "message": "日本語"
+    },
+    "onboarding_lang_ko": {
+        "message": "한국어"
+    },
+    "onboarding_lang_zh_CN": {
+        "message": "简体中文"
+    },
+    "onboarding_lang_zh_TW": {
+        "message": "繁體中文"
+    },
+    "option_theme_blueberry": {
+        "message": "蓝莓"
+    },
+    "onboarding_feature_network_title": {
+        "message": "网络捕获"
+    },
+    "onboarding_feature_network_desc": {
+        "message": "拦截通过网络请求动态加载的图片"
+    },
+    "onboarding_feature_convert_title": {
+        "message": "转换图片"
+    },
+    "onboarding_feature_convert_desc": {
+        "message": "下载前在 PNG、JPEG、WebP 等格式间转换"
+    },
+    "tooltip_delete": {
+        "message": "从列表中删除选中的图片"
+    },
+    "hint_deleted": {
+        "message": "已从列表中删除 $1 个项目。"
+    },
+    "heading_stats": {
+        "message": "统计"
+    },
+    "label_stats_scans": {
+        "message": "扫描次数："
+    },
+    "label_stats_images_scanned": {
+        "message": "已扫描图片："
+    },
+    "label_stats_overlays_nuked": {
+        "message": "已移除遮罩层："
+    },
+    "label_stats_overlay_tweaks": {
+        "message": "遮罩层调整："
+    },
+    "label_stats_images_downloaded": {
+        "message": "已下载图片："
+    }
+}

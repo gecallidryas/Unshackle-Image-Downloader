@@ -1,0 +1,773 @@
+{
+    "summary_counts": {
+        "message": "共 $1 個 | 可見 $2 個 | 已選 $3 個"
+    },
+    "label_discovery_stats": {
+        "message": "新增 $1 個 | 已見 $2 個"
+    },
+    "button_preview": {
+        "message": "預覽"
+    },
+    "hint_select_items": {
+        "message": "請先選擇一些項目。"
+    },
+    "hint_download_requested": {
+        "message": "已請求下載 $1 個檔案。"
+    },
+    "hint_convert_requested": {
+        "message": "已轉換並請求下載 $1 個檔案。"
+    },
+    "hint_zip_no_items": {
+        "message": "沒有檔案可加入 ZIP。"
+    },
+    "hint_zip_failed": {
+        "message": "ZIP 建立失敗。"
+    },
+    "hint_zip_success": {
+        "message": "ZIP 檔案已建立，包含 $1 個項目。"
+    },
+    "hint_zip_download_failed": {
+        "message": "ZIP 下載請求失敗。"
+    },
+    "label_footer_logs_empty": {
+        "message": "暫無訊息。"
+    },
+    "button_hide_messages": {
+        "message": "隱藏訊息"
+    },
+    "button_show_messages": {
+        "message": "顯示訊息"
+    },
+    "label_no_results": {
+        "message": "沒有匹配這些篩選器的擷取。嘗試掃描或調整篩選器。"
+    },
+    "prompt_rename_start": {
+        "message": "從以下數字開始編號："
+    },
+    "prompt_rename_default": {
+        "message": "1"
+    },
+    "hint_rename_success": {
+        "message": "已重新命名 $1 個項目，起始編號 $2。"
+    },
+    "hint_no_active_tab": {
+        "message": "沒有活動分頁。"
+    },
+    "hint_connect_retry": {
+        "message": "無法連接到頁面（請嘗試重新整理）。"
+    },
+    "hint_connect_failed": {
+        "message": "無法連接到頁面。"
+    },
+    "hint_permission_cancelled": {
+        "message": "權限請求已取消。"
+    },
+    "hint_permission_denied": {
+        "message": "Chrome 未授予對此網站的存取權限。"
+    },
+    "hint_tab_not_supported": {
+        "message": "請先在主瀏覽器視窗中開啟網頁（http/https/file）。"
+    },
+    "label_scanning": {
+        "message": "正在掃描..."
+    },
+    "hint_scan_failed": {
+        "message": "掃描失敗。"
+    },
+    "hint_auto_canvas_on": {
+        "message": "自動畫布已啟用。"
+    },
+    "hint_auto_images_on": {
+        "message": "自動圖片已啟用。"
+    },
+    "label_overlay_threshold_value": {
+        "message": "$1%"
+    },
+    "hint_enable_success": {
+        "message": "右鍵選單和拖曳已啟用；遮罩層已軟化。"
+    },
+    "hint_overlay_removed": {
+        "message": "遮罩層清理影響了 $1 個元素。"
+    },
+    "button_delete": {
+        "message": "刪除"
+    },
+    "hint_overlay_preview": {
+        "message": "正在預覽 $1 個潛在遮罩層。"
+    },
+    "hint_overlay_undo": {
+        "message": "已恢復 $1 個遮罩層元素。"
+    },
+    "hint_overlay_nothing_to_undo": {
+        "message": "沒有可復原的遮罩層清理。"
+    },
+    "hint_enter_keywords": {
+        "message": "請先輸入關鍵字。"
+    },
+    "confirm_keyword_remove": {
+        "message": "按關鍵字移除遮罩層可能會破壞網站功能。是否繼續？"
+    },
+    "hint_keywords_removed": {
+        "message": "已按關鍵字移除 $1 個元素。"
+    },
+    "label_progress_preparing": {
+        "message": "正在準備…"
+    },
+    "hint_download_failed": {
+        "message": "下載請求失敗。"
+    },
+    "label_processing_blob": {
+        "message": "正在準備 blob 預覽..."
+    },
+    "button_advanced_collapse": {
+        "message": "進階選項 [v]"
+    },
+    "button_advanced_expand": {
+        "message": "進階選項 [>]"
+    },
+    "hint_sidepanel_enabled": {
+        "message": "側邊欄模式已預設啟用。"
+    },
+    "hint_popup_enabled": {
+        "message": "彈出式模式已預設啟用。"
+    },
+    "tooltip_settings": {
+        "message": "設定"
+    },
+    "tooltip_open_mode": {
+        "message": "選擇點擊擴充功能圖示時的開啟方式"
+    },
+    "label_popup": {
+        "message": "彈出視窗"
+    },
+    "label_side_panel": {
+        "message": "側邊欄"
+    },
+    "aria_toggle_mode": {
+        "message": "在彈出視窗和側邊欄之間切換"
+    },
+    "note_toggle_mode": {
+        "message": "關閉以使用彈出視窗模式。"
+    },
+    "button_scan": {
+        "message": "掃描"
+    },
+    "tooltip_scan": {
+        "message": "掃描圖片：直接圖片、背景圖、Data URI、Blob、SVG"
+    },
+    "button_canvas": {
+        "message": "畫布"
+    },
+    "tooltip_canvas": {
+        "message": "擷取同源畫布"
+    },
+    "label_auto_images": {
+        "message": "自動圖片"
+    },
+    "label_auto_canvas": {
+        "message": "自動畫布"
+    },
+    "button_advanced_plain": {
+        "message": "進階"
+    },
+    "aria_advanced_section": {
+        "message": "進階選項"
+    },
+    "heading_advanced": {
+        "message": "進階選項"
+    },
+    "button_enable_interactions": {
+        "message": "啟用右鍵選單"
+    },
+    "button_overlay_preview": {
+        "message": "預覽受影響的遮罩層"
+    },
+    "button_overlay_remove": {
+        "message": "套用清理"
+    },
+    "button_overlay_undo": {
+        "message": "復原遮罩層清理"
+    },
+    "label_overlay_threshold": {
+        "message": "表面覆蓋閾值"
+    },
+    "placeholder_overlay_keywords": {
+        "message": "要移除的關鍵字（逗號分隔）"
+    },
+    "button_overlay_keywords": {
+        "message": "套用關鍵字"
+    },
+    "button_overlay_keyword_preview": {
+        "message": "預覽關鍵字"
+    },
+    "label_overlay_mode": {
+        "message": "模式："
+    },
+    "label_overlay_mode_soft": {
+        "message": "軟化"
+    },
+    "label_overlay_mode_hard": {
+        "message": "移除"
+    },
+    "aria_overlay_mode": {
+        "message": "選擇遮罩層清理模式"
+    },
+    "label_overlay_z": {
+        "message": "最小 z-index"
+    },
+    "label_overlay_preview_idle": {
+        "message": "暫無預覽。"
+    },
+    "label_overlay_preview_running": {
+        "message": "正在醒目提示遮罩層..."
+    },
+    "label_overlay_preview_match": {
+        "message": "已醒目提示 $1 個遮罩層。"
+    },
+    "label_overlay_preview_none": {
+        "message": "沒有遮罩層候選項符合閾值。"
+    },
+    "label_overlay_preview_failed": {
+        "message": "遮罩層預覽失敗。"
+    },
+    "hint_overlay_preview_match": {
+        "message": "已醒目提示 $1 個遮罩層元素。"
+    },
+    "hint_overlay_preview_none": {
+        "message": "沒有遮罩層候選項符合閾值。"
+    },
+    "hint_overlay_preview_failed": {
+        "message": "遮罩層預覽失敗。"
+    },
+    "hint_keywords_preview": {
+        "message": "有 $1 個元素符合這些關鍵字。"
+    },
+    "hint_keywords_preview_none": {
+        "message": "沒有遮罩層元素符合這些關鍵字。"
+    },
+    "hint_keywords_preview_failed": {
+        "message": "關鍵字預覽失敗。"
+    },
+    "hint_keywords_softened": {
+        "message": "已軟化 $1 個關鍵字遮罩層。"
+    },
+    "label_overlay_recent_tags": {
+        "message": "最近使用的標籤"
+    },
+    "label_overlay_suggested_tags": {
+        "message": "建議標籤"
+    },
+    "label_overlay_no_recent": {
+        "message": "暫無最近標籤。"
+    },
+    "label_min_width": {
+        "message": "最小寬度："
+    },
+    "label_min_height": {
+        "message": "最小高度："
+    },
+    "label_format": {
+        "message": "格式："
+    },
+    "option_format_any": {
+        "message": "任意"
+    },
+    "option_format_png": {
+        "message": "PNG"
+    },
+    "option_format_jpg": {
+        "message": "JPG"
+    },
+    "option_format_webp": {
+        "message": "WEBP"
+    },
+    "option_format_gif": {
+        "message": "GIF"
+    },
+    "option_format_svg": {
+        "message": "SVG"
+    },
+    "button_select_all": {
+        "message": "全選"
+    },
+    "button_select_none": {
+        "message": "取消"
+    },
+    "label_convert": {
+        "message": "轉換："
+    },
+    "option_convert_original": {
+        "message": "原格式"
+    },
+    "button_download_selected": {
+        "message": "下載所選"
+    },
+    "button_zip_selected": {
+        "message": "ZIP 所選"
+    },
+    "button_rename_serial": {
+        "message": "序列重新命名"
+    },
+    "tooltip_rename_serial": {
+        "message": "按偵測順序重新命名項目"
+    },
+    "label_sort": {
+        "message": "排序："
+    },
+    "option_sort_detected": {
+        "message": "偵測順序"
+    },
+    "option_sort_name": {
+        "message": "名稱 (A-Z)"
+    },
+    "option_sort_pixels": {
+        "message": "像素大小（最大）"
+    },
+    "option_sort_filesize": {
+        "message": "檔案大小（最大）"
+    },
+    "link_tip": {
+        "message": "打賞"
+    },
+    "link_contact": {
+        "message": "聯絡我們"
+    },
+    "link_help": {
+        "message": "說明與模式指南"
+    },
+    "confirm_host_permission": {
+        "message": "Unshackle 只在您點擊掃描後請求存取權限。\n我們需要暫時存取 $1 以讀取圖片。是否繼續？"
+    },
+    "menu_enable_context": {
+        "message": "在此網站啟用右鍵選單和拖曳"
+    },
+    "button_progress_cancel": {
+        "message": "取消"
+    },
+    "tooltip_telemetry": {
+        "message": "儲存掃描和遮罩層調整的本機計數器"
+    },
+    "label_telemetry_toggle": {
+        "message": "診斷計數器（僅限本機）"
+    },
+    "aria_toggle_telemetry": {
+        "message": "切換遙測資料選項"
+    },
+    "label_telemetry_off": {
+        "message": "遙測資料已停用（僅限本機）。"
+    },
+    "label_telemetry_stats": {
+        "message": "掃描次數：$1 | 遮罩層調整：$2"
+    },
+    "button_show_onboarding": {
+        "message": "顯示導覽"
+    },
+    "tooltip_permission_prompt": {
+        "message": "選擇掃描前如何請求網站存取權限"
+    },
+    "label_permission_prompt": {
+        "message": "每次掃描都請求網站存取權限"
+    },
+    "aria_toggle_permission_prompt": {
+        "message": "切換網站權限提示"
+    },
+    "note_permission_prompt": {
+        "message": "停用以保持存取權限而不顯示提示。"
+    },
+    "toast_permission_prompt_disabled": {
+        "message": "網站存取權限已保持；不再顯示提示。"
+    },
+    "toast_permission_prompt_enabled": {
+        "message": "將按網站請求存取權限。"
+    },
+    "toast_permission_prompt_denied": {
+        "message": "網站存取請求被拒絕。"
+    },
+    "hint_permission_global_required": {
+        "message": "未授予網站存取權限。請重新啟用提示或在設定中允許存取。"
+    },
+    "badge_download_queued": {
+        "message": "已排隊"
+    },
+    "badge_download_done": {
+        "message": "已下載"
+    },
+    "badge_download_failed": {
+        "message": "下載失敗"
+    },
+    "toast_downloads": {
+        "message": "已請求下載 $1 個檔案。"
+    },
+    "toast_downloads_link": {
+        "message": "開啟下載"
+    },
+    "toast_downloads_partial": {
+        "message": "$1 個下載已排隊，$2 個失敗。"
+    },
+    "toast_zip": {
+        "message": "ZIP 已排隊，包含 $1 個項目。"
+    },
+    "toast_first_run": {
+        "message": "Unshackle 只在您執行掃描或擷取時請求網站存取權限。"
+    },
+    "toast_first_run_link": {
+        "message": "瞭解更多"
+    },
+    "hint_progress_cancelled": {
+        "message": "操作已取消。"
+    },
+    "label_progress_cancelled": {
+        "message": "已取消"
+    },
+    "label_progress_done": {
+        "message": "完成"
+    },
+    "label_progress_converting": {
+        "message": "正在轉換..."
+    },
+    "label_progress_converting_step": {
+        "message": "正在轉換 $1 / $2"
+    },
+    "label_progress_download": {
+        "message": "正在請求下載 $1 / $2"
+    },
+    "hint_download_complete": {
+        "message": "已請求下載 $1 / $2 個檔案。"
+    },
+    "label_staging_items": {
+        "message": "正在準備 $1 / $2"
+    },
+    "label_zip_packing": {
+        "message": "正在打包 ZIP..."
+    },
+    "label_zip_packing_progress": {
+        "message": "正在打包 ZIP $1%"
+    },
+    "label_zip_finalizing": {
+        "message": "正在完成 ZIP..."
+    },
+    "notice_first_run": {
+        "message": "Unshackle 只在您開始掃描或擷取時請求網站存取權限。"
+    },
+    "notice_first_run_help": {
+        "message": "閱讀快速指南"
+    },
+    "notice_first_run_dismiss": {
+        "message": "知道了"
+    },
+    "tooltip_help": {
+        "message": "開啟 Unshackle 指南"
+    },
+    "option_kind_gv": {
+        "message": "GigaViewer"
+    },
+    "option_kind_speedbinb": {
+        "message": "Speedbinb"
+    },
+    "option_kind_bellaciao": {
+        "message": "BellaCiao"
+    },
+    "option_kind_lezhin": {
+        "message": "Lezhin"
+    },
+    "option_theme_lightdark": {
+        "message": "暗夜微光"
+    },
+    "toast_theme_applied": {
+        "message": "主題已更新。"
+    },
+    "label_locale": {
+        "message": "語言"
+    },
+    "toast_locale_applied": {
+        "message": "語言已更新。"
+    },
+    "toast_help_opened": {
+        "message": "說明已在新分頁中開啟。"
+    },
+    "gv_option_only_first": {
+        "message": "僅第一頁"
+    },
+    "gv_option_save_metadata": {
+        "message": "儲存 metadata.json"
+    },
+    "gv_option_purchase_guard": {
+        "message": "未購買時停止"
+    },
+    "gv_option_zip": {
+        "message": "下載為 ZIP"
+    },
+    "label_gv_gallery_hidden": {
+        "message": "檢視器下載會顯示在主網格中。此處隱藏縮圖。"
+    },
+    "heading_chapters": {
+        "message": "章節"
+    },
+    "button_chapter_refresh": {
+        "message": "重新整理列表"
+    },
+    "label_chapter_idle": {
+        "message": "章節尚未載入。"
+    },
+    "label_chapter_loading": {
+        "message": "正在載入章節..."
+    },
+    "label_chapter_empty": {
+        "message": "此頁面沒有可用章節。"
+    },
+    "label_chapter_error": {
+        "message": "無法載入章節。請開啟漫畫概覽頁面重試。"
+    },
+    "label_chapter_loaded": {
+        "message": "已載入 $1 個章節。"
+    },
+    "label_chapter_free": {
+        "message": "免費"
+    },
+    "label_chapter_locked": {
+        "message": "已鎖定"
+    },
+    "label_chapter_purchased": {
+        "message": "已購買"
+    },
+    "label_chapter_added": {
+        "message": "章節已加入網格。"
+    },
+    "aria_chapter_add": {
+        "message": "將 $1 加入面板網格"
+    },
+    "option_hk_loader_auto": {
+        "message": "自動（Runner + Manager）"
+    },
+    "option_hk_loader_runner": {
+        "message": "相容模式（僅 Runner）"
+    },
+    "option_hk_loader_manager": {
+        "message": "僅 Manager（實驗性）"
+    },
+    "note_hk_loader": {
+        "message": "自動模式嘗試兩種路徑並保持圖片模式安全。僅在偵錯時使用 Manager。"
+    },
+    "button_reset_manga_defaults": {
+        "message": "重設為安全預設值"
+    },
+    "note_reset_manga_defaults": {
+        "message": "停用漫畫模式並恢復原始系列/載入器設定。"
+    },
+    "toast_reset_safe_defaults": {
+        "message": "設定已恢復為安全預設值。"
+    },
+    "toast_reset_safe_defaults_failed": {
+        "message": "無法重設設定。請重試。"
+    },
+    "confirm_reset_manga_defaults": {
+        "message": "重設為安全預設值？這將停用漫畫模式直到您重新啟用。"
+    },
+    "button_download": {
+        "message": "下載"
+    },
+    "button_zip": {
+        "message": "ZIP"
+    },
+    "button_select_invert": {
+        "message": "反選"
+    },
+    "label_search": {
+        "message": "搜尋："
+    },
+    "placeholder_search": {
+        "message": "檔案名稱或 URL"
+    },
+    "label_kind": {
+        "message": "類型："
+    },
+    "option_kind_all": {
+        "message": "全部"
+    },
+    "option_kind_img": {
+        "message": "圖片"
+    },
+    "option_kind_background": {
+        "message": "背景"
+    },
+    "option_kind_blob": {
+        "message": "Blob"
+    },
+    "option_kind_data": {
+        "message": "Data URI"
+    },
+    "option_kind_canvas": {
+        "message": "畫布"
+    },
+    "option_kind_svg": {
+        "message": "SVG"
+    },
+    "label_discovery": {
+        "message": "發現："
+    },
+    "option_discovery_all": {
+        "message": "全部"
+    },
+    "option_discovery_new": {
+        "message": "本次工作階段新發現"
+    },
+    "option_discovery_seen": {
+        "message": "之前已見"
+    },
+    "label_overlay_aggressiveness": {
+        "message": "積極程度"
+    },
+    "heading_quick_settings": {
+        "message": "快捷設定"
+    },
+    "label_theme": {
+        "message": "主題"
+    },
+    "option_theme_contrast": {
+        "message": "高對比"
+    },
+    "option_theme_dark": {
+        "message": "深色"
+    },
+    "heading_manga_settings": {
+        "message": "漫畫模式"
+    },
+    "label_enable_manga": {
+        "message": "啟用漫畫模式"
+    },
+    "tooltip_enable_manga": {
+        "message": "啟用帶有 HakuNeko 連接器的漫畫測試版面板"
+    },
+    "aria_toggle_manga_mode": {
+        "message": "切換漫畫模式"
+    },
+    "label_hk_loader": {
+        "message": "載入器"
+    },
+    "tooltip_hk_loader": {
+        "message": "選擇 HakuNeko 連接器的載入方式（runner、manager 或自動）"
+    },
+    "heading_privacy": {
+        "message": "隱私"
+    },
+    "button_open_bookmarks": {
+        "message": "開啟書籤"
+    },
+    "heading_donation_prompt": {
+        "message": "支持 Unshackle"
+    },
+    "label_donation_frequency": {
+        "message": "每月最多顯示一次，當您下載大量檔案時顯示。"
+    },
+    "onboarding_title": {
+        "message": "歡迎使用 Unshackle"
+    },
+    "onboarding_step_language": {
+        "message": "選擇語言"
+    },
+    "onboarding_step_theme": {
+        "message": "選擇主題"
+    },
+    "onboarding_step_features": {
+        "message": "快速瀏覽"
+    },
+    "onboarding_btn_next": {
+        "message": "下一步"
+    },
+    "onboarding_btn_back": {
+        "message": "返回"
+    },
+    "onboarding_btn_start": {
+        "message": "開始使用"
+    },
+    "onboarding_btn_skip": {
+        "message": "略過"
+    },
+    "onboarding_feature_scan_title": {
+        "message": "掃描圖片"
+    },
+    "onboarding_feature_scan_desc": {
+        "message": "從任何網頁擷取圖片，包括背景、畫布和Blob"
+    },
+    "onboarding_feature_overlay_title": {
+        "message": "移除遮罩層"
+    },
+    "onboarding_feature_overlay_desc": {
+        "message": "停用右鍵阻擋器並移除煩人的遮罩層"
+    },
+    "onboarding_feature_manga_title": {
+        "message": "漫畫模式"
+    },
+    "onboarding_feature_manga_desc": {
+        "message": "使用 HakuNeko 連接器從漫畫網站下載章節"
+    },
+    "onboarding_feature_download_title": {
+        "message": "批次下載"
+    },
+    "onboarding_feature_download_desc": {
+        "message": "一次下載多張圖片或打包成 ZIP 檔案"
+    },
+    "onboarding_lang_en": {
+        "message": "English"
+    },
+    "onboarding_lang_de": {
+        "message": "Deutsch"
+    },
+    "onboarding_lang_es": {
+        "message": "Español"
+    },
+    "onboarding_lang_fr": {
+        "message": "Français"
+    },
+    "onboarding_lang_ja": {
+        "message": "日本語"
+    },
+    "onboarding_lang_ko": {
+        "message": "한국어"
+    },
+    "onboarding_lang_zh_CN": {
+        "message": "简体中文"
+    },
+    "onboarding_lang_zh_TW": {
+        "message": "繁體中文"
+    },
+    "option_theme_blueberry": {
+        "message": "藍莓"
+    },
+    "onboarding_feature_network_title": {
+        "message": "網路擷取"
+    },
+    "onboarding_feature_network_desc": {
+        "message": "攔截透過網路請求動態載入的圖片"
+    },
+    "onboarding_feature_convert_title": {
+        "message": "轉換圖片"
+    },
+    "onboarding_feature_convert_desc": {
+        "message": "下載前在 PNG、JPEG、WebP 等格式間轉換"
+    },
+    "tooltip_delete": {
+        "message": "從清單中刪除選取的圖片"
+    },
+    "hint_deleted": {
+        "message": "已從清單中刪除 $1 個項目。"
+    },
+    "heading_stats": {
+        "message": "統計"
+    },
+    "label_stats_scans": {
+        "message": "掃描次數："
+    },
+    "label_stats_images_scanned": {
+        "message": "已掃描圖片："
+    },
+    "label_stats_overlays_nuked": {
+        "message": "已移除遮罩層："
+    },
+    "label_stats_overlay_tweaks": {
+        "message": "遮罩層調整："
+    },
+    "label_stats_images_downloaded": {
+        "message": "已下載圖片："
+    }
+}

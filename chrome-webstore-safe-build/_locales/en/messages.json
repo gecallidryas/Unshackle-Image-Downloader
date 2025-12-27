@@ -1,0 +1,677 @@
+{
+  "summary_counts": {
+    "message": "$1 total | $2 visible | $3 selected"
+  },
+  "label_discovery_stats": {
+    "message": "$1 new | $2 seen"
+  },
+  "button_preview": {
+    "message": "Preview"
+  },
+  "hint_select_items": {
+    "message": "Select some items first."
+  },
+  "hint_download_requested": {
+    "message": "Requested $1 download(s)."
+  },
+  "hint_convert_requested": {
+    "message": "Converted and requested $1 download(s)."
+  },
+  "hint_zip_no_items": {
+    "message": "No files could be added to ZIP."
+  },
+  "hint_zip_failed": {
+    "message": "ZIP creation failed."
+  },
+  "hint_zip_success": {
+    "message": "ZIP file created with $1 item(s)."
+  },
+  "hint_zip_download_failed": {
+    "message": "ZIP download request failed."
+  },
+  "label_footer_logs_empty": {
+    "message": "No recent messages."
+  },
+  "button_hide_messages": {
+    "message": "Hide messages"
+  },
+  "button_show_messages": {
+    "message": "Show messages"
+  },
+  "label_no_results": {
+    "message": "No captures match these filters yet. Try a scan or adjust filters."
+  },
+  "prompt_rename_start": {
+    "message": "Start numbering from:"
+  },
+  "prompt_rename_default": {
+    "message": "1"
+  },
+  "hint_rename_success": {
+    "message": "Renamed $1 item(s) starting at $2."
+  },
+  "hint_no_active_tab": {
+    "message": "No active tab."
+  },
+  "hint_connect_retry": {
+    "message": "Could not connect to page (try reloading)."
+  },
+  "hint_connect_failed": {
+    "message": "Could not connect to page."
+  },
+  "hint_permission_cancelled": {
+    "message": "Permission request was cancelled."
+  },
+  "hint_permission_denied": {
+    "message": "Chrome did not grant access to this site."
+  },
+  "hint_tab_not_supported": {
+    "message": "Open a webpage (http/https/file) in the main browser window first."
+  },
+  "label_scanning": {
+    "message": "Scanning..."
+  },
+  "hint_scan_failed": {
+    "message": "Scan failed."
+  },
+  "hint_auto_canvas_on": {
+    "message": "Auto canvas enabled."
+  },
+  "hint_auto_images_on": {
+    "message": "Auto images enabled."
+  },
+  "label_overlay_threshold_value": {
+    "message": "$1%"
+  },
+  "hint_enable_success": {
+    "message": "Right-click and dragging enabled; overlays softened."
+  },
+  "hint_overlay_removed": {
+    "message": "Overlay cleanup affected $1 element(s)."
+  },
+  "button_delete": {
+    "message": "Delete"
+  },
+  "hint_overlay_preview": {
+    "message": "Previewing $1 potential overlays."
+  },
+  "hint_overlay_undo": {
+    "message": "Restored $1 overlay element(s)."
+  },
+  "hint_overlay_nothing_to_undo": {
+    "message": "No overlay cleanup to undo."
+  },
+  "hint_enter_keywords": {
+    "message": "Enter keyword(s) first."
+  },
+  "confirm_keyword_remove": {
+    "message": "Removing overlays by keyword may break site functionality. Proceed?"
+  },
+  "hint_keywords_removed": {
+    "message": "Removed $1 element(s) by keyword."
+  },
+  "label_progress_preparing": {
+    "message": "Preparing\u2026"
+  },
+  "hint_download_failed": {
+    "message": "Download request failed."
+  },
+  "label_processing_blob": {
+    "message": "Preparing blob previews..."
+  },
+  "button_advanced_collapse": {
+    "message": "Advanced [v]"
+  },
+  "button_advanced_expand": {
+    "message": "Advanced [>]"
+  },
+  "hint_sidepanel_enabled": {
+    "message": "Side panel enabled by default."
+  },
+  "hint_popup_enabled": {
+    "message": "Popup enabled by default."
+  },
+  "tooltip_settings": {
+    "message": "Settings"
+  },
+  "tooltip_open_mode": {
+    "message": "Choose how the UI opens when clicking the extension icon"
+  },
+  "label_popup": {
+    "message": "Popup"
+  },
+  "label_side_panel": {
+    "message": "Side Panel"
+  },
+  "aria_toggle_mode": {
+    "message": "Switch between Popup and Side Panel"
+  },
+  "note_toggle_mode": {
+    "message": "Toggle off for popup window mode."
+  },
+  "button_scan": {
+    "message": "Scan"
+  },
+  "tooltip_scan": {
+    "message": "Scan images: direct, background, data URI, blob, SVG"
+  },
+  "button_canvas": {
+    "message": "Canvas"
+  },
+  "tooltip_canvas": {
+    "message": "Capture same-origin canvases"
+  },
+  "label_auto_images": {
+    "message": "Auto Images"
+  },
+  "label_auto_canvas": {
+    "message": "Auto Canvas"
+  },
+  "button_advanced_plain": {
+    "message": "Advanced"
+  },
+  "aria_advanced_section": {
+    "message": "Advanced Options"
+  },
+  "heading_advanced": {
+    "message": "Advanced Options"
+  },
+  "button_enable_interactions": {
+    "message": "Enable Right-click"
+  },
+  "button_overlay_preview": {
+    "message": "Preview affected overlays"
+  },
+  "button_overlay_remove": {
+    "message": "Apply cleanup"
+  },
+  "button_overlay_undo": {
+    "message": "Undo Overlay Cleanup"
+  },
+  "label_overlay_threshold": {
+    "message": "Surface coverage threshold"
+  },
+  "placeholder_overlay_keywords": {
+    "message": "Keywords to remove (comma separated)"
+  },
+  "button_overlay_keywords": {
+    "message": "Apply keywords"
+  },
+  "button_overlay_keyword_preview": {
+    "message": "Preview keywords"
+  },
+  "label_overlay_mode": {
+    "message": "Mode:"
+  },
+  "label_overlay_mode_soft": {
+    "message": "Soften"
+  },
+  "label_overlay_mode_hard": {
+    "message": "Remove"
+  },
+  "aria_overlay_mode": {
+    "message": "Choose overlay cleanup mode"
+  },
+  "label_overlay_z": {
+    "message": "Minimum z-index"
+  },
+  "label_overlay_preview_idle": {
+    "message": "No preview yet."
+  },
+  "label_overlay_preview_running": {
+    "message": "Highlighting overlays..."
+  },
+  "label_overlay_preview_match": {
+    "message": "$1 overlay(s) highlighted."
+  },
+  "label_overlay_preview_none": {
+    "message": "No overlay candidates met the thresholds."
+  },
+  "label_overlay_preview_failed": {
+    "message": "Overlay preview failed."
+  },
+  "hint_overlay_preview_match": {
+    "message": "$1 overlay element(s) highlighted."
+  },
+  "hint_overlay_preview_none": {
+    "message": "No overlay candidates met the thresholds."
+  },
+  "hint_overlay_preview_failed": {
+    "message": "Overlay preview failed."
+  },
+  "hint_keywords_preview": {
+    "message": "$1 element(s) match those keywords."
+  },
+  "hint_keywords_preview_none": {
+    "message": "No overlay elements match those keywords."
+  },
+  "hint_keywords_preview_failed": {
+    "message": "Keyword preview failed."
+  },
+  "hint_keywords_softened": {
+    "message": "Softened $1 keyword overlay(s)."
+  },
+  "label_overlay_recent_tags": {
+    "message": "Recent tags"
+  },
+  "label_overlay_suggested_tags": {
+    "message": "Suggested tags"
+  },
+  "label_overlay_no_recent": {
+    "message": "No recent tags yet."
+  },
+  "label_min_width": {
+    "message": "Min W:"
+  },
+  "label_min_height": {
+    "message": "Min H:"
+  },
+  "label_format": {
+    "message": "Format:"
+  },
+  "option_format_any": {
+    "message": "Any"
+  },
+  "option_format_png": {
+    "message": "PNG"
+  },
+  "option_format_jpg": {
+    "message": "JPG"
+  },
+  "option_format_webp": {
+    "message": "WEBP"
+  },
+  "option_format_gif": {
+    "message": "GIF"
+  },
+  "option_format_svg": {
+    "message": "SVG"
+  },
+  "button_select_all": {
+    "message": "Select All"
+  },
+  "button_select_none": {
+    "message": "None"
+  },
+  "label_convert": {
+    "message": "Convert:"
+  },
+  "option_convert_original": {
+    "message": "Original"
+  },
+  "button_download_selected": {
+    "message": "Download Selected"
+  },
+  "button_zip_selected": {
+    "message": "ZIP Selected"
+  },
+  "button_rename_serial": {
+    "message": "Rename Serially"
+  },
+  "tooltip_rename_serial": {
+    "message": "Rename items by detection order"
+  },
+  "label_sort": {
+    "message": "Sort:"
+  },
+  "option_sort_detected": {
+    "message": "Detection order"
+  },
+  "option_sort_name": {
+    "message": "Name (A-Z)"
+  },
+  "option_sort_pixels": {
+    "message": "Pixel size (largest)"
+  },
+  "option_sort_filesize": {
+    "message": "File size (largest)"
+  },
+  "link_tip": {
+    "message": "Tip"
+  },
+  "link_contact": {
+    "message": "Contact Us"
+  },
+  "link_help": {
+    "message": "Help & modes guide"
+  },
+  "confirm_host_permission": {
+    "message": "Unshackle only requests access after you click scan.\nWe need temporary access to $1 to read images. Continue?"
+  },
+  "menu_enable_context": {
+    "message": "Enable right-click & drag on this site"
+  },
+  "button_progress_cancel": {
+    "message": "Cancel"
+  },
+  "tooltip_telemetry": {
+    "message": "Store local counters for scans and overlay tweaks"
+  },
+  "label_telemetry_toggle": {
+    "message": "Diagnostics counters (local only)"
+  },
+  "aria_toggle_telemetry": {
+    "message": "Toggle telemetry opt-in"
+  },
+  "label_telemetry_off": {
+    "message": "Telemetry disabled (local only)."
+  },
+  "label_telemetry_stats": {
+    "message": "Scans: $1 | Overlay adjustments: $2"
+  },
+  "button_show_onboarding": {
+    "message": "Show onboarding"
+  },
+  "tooltip_permission_prompt": {
+    "message": "Choose how site access is requested before scanning"
+  },
+  "label_permission_prompt": {
+    "message": "Ask for site access each scan"
+  },
+  "aria_toggle_permission_prompt": {
+    "message": "Toggle site permission prompts"
+  },
+  "note_permission_prompt": {
+    "message": "Disable to keep access without prompts."
+  },
+  "toast_permission_prompt_disabled": {
+    "message": "Site access stays granted; no more prompts."
+  },
+  "toast_permission_prompt_enabled": {
+    "message": "You'll be asked for site access per site."
+  },
+  "toast_permission_prompt_denied": {
+    "message": "Site access request was declined."
+  },
+  "hint_permission_global_required": {
+    "message": "Site access was not granted. Re-enable prompts or allow access in the settings."
+  },
+  "badge_download_queued": {
+    "message": "Queued"
+  },
+  "badge_download_done": {
+    "message": "Downloaded"
+  },
+  "badge_download_failed": {
+    "message": "Download failed"
+  },
+  "toast_downloads": {
+    "message": "Requested $1 download(s)."
+  },
+  "toast_downloads_link": {
+    "message": "Open Downloads"
+  },
+  "toast_downloads_partial": {
+    "message": "$1 download(s) queued, $2 failed."
+  },
+  "toast_zip": {
+    "message": "ZIP queued with $1 item(s)."
+  },
+  "toast_first_run": {
+    "message": "Unshackle only asks for site access when you run scans or captures."
+  },
+  "toast_first_run_link": {
+    "message": "Learn more"
+  },
+  "hint_progress_cancelled": {
+    "message": "Operation cancelled."
+  },
+  "label_progress_cancelled": {
+    "message": "Cancelled"
+  },
+  "label_progress_done": {
+    "message": "Done"
+  },
+  "label_progress_converting": {
+    "message": "Converting..."
+  },
+  "label_progress_converting_step": {
+    "message": "Converting $1 of $2"
+  },
+  "label_progress_download": {
+    "message": "Requesting download $1 of $2"
+  },
+  "hint_download_complete": {
+    "message": "Requested $1 of $2 download(s)."
+  },
+  "label_staging_items": {
+    "message": "Staging $1 of $2"
+  },
+  "label_zip_packing": {
+    "message": "Packing ZIP..."
+  },
+  "label_zip_packing_progress": {
+    "message": "Packing ZIP $1%"
+  },
+  "label_zip_finalizing": {
+    "message": "Finalizing ZIP..."
+  },
+  "notice_first_run": {
+    "message": "Unshackle only requests site access when you begin a scan or capture."
+  },
+  "notice_first_run_help": {
+    "message": "Read the quick guide"
+  },
+  "notice_first_run_dismiss": {
+    "message": "Got it"
+  },
+  "tooltip_help": {
+    "message": "Open the Unshackle guide"
+  },
+  "option_kind_gv": {
+    "message": "GigaViewer"
+  },
+  "option_kind_speedbinb": {
+    "message": "Speedbinb"
+  },
+  "option_kind_bellaciao": {
+    "message": "BellaCiao"
+  },
+  "option_kind_lezhin": {
+    "message": "Lezhin"
+  },
+  "option_theme_lightdark": {
+    "message": "Light in the Dark"
+  },
+  "toast_theme_applied": {
+    "message": "Theme updated."
+  },
+  "label_locale": {
+    "message": "Language"
+  },
+  "toast_locale_applied": {
+    "message": "Language updated."
+  },
+  "toast_help_opened": {
+    "message": "Help opened in a new tab."
+  },
+  "gv_option_only_first": {
+    "message": "Only first page"
+  },
+  "gv_option_save_metadata": {
+    "message": "Save metadata.json"
+  },
+  "gv_option_purchase_guard": {
+    "message": "Stop if not purchased"
+  },
+  "gv_option_zip": {
+    "message": "Download as ZIP"
+  },
+  "label_gv_gallery_hidden": {
+    "message": "Viewer downloads appear in the main grid. Thumbnails are hidden here."
+  },
+  "heading_chapters": {
+    "message": "Chapters"
+  },
+  "button_chapter_refresh": {
+    "message": "Refresh list"
+  },
+  "label_chapter_idle": {
+    "message": "Chapters not loaded yet."
+  },
+  "label_chapter_loading": {
+    "message": "Loading chapters..."
+  },
+  "label_chapter_empty": {
+    "message": "No chapters available on this page."
+  },
+  "label_chapter_error": {
+    "message": "Unable to load chapters. Open the comic overview and try again."
+  },
+  "label_chapter_loaded": {
+    "message": "Loaded $1 chapter(s)."
+  },
+  "label_chapter_free": {
+    "message": "Free"
+  },
+  "label_chapter_locked": {
+    "message": "Locked"
+  },
+  "label_chapter_purchased": {
+    "message": "Purchased"
+  },
+  "label_chapter_added": {
+    "message": "Chapter added to the grid."
+  },
+  "aria_chapter_add": {
+    "message": "Add $1 to the panel grid"
+  },
+  "option_hk_loader_auto": {
+    "message": "Auto (Runner + Manager)"
+  },
+  "option_hk_loader_runner": {
+    "message": "Compatibility (Runner only)"
+  },
+  "option_hk_loader_manager": {
+    "message": "Manager only (experimental)"
+  },
+  "note_hk_loader": {
+    "message": "Auto tries both paths and keeps Image mode safe. Use Manager only for debugging."
+  },
+  "button_reset_manga_defaults": {
+    "message": "Reset to safe defaults"
+  },
+  "note_reset_manga_defaults": {
+    "message": "Disables Manga mode and restores the original family/loader settings."
+  },
+  "toast_reset_safe_defaults": {
+    "message": "Settings restored to safe defaults."
+  },
+  "toast_reset_safe_defaults_failed": {
+    "message": "Unable to reset settings. Try again."
+  },
+  "confirm_reset_manga_defaults": {
+    "message": "Reset to safe defaults? This disables Manga mode until you re-enable it."
+  },
+  "onboarding_title": {
+    "message": "Welcome to Unshackle"
+  },
+  "onboarding_step_language": {
+    "message": "Choose Your Language"
+  },
+  "onboarding_step_theme": {
+    "message": "Pick a Theme"
+  },
+  "onboarding_step_features": {
+    "message": "Quick Tour"
+  },
+  "onboarding_btn_next": {
+    "message": "Next"
+  },
+  "onboarding_btn_back": {
+    "message": "Back"
+  },
+  "onboarding_btn_start": {
+    "message": "Get Started"
+  },
+  "onboarding_btn_skip": {
+    "message": "Skip"
+  },
+  "onboarding_feature_scan_title": {
+    "message": "Scan Images"
+  },
+  "onboarding_feature_scan_desc": {
+    "message": "Extract images from any webpage including backgrounds, canvases, and blobs"
+  },
+  "onboarding_feature_overlay_title": {
+    "message": "Remove Overlays"
+  },
+  "onboarding_feature_overlay_desc": {
+    "message": "Disable right-click blockers and remove annoying overlays"
+  },
+  "onboarding_feature_manga_title": {
+    "message": "Manga Mode"
+  },
+  "onboarding_feature_manga_desc": {
+    "message": "Download chapters from manga sites with HakuNeko connectors"
+  },
+  "onboarding_feature_download_title": {
+    "message": "Bulk Download"
+  },
+  "onboarding_feature_download_desc": {
+    "message": "Download multiple images at once or pack them into a ZIP file"
+  },
+  "onboarding_lang_en": {
+    "message": "English"
+  },
+  "onboarding_lang_de": {
+    "message": "Deutsch"
+  },
+  "onboarding_lang_es": {
+    "message": "Español"
+  },
+  "onboarding_lang_fr": {
+    "message": "Français"
+  },
+  "onboarding_lang_ja": {
+    "message": "日本語"
+  },
+  "onboarding_lang_ko": {
+    "message": "한국어"
+  },
+  "onboarding_lang_zh_CN": {
+    "message": "简体中文"
+  },
+  "onboarding_lang_zh_TW": {
+    "message": "繁體中文"
+  },
+  "option_theme_blueberry": {
+    "message": "Blueberry"
+  },
+  "onboarding_feature_network_title": {
+    "message": "Network Capture"
+  },
+  "onboarding_feature_network_desc": {
+    "message": "Intercept images loaded dynamically via network requests for protected content"
+  },
+  "onboarding_feature_convert_title": {
+    "message": "Convert Images"
+  },
+  "onboarding_feature_convert_desc": {
+    "message": "Convert images between formats like PNG, JPEG, and WebP before downloading"
+  },
+  "tooltip_delete": {
+    "message": "Delete selected images from the list"
+  },
+  "hint_deleted": {
+    "message": "Deleted $1 item(s) from the list."
+  },
+  "heading_stats": {
+    "message": "Stats"
+  },
+  "label_stats_scans": {
+    "message": "Scans:"
+  },
+  "label_stats_images_scanned": {
+    "message": "Images scanned:"
+  },
+  "label_stats_overlays_nuked": {
+    "message": "Overlays nuked:"
+  },
+  "label_stats_overlay_tweaks": {
+    "message": "Overlay tweaks:"
+  },
+  "label_stats_images_downloaded": {
+    "message": "Images downloaded:"
+  }
+}

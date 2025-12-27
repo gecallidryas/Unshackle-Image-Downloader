@@ -1,0 +1,1655 @@
+[
+  {
+    "id": "speedbinb.booklive",
+    "label": "BookLive",
+    "domains": [
+      "booklive.jp"
+    ],
+    "type": "delegate",
+    "module": "speedbinb",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "speedbinb.comicfire",
+    "label": "Comic Fire",
+    "domains": [
+      "hobbyjapan.co.jp",
+      "comic-fire.com"
+    ],
+    "type": "delegate",
+    "module": "speedbinb",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "coreview.comicaction",
+    "label": "Comic Action",
+    "domains": [
+      "comic-action.com"
+    ],
+    "type": "delegate",
+    "module": "gigaviewer",
+    "family": "CoreView"
+  },
+  {
+    "id": "delegate.madara",
+    "label": "Madara (Generic)",
+    "domains": [],
+    "type": "delegate",
+    "module": "madara"
+  },
+  {
+    "id": "delegate.mangastream",
+    "label": "Mangastream (Generic)",
+    "domains": [],
+    "type": "delegate",
+    "module": "mangastream"
+  },
+  {
+    "id": "delegate.foolslide",
+    "label": "FoolSlide (Generic)",
+    "domains": [],
+    "type": "delegate",
+    "module": "foolslide"
+  },
+  {
+    "id": "delegate.speedbinb",
+    "label": "SpeedBinb (Native)",
+    "domains": [],
+    "type": "delegate",
+    "module": "speedbinb",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "delegate.coreview",
+    "label": "CoreView (Native)",
+    "domains": [],
+    "type": "delegate",
+    "module": "gigaviewer",
+    "family": "CoreView"
+  },
+  {
+    "id": "yanmaga",
+    "label": "Yanmaga (Native)",
+    "domains": [
+      "yanmaga.jp",
+      "sbc.yanmaga.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Yanmaga.mjs",
+    "engineId": "yanmaga",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "booklive",
+    "label": "BookLive (Native)",
+    "domains": [
+      "booklive.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/BookLive.mjs",
+    "engineId": "booklive",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicaction",
+    "label": "web\u30a2\u30af\u30b7\u30e7\u30f3 (Comic Action) (Native)",
+    "domains": [
+      "comic-action.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicAction.mjs",
+    "engineId": "comicaction",
+    "family": "CoreView"
+  },
+  {
+    "id": "alphapolis",
+    "label": "ALPHAPOLIS (\u30a2\u30eb\u30d5\u30a1\u30dd\u30ea\u30b9) (Native)",
+    "domains": [
+      "alphapolis.co.jp",
+      "www.alphapolis.co.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Alphapolis.mjs",
+    "engineId": "alphapolis",
+    "family": "Connector"
+  },
+  {
+    "id": "baozimh",
+    "label": "\u5305\u5b50\u6f2b\u66f8 (baozimh) (Native)",
+    "domains": [
+      "baozimh.com",
+      "www.baozimh.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Baozimh.mjs",
+    "engineId": "baozimh",
+    "family": "Connector"
+  },
+  {
+    "id": "bilibili-comics",
+    "label": "Bilibili Comics (Multi-lingual) (Native)",
+    "domains": [
+      "bilibilicomics.com",
+      "www.bilibilicomics.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/BilibiliComics.mjs",
+    "engineId": "bilibili-comics",
+    "family": "BilibiliManhua"
+  },
+  {
+    "id": "comicboost",
+    "label": "comic\u30d6\u30fc\u30b9\u30c8 (Comic Boost) (Native)",
+    "domains": [
+      "comic-boost.com",
+      "www.comic-boost.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicBoost.mjs",
+    "engineId": "comicboost",
+    "family": "Connector"
+  },
+  {
+    "id": "comicborder",
+    "label": "\u30b3\u30df\u30c3\u30af\u30dc\u30fc\u30c0\u30fc (ComicBorder) (Native)",
+    "domains": [
+      "comicborder.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicBorder.mjs",
+    "engineId": "comicborder",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicbrise",
+    "label": "comicBrise (Native)",
+    "domains": [
+      "comic-brise.com",
+      "www.comic-brise.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicBrise.mjs",
+    "engineId": "comicbrise",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicbunch",
+    "label": "\u30b3\u30df\u30c3\u30af\u30d0\u30f3\u30c1 (ComicBunch) (Native)",
+    "domains": [
+      "comicbunch.com",
+      "www.comicbunch.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicBunch.mjs",
+    "engineId": "comicbunch",
+    "family": "Connector"
+  },
+  {
+    "id": "comicbushi",
+    "label": "\u30b3\u30df\u30c3\u30af\u30d6\u30b7\u30ed\u30fc\u30c9WEB (Comic Bushiroad WEB / Growl) (Native)",
+    "domains": [
+      "comic-growl.com",
+      "www.comic-growl.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicBushi.mjs",
+    "engineId": "comicbushi",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicclear",
+    "label": "\u30b3\u30df\u30c3\u30af\u30af\u30ea\u30a2 (Comic Clear) (Native)",
+    "domains": [
+      "comic-clear.jp",
+      "www.comic-clear.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicClear.mjs",
+    "engineId": "comicclear",
+    "family": "Connector"
+  },
+  {
+    "id": "comicdays",
+    "label": "\u30b3\u30df\u30c3\u30afDAYS (Comic Days) (Native)",
+    "domains": [
+      "comic-days.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicDays.mjs",
+    "engineId": "comicdays",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicdom",
+    "label": "ComicDom (Native)",
+    "domains": [
+      "comicdom.org",
+      "www.comicdom.org"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicDom.mjs",
+    "engineId": "comicdom",
+    "family": "WordPressMadara"
+  },
+  {
+    "id": "comicearthstar",
+    "label": "\u30b3\u30df\u30c3\u30af \u30a2\u30fc\u30b9\u30fb\u30b9\u30bf\u30fc (Comic Earth Star) (Native)",
+    "domains": [
+      "comic-earthstar.com",
+      "www.comic-earthstar.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicEarthStar.mjs",
+    "engineId": "comicearthstar",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicextra",
+    "label": "ComicExtra (Native)",
+    "domains": [
+      "comixextra.com",
+      "www.comixextra.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicExtra.mjs",
+    "engineId": "comicextra",
+    "family": "Connector"
+  },
+  {
+    "id": "comicfire",
+    "label": "COMIC \u30d5\u30a1\u30a4\u30a2 (Comic Fire/Hobby Japan) (Native)",
+    "domains": [
+      "hobbyjapan.co.jp",
+      "www.hobbyjapan.co.jp",
+      "comic-fire.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicFire.mjs",
+    "engineId": "comicfire",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicfuz",
+    "label": "COMIC FUZ (Native)",
+    "domains": [
+      "comic-fuz.com",
+      "www.comic-fuz.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicFuz.mjs",
+    "engineId": "comicfuz",
+    "family": "Connector"
+  },
+  {
+    "id": "comicgardo",
+    "label": "\u30b3\u30df\u30c3\u30af\u30ac\u30eb\u30c9 (Comic Gardo) (Native)",
+    "domains": [
+      "comic-gardo.com",
+      "www.comic-gardo.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicGardo.mjs",
+    "engineId": "comicgardo",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicgrast",
+    "label": "comic \u30b0\u30e9\u30b9\u30c8 (Comic Grast) (Native)",
+    "domains": [
+      "novema.jp",
+      "www.novema.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicGrast.mjs",
+    "engineId": "comicgrast",
+    "family": "Connector"
+  },
+  {
+    "id": "comicmeteor",
+    "label": "COMIC\u30e1\u30c6\u30aa (COMIC Meteor) (Native)",
+    "domains": [
+      "comic-meteor.jp",
+      "www.comic-meteor.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicMeteor.mjs",
+    "engineId": "comicmeteor",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicpolaris",
+    "label": "COMIC\u30dd\u30e9\u30ea\u30b9 (COMIC Polaris) (Native)",
+    "domains": [
+      "comic-polaris.jp",
+      "www.comic-polaris.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicPolaris.mjs",
+    "engineId": "comicpolaris",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicride",
+    "label": "ComicRide (Native)",
+    "domains": [
+      "comicride.jp",
+      "www.comicride.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicRide.mjs",
+    "engineId": "comicride",
+    "family": "YoungChampion"
+  },
+  {
+    "id": "comicryu",
+    "label": "COMIC\u30ea\u30e5\u30a6 (Native)",
+    "domains": [
+      "comic-ryu.jp",
+      "www.comic-ryu.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicRyu.mjs",
+    "engineId": "comicryu",
+    "family": "Connector"
+  },
+  {
+    "id": "comictrail",
+    "label": "Comic Trail (\u30b3\u30df\u30c3\u30af\u30c8\u30ec\u30a4\u30eb) (Native)",
+    "domains": [
+      "comic-trail.com",
+      "www.comic-trail.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicTrail.mjs",
+    "engineId": "comictrail",
+    "family": "CoreView"
+  },
+  {
+    "id": "comicvalkyrie",
+    "label": "Comic Valkyrie (Native)",
+    "domains": [
+      "comic-valkyrie.com",
+      "www.comic-valkyrie.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicValkyrie.mjs",
+    "engineId": "comicvalkyrie",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "comicwalker",
+    "label": "\u30ab\u30c9\u30b3\u30df (KadoComi) (Native)",
+    "domains": [
+      "comic-walker.com",
+      "www.comic-walker.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicWalker.mjs",
+    "engineId": "comicwalker",
+    "family": "Connector"
+  },
+  {
+    "id": "comiczenon",
+    "label": "\u30bc\u30ce\u30f3\u7de8\u96c6\u90e8 (Comic Zenon) (Native)",
+    "domains": [
+      "comic-zenon.com",
+      "www.comic-zenon.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicZenon.mjs",
+    "engineId": "comiczenon",
+    "family": "CoreView"
+  },
+  {
+    "id": "comiczerosum",
+    "label": "Comic \u30bc\u30ed\u30b5\u30e0 (Comic ZEROSUM) (Native)",
+    "domains": [
+      "zerosumonline.com",
+      "www.zerosumonline.com",
+      "api.zerosumonline.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ComicZerosum.mjs",
+    "engineId": "comiczerosum",
+    "family": "Connector"
+  },
+  {
+    "id": "comico",
+    "label": "Comico (\u30b3\u30df\u30b3) (Native)",
+    "domains": [
+      "comico.jp",
+      "www.comico.jp",
+      "api.comico.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Comico.mjs",
+    "engineId": "comico",
+    "family": "Connector"
+  },
+  {
+    "id": "comikey",
+    "label": "Comikey (Native)",
+    "domains": [
+      "comikey.com",
+      "www.comikey.com",
+      "api.comikey.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Comikey.mjs",
+    "engineId": "comikey",
+    "family": "Connector"
+  },
+  {
+    "id": "cxc",
+    "label": "CxC - Content x Creator (Native)",
+    "domains": [
+      "cxc.today",
+      "api.cxc.today"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/CxC.mjs",
+    "engineId": "cxc",
+    "family": "Connector"
+  },
+  {
+    "id": "cycomi",
+    "label": "CyComi (Native)",
+    "domains": [
+      "cycomi.com",
+      "www.cycomi.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Cycomi.mjs",
+    "engineId": "cycomi",
+    "family": "Connector"
+  },
+  {
+    "id": "daumwebtoon",
+    "label": "Daum \uc6f9\ud230 (Native)",
+    "domains": [
+      "webtoon.daum.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/DaumWebtoon.mjs",
+    "engineId": "daumwebtoon",
+    "family": "Connector"
+  },
+  {
+    "id": "daysneo",
+    "label": "daysneo (Native)",
+    "domains": [
+      "daysneo.com",
+      "www.daysneo.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Daysneo.mjs",
+    "engineId": "daysneo",
+    "family": "Connector"
+  },
+  {
+    "id": "futabanet",
+    "label": "\u304c\u3046\u304c\u3046\u30e2\u30f3\u30b9\u30bf\u30fc (Futabanet Monster) (Native)",
+    "domains": [
+      "gaugau.futabanet.jp",
+      "www.futabanet.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Futabanet.mjs",
+    "engineId": "futabanet",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "gammaplus",
+    "label": "GammaPlus (Native)",
+    "domains": [
+      "gammaplus.takeshobo.co.jp",
+      "takeshobo.co.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/GammaPlus.mjs",
+    "engineId": "gammaplus",
+    "family": "TakeShoboNew"
+  },
+  {
+    "id": "ganganonline",
+    "label": "\u30ac\u30f3\u30ac\u30f3ONLINE (Gangan Online) (Native)",
+    "domains": [
+      "ganganonline.com",
+      "www.ganganonline.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/GanGanOnline.mjs",
+    "engineId": "ganganonline",
+    "family": "Connector"
+  },
+  {
+    "id": "ganma",
+    "label": "GANMA! (Native)",
+    "domains": [
+      "ganma.jp",
+      "www.ganma.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Ganma.mjs",
+    "engineId": "ganma",
+    "family": "Connector"
+  },
+  {
+    "id": "hitomi",
+    "label": "Hitomi (Native)",
+    "domains": [
+      "hitomi.la"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Hitomi.mjs",
+    "engineId": "hitomi",
+    "family": "Connector"
+  },
+  {
+    "id": "lhtranslation",
+    "label": "LHTranslation (Native)",
+    "domains": [
+      "lhtranslation.net",
+      "www.lhtranslation.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LHTranslation.mjs",
+    "engineId": "lhtranslation",
+    "family": "WordPressMadara"
+  },
+  {
+    "id": "lezhin-en",
+    "label": "Lezhin (english) (Native)",
+    "domains": [
+      "lezhinus.com",
+      "www.lezhinus.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LezhinEN.mjs",
+    "engineId": "lezhin-en",
+    "family": "Lezhin"
+  },
+  {
+    "id": "lezhin-ja",
+    "label": "Lezhin (japanese) (Native)",
+    "domains": [
+      "lezhin.jp",
+      "www.lezhin.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LezhinJA.mjs",
+    "engineId": "lezhin-ja",
+    "family": "Lezhin"
+  },
+  {
+    "id": "lezhin-ko",
+    "label": "Lezhin (korean) (Native)",
+    "domains": [
+      "lezhin.com",
+      "www.lezhin.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LezhinKO.mjs",
+    "engineId": "lezhin-ko",
+    "family": "Lezhin"
+  },
+  {
+    "id": "linewebtoon-en",
+    "label": "Line Webtoon (English) (Native)",
+    "domains": [
+      "webtoons.com",
+      "www.webtoons.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LineWebtoonEN.mjs",
+    "engineId": "linewebtoon-en",
+    "family": "LineWebtoon"
+  },
+  {
+    "id": "madokami",
+    "label": "Madokami (Native)",
+    "domains": [
+      "manga.madokami.al"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Madokami.mjs",
+    "engineId": "madokami",
+    "family": "Connector"
+  },
+  {
+    "id": "magcomi",
+    "label": "MAGCOMI (Native)",
+    "domains": [
+      "magcomi.com",
+      "www.magcomi.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/MagComi.mjs",
+    "engineId": "magcomi",
+    "family": "CoreView"
+  },
+  {
+    "id": "magkan",
+    "label": "MagKan (Native)",
+    "domains": [
+      "kansai.mag-garden.co.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/MagKan.mjs",
+    "engineId": "magkan",
+    "family": "YoungChampion"
+  },
+  {
+    "id": "nhentai",
+    "label": "NHentai (Native)",
+    "domains": [
+      "nhentai.net",
+      "www.nhentai.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NHentai.mjs",
+    "engineId": "nhentai",
+    "family": "Connector"
+  },
+  {
+    "id": "nhentaicom",
+    "label": "NHentai.Com (Native)",
+    "domains": [
+      "nhentai.com",
+      "www.nhentai.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NHentaiCom.mjs",
+    "engineId": "nhentaicom",
+    "family": "Connector"
+  },
+  {
+    "id": "newtype",
+    "label": "NewType (Native)",
+    "domains": [
+      "comic.webnewtype.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NewType.mjs",
+    "engineId": "newtype",
+    "family": "Connector"
+  },
+  {
+    "id": "onetwothreehon",
+    "label": "123hon (Native)",
+    "domains": [
+      "123hon.com",
+      "www.123hon.com",
+      "123hon.com/polca",
+      "www.123hon.com/polca",
+      "123hon.com/nova",
+      "www.123hon.com/nova"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/OneTwoThreeHon.mjs",
+    "engineId": "onetwothreehon",
+    "family": "SpeedBinb"
+  },
+  {
+    "id": "shonenjumpplus",
+    "label": "\u5c11\u5e74\u30b8\u30e3\u30f3\u30d7\uff0b (Shonen Jump +) (Native)",
+    "domains": [
+      "shonenjumpplus.com",
+      "www.shonenjumpplus.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ShonenJumpPlus.mjs",
+    "engineId": "shonenjumpplus",
+    "family": "CoreView"
+  },
+  {
+    "id": "shonenjumprookie",
+    "label": "\u30b8\u30e3\u30f3\u30d7\u30eb\u30fc\u30ad\u30fc (Jump Rookie) (Native)",
+    "domains": [
+      "rookie.shonenjump.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ShonenJumpRookie.mjs",
+    "engineId": "shonenjumprookie",
+    "family": "Connector"
+  },
+  {
+    "id": "shonenmagazine",
+    "label": "\u9031\u520a\u5c11\u5e74\u30de\u30ac\u30b8 (Weekly Shonen Magazine) (Native)",
+    "domains": [
+      "shonenmagazine.com",
+      "www.shonenmagazine.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ShonenMagazine.mjs",
+    "engineId": "shonenmagazine",
+    "family": "CoreView"
+  },
+  {
+    "id": "shonenmagazine-pocket",
+    "label": "\u30de\u30ac\u30b8\u30f3\u30dd\u30b1\u30c3\u30c8 (Shonen Magazine Pocket) (Native)",
+    "domains": [
+      "pocket.shonenmagazine.com",
+      "www.pocket.shonenmagazine.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ShonenMagazinePocket.mjs",
+    "engineId": "shonenmagazine-pocket",
+    "family": "CoreView"
+  },
+  {
+    "id": "shueishamangaplus",
+    "label": "MANGA Plus by Shueisha (Native)",
+    "domains": [
+      "mangaplus.shueisha.co.jp",
+      "jumpg-webapi.tokyo-cdn.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ShueishaMangaPlus.mjs",
+    "engineId": "shueishamangaplus",
+    "family": "Publus"
+  },
+  {
+    "id": "mangadex",
+    "label": "MangaDex (Native)",
+    "domains": [
+      "mangadex.org",
+      "www.mangadex.org"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/MangaDex.mjs",
+    "engineId": "mangadex",
+    "family": "Connector"
+  },
+  {
+    "id": "sundaywebry",
+    "label": "\u30b5\u30f3\u30c7\u30fc\u3046\u3047\u3076\u308a (Sunday Webry) (Native)",
+    "domains": [
+      "sunday-webry.com",
+      "www.sunday-webry.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/SundayWebry.mjs",
+    "engineId": "sundaywebry",
+    "family": "CoreView"
+  },
+  {
+    "id": "tappytoon-en",
+    "label": "Tappytoon (English) (Native)",
+    "domains": [
+      "tappytoon.com",
+      "www.tappytoon.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/TappytoonEN.mjs",
+    "engineId": "tappytoon-en",
+    "family": "Tappytoon"
+  },
+  {
+    "id": "tencentcomic",
+    "label": "Tencent Comic (Native)",
+    "domains": [
+      "ac.qq.com",
+      "www.ac.qq.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/TencentComic.mjs",
+    "engineId": "tencentcomic",
+    "family": "Connector"
+  },
+  {
+    "id": "tonarinoyoungjump",
+    "label": "\u3068\u306a\u308a\u306e\u30e4\u30f3\u30b0\u30b8\u30e3\u30f3\u30d7 (Tonari no Young Jump) (Native)",
+    "domains": [
+      "tonarinoyj.jp",
+      "www.tonarinoyj.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/TonariNoYoungJump.mjs",
+    "engineId": "tonarinoyoungjump",
+    "family": "CoreView"
+  },
+  {
+    "id": "toomics-en",
+    "label": "Toomics (English) (Native)",
+    "domains": [
+      "global.toomics.com",
+      "www.toomics.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ToomicsEN.mjs",
+    "engineId": "toomics-en",
+    "family": "Toomics"
+  },
+  {
+    "id": "vizshonenjump",
+    "label": "Viz - Shonen Jump (Native)",
+    "domains": [
+      "viz.com",
+      "www.viz.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/VizShonenJump.mjs",
+    "engineId": "vizshonenjump",
+    "family": "Connector"
+  },
+  {
+    "id": "webcomicgamma",
+    "label": "WebComicGamma (Native)",
+    "domains": [
+      "webcomicgamma.takeshobo.co.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WebComicGamma.mjs",
+    "engineId": "webcomicgamma",
+    "family": "TakeShoboNew"
+  },
+  {
+    "id": "webcomicsapp",
+    "label": "WebComicsApp (Native)",
+    "domains": [
+      "webcomicsapp.com",
+      "www.webcomicsapp.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WebComicsApp.mjs",
+    "engineId": "webcomicsapp",
+    "family": "Connector"
+  },
+  {
+    "id": "webnovel",
+    "label": "Webnovel Comics (Native)",
+    "domains": [
+      "webnovel.com",
+      "www.webnovel.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WebNovel.mjs",
+    "engineId": "webnovel",
+    "family": "Connector"
+  },
+  {
+    "id": "kakaopage",
+    "label": "Page Kakao (\uce74\uce74\uc624\ud398\uc774\uc9c0) (Native)",
+    "domains": [
+      "page.kakao.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/kakaopage.mjs",
+    "engineId": "kakaopage",
+    "family": "Connector"
+  },
+  {
+    "id": "anyacg-template",
+    "label": "Any A C G (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/AnyACG.mjs",
+    "engineId": "anyacg-template",
+    "family": "template"
+  },
+  {
+    "id": "bigcomics",
+    "label": "BigComics",
+    "domains": [
+      "bigcomics.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/BigComics.mjs",
+    "engineId": "bigcomics",
+    "family": ""
+  },
+  {
+    "id": "bloggermanga-template",
+    "label": "Blogger Manga (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/BloggerManga.mjs",
+    "engineId": "bloggermanga-template",
+    "family": "template"
+  },
+  {
+    "id": "bookmarks",
+    "label": "\u3010Bookmarks\u3011",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/system/BookmarkConnector.mjs",
+    "engineId": "bookmarks",
+    "family": "system"
+  },
+  {
+    "id": "ciayo-template",
+    "label": "CIAYO (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Ciayo.mjs",
+    "engineId": "ciayo-template",
+    "family": "template"
+  },
+  {
+    "id": "clipboard",
+    "label": "\u3010Clipboard\u3011",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/system/ClipboardConnector.mjs",
+    "engineId": "clipboard",
+    "family": "system"
+  },
+  {
+    "id": "comicake-template",
+    "label": "Comi Cake (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/ComiCake.mjs",
+    "engineId": "comicake-template",
+    "family": "template"
+  },
+  {
+    "id": "coreview-template",
+    "label": "Core View (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/CoreView.mjs",
+    "engineId": "coreview-template",
+    "family": "template"
+  },
+  {
+    "id": "flatmanga-template",
+    "label": "Flat Manga (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/FlatManga.mjs",
+    "engineId": "flatmanga-template",
+    "family": "template"
+  },
+  {
+    "id": "folder",
+    "label": "\u3010Folder Viewer\u3011",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/system/FolderConnector.mjs",
+    "engineId": "folder",
+    "family": "system"
+  },
+  {
+    "id": "foolslide-template",
+    "label": "Fool Slide (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/FoolSlide.mjs",
+    "engineId": "foolslide-template",
+    "family": "template"
+  },
+  {
+    "id": "futekiya",
+    "label": "futekiya",
+    "domains": [
+      "mangaplanet.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Mangaplanet.mjs",
+    "engineId": "futekiya",
+    "family": ""
+  },
+  {
+    "id": "genkan",
+    "label": "Genkan",
+    "domains": [
+      "genkan.io"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Genkan.mjs",
+    "engineId": "genkan",
+    "family": ""
+  },
+  {
+    "id": "genkan-template",
+    "label": "Genkan (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Genkan.mjs",
+    "engineId": "genkan-template",
+    "family": "template"
+  },
+  {
+    "id": "gnuboard5bootstrapbasic2-template",
+    "label": "Gnu Board5 Bootstrap Basic2 (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/GnuBoard5BootstrapBasic2.mjs",
+    "engineId": "gnuboard5bootstrapbasic2-template",
+    "family": "template"
+  },
+  {
+    "id": "guya-template",
+    "label": "Guya (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Guya.mjs",
+    "engineId": "guya-template",
+    "family": "template"
+  },
+  {
+    "id": "heancms-template",
+    "label": "Hean Cms (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/HeanCms.mjs",
+    "engineId": "heancms-template",
+    "family": "template"
+  },
+  {
+    "id": "herosweb",
+    "label": "Hero's (\u30d2\u30fc\u30ed\u30fc\u30ba)",
+    "domains": [
+      "viewer.heros-web.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/HerosWeb.mjs",
+    "engineId": "herosweb",
+    "family": ""
+  },
+  {
+    "id": "ichijin-plus",
+    "label": "\u4e00\u8fc5\u30d7\u30e9\u30b9 (Ichijin Plus)",
+    "domains": [
+      "ichijin-plus.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Ichijin-Plus.mjs",
+    "engineId": "ichijin-plus",
+    "family": ""
+  },
+  {
+    "id": "iken-template",
+    "label": "Iken (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Iken.mjs",
+    "engineId": "iken-template",
+    "family": "template"
+  },
+  {
+    "id": "imgur",
+    "label": "Imgur",
+    "domains": [
+      "imgur.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Imgur.mjs",
+    "engineId": "imgur",
+    "family": ""
+  },
+  {
+    "id": "invalidconnector",
+    "label": "Invalid Connector",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/system/InvalidConnector.mjs",
+    "engineId": "invalidconnector",
+    "family": "system"
+  },
+  {
+    "id": "jumpbookstore",
+    "label": "\u30b8\u30e3\u30f3\u30d7BOOK\u30b9\u30c8\u30a2 (Jump Book Store)",
+    "domains": [
+      "jumpbookstore.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/JumpBookStore.mjs",
+    "engineId": "jumpbookstore",
+    "family": ""
+  },
+  {
+    "id": "kaguyadex",
+    "label": "Kaguyadex",
+    "domains": [
+      "kaguyadex.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Kaguyadex.mjs",
+    "engineId": "kaguyadex",
+    "family": ""
+  },
+  {
+    "id": "kuragebunch",
+    "label": "\u304f\u3089\u3052\u30d0\u30f3\u30c1 (KurageBunch)",
+    "domains": [
+      "kuragebunch.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/KurageBunch.mjs",
+    "engineId": "kuragebunch",
+    "family": ""
+  },
+  {
+    "id": "lezhin-template",
+    "label": "Lezhin (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Lezhin.mjs",
+    "engineId": "lezhin-template",
+    "family": "template"
+  },
+  {
+    "id": "linewebtoon-de",
+    "label": "Line Webtoon (German)",
+    "domains": [
+      "www.webtoons.com",
+      "webtoons.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LineWebtoonDE.mjs",
+    "engineId": "linewebtoon-de",
+    "family": ""
+  },
+  {
+    "id": "linewebtoon-template",
+    "label": "Line Webtoon (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/LineWebtoon.mjs",
+    "engineId": "linewebtoon-template",
+    "family": "template"
+  },
+  {
+    "id": "linewebtoon-th",
+    "label": "Line Webtoon (Thai)",
+    "domains": [
+      "www.webtoons.com",
+      "webtoons.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/LineWebtoonTH.mjs",
+    "engineId": "linewebtoon-th",
+    "family": ""
+  },
+  {
+    "id": "madtheme-template",
+    "label": "Mad Theme (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MadTheme.mjs",
+    "engineId": "madtheme-template",
+    "family": "template"
+  },
+  {
+    "id": "manga-park",
+    "label": "\u30de\u30f3\u30acPark (Manga-Park)",
+    "domains": [
+      "manga-park.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/MagaParkPublisher.mjs",
+    "engineId": "manga-park",
+    "family": ""
+  },
+  {
+    "id": "mangaeden-template",
+    "label": "Manga Eden (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MangaEden.mjs",
+    "engineId": "mangaeden-template",
+    "family": "template"
+  },
+  {
+    "id": "mangareadercms-template",
+    "label": "Manga Reader C M S (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MangaReaderCMS.mjs",
+    "engineId": "mangareadercms-template",
+    "family": "template"
+  },
+  {
+    "id": "mangatoon-template",
+    "label": "MangaToon (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MangaToon.mjs",
+    "engineId": "mangatoon-template",
+    "family": "template"
+  },
+  {
+    "id": "mh-template",
+    "label": "M H (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MH.mjs",
+    "engineId": "mh-template",
+    "family": "template"
+  },
+  {
+    "id": "mhxk-template",
+    "label": "M H X K (Template)",
+    "domains": [
+      "www.mhxk.com",
+      "mhxk.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MHXK.mjs",
+    "engineId": "mhxk-template",
+    "family": "template"
+  },
+  {
+    "id": "mojoportalcomic-template",
+    "label": "Mojo Portal Comic (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/MojoPortalComic.mjs",
+    "engineId": "mojoportalcomic-template",
+    "family": "template"
+  },
+  {
+    "id": "naver",
+    "label": "\ub124\uc774\ubc84 \uc6f9\ud230 (Naver Webtoon)",
+    "domains": [
+      "comic.naver.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Naver.mjs",
+    "engineId": "naver",
+    "family": ""
+  },
+  {
+    "id": "newtoki",
+    "label": "NewToki",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NewToki.mjs",
+    "engineId": "newtoki",
+    "family": ""
+  },
+  {
+    "id": "niconicoseiga",
+    "label": "\u30cb\u30b3\u30cb\u30b3\u9759\u753b (niconico seiga)",
+    "domains": [
+      "seiga.nicovideo.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NicoNicoSeiga.mjs",
+    "engineId": "niconicoseiga",
+    "family": ""
+  },
+  {
+    "id": "ninemanga-template",
+    "label": "Nine Manga (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/NineManga.mjs",
+    "engineId": "ninemanga-template",
+    "family": "template"
+  },
+  {
+    "id": "novelcool-template",
+    "label": "Novel Cool (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/NovelCool.mjs",
+    "engineId": "novelcool-template",
+    "family": "template"
+  },
+  {
+    "id": "novelmic",
+    "label": "NovelMic",
+    "domains": [
+      "novelmic.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/NovelMic.mjs",
+    "engineId": "novelmic",
+    "family": ""
+  },
+  {
+    "id": "ohtabooks",
+    "label": "Ohtabooks",
+    "domains": [
+      "webcomic.ohtabooks.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Ohtabooks.mjs",
+    "engineId": "ohtabooks",
+    "family": ""
+  },
+  {
+    "id": "piccoma",
+    "label": "Piccoma",
+    "domains": [
+      "piccoma.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Piccoma.mjs",
+    "engineId": "piccoma",
+    "family": ""
+  },
+  {
+    "id": "pixiv",
+    "label": "pixiv (Artwork)",
+    "domains": [
+      "www.pixiv.net",
+      "pixiv.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Pixiv.mjs",
+    "engineId": "pixiv",
+    "family": ""
+  },
+  {
+    "id": "pixivcomics",
+    "label": "pixiv\u30b3\u30df\u30c3\u30af",
+    "domains": [
+      "comic.pixiv.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/PixivComics.mjs",
+    "engineId": "pixivcomics",
+    "family": ""
+  },
+  {
+    "id": "pizzareader-template",
+    "label": "Pizza Reader (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/PizzaReader.mjs",
+    "engineId": "pizzareader-template",
+    "family": "template"
+  },
+  {
+    "id": "publus-template",
+    "label": "Publus (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Publus.mjs",
+    "engineId": "publus-template",
+    "family": "template"
+  },
+  {
+    "id": "rawdevart",
+    "label": "Rawdevart",
+    "domains": [
+      "rawdevart.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/RawDevart.mjs",
+    "engineId": "rawdevart",
+    "family": ""
+  },
+  {
+    "id": "rawkuma",
+    "label": "Rawkuma",
+    "domains": [
+      "rawkuma.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Rawkuma.mjs",
+    "engineId": "rawkuma",
+    "family": ""
+  },
+  {
+    "id": "readerfront-template",
+    "label": "Reader Front (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/ReaderFront.mjs",
+    "engineId": "readerfront-template",
+    "family": "template"
+  },
+  {
+    "id": "readm",
+    "label": "Read M",
+    "domains": [
+      "readm.org"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ReadM.mjs",
+    "engineId": "readm",
+    "family": ""
+  },
+  {
+    "id": "ridibooks",
+    "label": "Ridibooks (Korean)",
+    "domains": [
+      "ridibooks.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Ridibooks.mjs",
+    "engineId": "ridibooks",
+    "family": ""
+  },
+  {
+    "id": "shakai",
+    "label": "Shakai",
+    "domains": [
+      "shakai.ru"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Shakai.mjs",
+    "engineId": "shakai",
+    "family": ""
+  },
+  {
+    "id": "sinmh-template",
+    "label": "Sin M H (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/SinMH.mjs",
+    "engineId": "sinmh-template",
+    "family": "template"
+  },
+  {
+    "id": "sixparkbbs-template",
+    "label": "Six Parkbbs (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/SixParkbbs.mjs",
+    "engineId": "sixparkbbs-template",
+    "family": "template"
+  },
+  {
+    "id": "soraone-template",
+    "label": "Sora One (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/SoraOne.mjs",
+    "engineId": "soraone-template",
+    "family": "template"
+  },
+  {
+    "id": "speedbinb-template",
+    "label": "Speed Binb (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/SpeedBinb.mjs",
+    "engineId": "speedbinb-template",
+    "family": "template"
+  },
+  {
+    "id": "takeshobo-template",
+    "label": "Take Shobo (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/TakeShobo.mjs",
+    "engineId": "takeshobo-template",
+    "family": "template"
+  },
+  {
+    "id": "takeshobonew-template",
+    "label": "Take Shobo New (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/TakeShoboNew.mjs",
+    "engineId": "takeshobonew-template",
+    "family": "template"
+  },
+  {
+    "id": "tapas",
+    "label": "Tapas",
+    "domains": [
+      "tapas.io"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Tapas.mjs",
+    "engineId": "tapas",
+    "family": ""
+  },
+  {
+    "id": "tappytoon-de",
+    "label": "Tappytoon (German)",
+    "domains": [
+      "www.tappytoon.com",
+      "tappytoon.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/TappytoonDE.mjs",
+    "engineId": "tappytoon-de",
+    "family": ""
+  },
+  {
+    "id": "tappytoon-template",
+    "label": "Tappytoon (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Tappytoon.mjs",
+    "engineId": "tappytoon-template",
+    "family": "template"
+  },
+  {
+    "id": "template-template",
+    "label": "Template (Template)",
+    "domains": [
+      "template.net"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/@Samples.mjs",
+    "engineId": "template-template",
+    "family": "template"
+  },
+  {
+    "id": "to-corona-ex",
+    "label": "\u30b3\u30ed\u30ca (to-corona-ex)",
+    "domains": [
+      "to-corona-ex.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/To-Corona-Ex.mjs",
+    "engineId": "to-corona-ex",
+    "family": ""
+  },
+  {
+    "id": "toomics-de",
+    "label": "Toomics (German)",
+    "domains": [
+      "global.toomics.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ToomicsDE.mjs",
+    "engineId": "toomics-de",
+    "family": ""
+  },
+  {
+    "id": "toomics-jp",
+    "label": "Toomics (Japanese)",
+    "domains": [
+      "global.toomics.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ToomicsJP.mjs",
+    "engineId": "toomics-jp",
+    "family": ""
+  },
+  {
+    "id": "toomics-ko",
+    "label": "Toomics (Korean)",
+    "domains": [
+      "www.toomics.com",
+      "toomics.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/ToomicsKO.mjs",
+    "engineId": "toomics-ko",
+    "family": ""
+  },
+  {
+    "id": "toomics-template",
+    "label": "Toomics (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/Toomics.mjs",
+    "engineId": "toomics-template",
+    "family": "template"
+  },
+  {
+    "id": "toptoon",
+    "label": "TOPTOON (\ud0d1\ud230)",
+    "domains": [
+      "toptoon.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/TopToon.mjs",
+    "engineId": "toptoon",
+    "family": ""
+  },
+  {
+    "id": "urasunday",
+    "label": "\u88cf\u30b5\u30f3\u30c7\u30fc (Ura Sunday)",
+    "domains": [
+      "urasunday.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/UraSunday.mjs",
+    "engineId": "urasunday",
+    "family": ""
+  },
+  {
+    "id": "vrv-template",
+    "label": "V R V (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/VRV.mjs",
+    "engineId": "vrv-template",
+    "family": "template"
+  },
+  {
+    "id": "webace",
+    "label": "web\u30a8\u30fc\u30b9 (web ace)",
+    "domains": [
+      "web-ace.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WebAce.mjs",
+    "engineId": "webace",
+    "family": ""
+  },
+  {
+    "id": "weebcentral",
+    "label": "Weeb Central",
+    "domains": [
+      "weebcentral.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WeebCentral.mjs",
+    "engineId": "weebcentral",
+    "family": ""
+  },
+  {
+    "id": "woopread",
+    "label": "WoopRead",
+    "domains": [
+      "woopread.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WoopRead.mjs",
+    "engineId": "woopread",
+    "family": ""
+  },
+  {
+    "id": "wordpressclaritymangareader-template",
+    "label": "Word Press Clarity Manga Reader (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressClarityMangaReader.mjs",
+    "engineId": "wordpressclaritymangareader-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpressjarida-template",
+    "label": "Word Press Jarida (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressJarida.mjs",
+    "engineId": "wordpressjarida-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpresslightpro-template",
+    "label": "Word Press Light Pro (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressLightPro.mjs",
+    "engineId": "wordpresslightpro-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpressmadara-template",
+    "label": "Word Press Madara (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressMadara.mjs",
+    "engineId": "wordpressmadara-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpressmadaranovel-template",
+    "label": "Word Press Madara Novel (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressMadaraNovel.mjs",
+    "engineId": "wordpressmadaranovel-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpressmangastream-template",
+    "label": "Word Press Mangastream (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressMangastream.mjs",
+    "engineId": "wordpressmangastream-template",
+    "family": "template"
+  },
+  {
+    "id": "wordpresszbulu-template",
+    "label": "Word Press Zbulu (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/WordPressZbulu.mjs",
+    "engineId": "wordpresszbulu-template",
+    "family": "template"
+  },
+  {
+    "id": "wuxiaworld",
+    "label": "WuxiaWorld",
+    "domains": [
+      "wuxiaworld.site"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/WuxiaWorld.mjs",
+    "engineId": "wuxiaworld",
+    "family": ""
+  },
+  {
+    "id": "xoxocomics",
+    "label": "XoxoComics",
+    "domains": [
+      "xoxocomic.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/XoxoComics.mjs",
+    "engineId": "xoxocomics",
+    "family": ""
+  },
+  {
+    "id": "yawarakaspirits",
+    "label": "\u3084\u308f\u3089\u304b\u30b9\u30d4\u30ea\u30c3\u30c4 (Yawaraka Spirits)",
+    "domains": [
+      "yawaspi.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/YawarakaSpirits.mjs",
+    "engineId": "yawarakaspirits",
+    "family": ""
+  },
+  {
+    "id": "youngchampion",
+    "label": "YoungChampion",
+    "domains": [
+      "youngchampion.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/YoungChampion.mjs",
+    "engineId": "youngchampion",
+    "family": ""
+  },
+  {
+    "id": "youngjump",
+    "label": "\u30e4\u30f3\u30b0\u30b8\u30e3\u30f3\u30d7 / \u30a6\u30eb\u30c8\u30e9\u30b8\u30e3\u30f3\u30d7 (young jump/ultra jump)",
+    "domains": [
+      "www.youngjump.world",
+      "youngjump.world"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/YoungJump.mjs",
+    "engineId": "youngjump",
+    "family": ""
+  },
+  {
+    "id": "zebrack",
+    "label": "Zebrack (\u30bc\u30d6\u30e9\u30c3\u30af)",
+    "domains": [
+      "zebrack-comic.shueisha.co.jp"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Zebrack.mjs",
+    "engineId": "zebrack",
+    "family": ""
+  },
+  {
+    "id": "zymk-template",
+    "label": "Z Y M K (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/ZYMK.mjs",
+    "engineId": "zymk-template",
+    "family": "template"
+  },
+  {
+    "id": "doujinland",
+    "label": "DOUJINLAND",
+    "domains": [
+      "doujinland.online"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/DoujinLand.mjs",
+    "engineId": "doujinland",
+    "family": ""
+  },
+  {
+    "id": "doujins",
+    "label": "Doujins",
+    "domains": [
+      "doujins.com"
+    ],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/Doujins.mjs",
+    "engineId": "doujins",
+    "family": ""
+  },
+  {
+    "id": "coreview-template",
+    "label": "Core View (Template)",
+    "domains": [],
+    "path": "hakuneko-runtime/src/web/mjs/connectors/templates/CoreView.mjs",
+    "engineId": "coreview-template",
+    "family": "template"
+  }
+]
