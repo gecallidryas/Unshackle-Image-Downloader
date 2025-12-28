@@ -2859,7 +2859,9 @@ body.hk-manga-disabled .hk-manga-panel {
   gap: 16px;
   padding: 18px 20px;
   border-bottom: 1px solid var(--border);
-  background: rgba(255, 204, 0, .08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .hk-modal-header h3 {

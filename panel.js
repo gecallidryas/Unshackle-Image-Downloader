@@ -17,8 +17,9 @@
     "https://comic-action.com/*",
     "https://*.comic-action.com/*"
   ];
-  const GLOBAL_PERMISSION_PRIMARY_ORIGINS = HK_TEST_HOST_PATTERNS.slice();
-  const GLOBAL_PERMISSION_ALL_ORIGINS = HK_TEST_HOST_PATTERNS.slice();
+  // Request <all_urls> permission when "Ask for site access each scan" is disabled
+  const GLOBAL_PERMISSION_PRIMARY_ORIGINS = ["<all_urls>"];
+  const GLOBAL_PERMISSION_ALL_ORIGINS = ["<all_urls>"];
   const TOAST_DURATION_MS = 6000;
   const LEGACY_TELEMETRY_KEY = "__unshackle_telemetry";
   const DONATION_KEY = "__unshackle_donation";

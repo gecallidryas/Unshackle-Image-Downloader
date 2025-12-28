@@ -15,6 +15,7 @@ Thumbs.db
 *.zip
 *.cbz
 *.epub
+chrome-webstore-safe-build/
 
 # Tests/artifacts
 test-artifacts/
