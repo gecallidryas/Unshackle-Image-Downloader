@@ -1,0 +1,773 @@
+{
+    "summary_counts": {
+        "message": "合計 $1 | 表示 $2 | 選択 $3"
+    },
+    "label_discovery_stats": {
+        "message": "新規 $1 | 既存 $2"
+    },
+    "button_preview": {
+        "message": "プレビュー"
+    },
+    "hint_select_items": {
+        "message": "まず項目を選択してください。"
+    },
+    "hint_download_requested": {
+        "message": "$1件のダウンロードを要求しました。"
+    },
+    "hint_convert_requested": {
+        "message": "$1件のファイルを変換してダウンロードを要求しました。"
+    },
+    "hint_zip_no_items": {
+        "message": "ZIPに追加できるファイルがありません。"
+    },
+    "hint_zip_failed": {
+        "message": "ZIPの作成に失敗しました。"
+    },
+    "hint_zip_success": {
+        "message": "$1件の項目でZIPファイルを作成しました。"
+    },
+    "hint_zip_download_failed": {
+        "message": "ZIPダウンロード要求に失敗しました。"
+    },
+    "label_footer_logs_empty": {
+        "message": "最近のメッセージはありません。"
+    },
+    "button_hide_messages": {
+        "message": "メッセージを隠す"
+    },
+    "button_show_messages": {
+        "message": "メッセージを表示"
+    },
+    "label_no_results": {
+        "message": "フィルターに一致するキャプチャがありません。スキャンするかフィルターを調整してください。"
+    },
+    "prompt_rename_start": {
+        "message": "開始番号:"
+    },
+    "prompt_rename_default": {
+        "message": "1"
+    },
+    "hint_rename_success": {
+        "message": "$2から始まる$1件の項目の名前を変更しました。"
+    },
+    "hint_no_active_tab": {
+        "message": "アクティブなタブがありません。"
+    },
+    "hint_connect_retry": {
+        "message": "ページに接続できません（再読み込みを試してください）。"
+    },
+    "hint_connect_failed": {
+        "message": "ページに接続できません。"
+    },
+    "hint_permission_cancelled": {
+        "message": "権限リクエストがキャンセルされました。"
+    },
+    "hint_permission_denied": {
+        "message": "Chromeはこのサイトへのアクセス権を付与しませんでした。"
+    },
+    "hint_tab_not_supported": {
+        "message": "まずメインブラウザウィンドウでウェブページ（http/https/file）を開いてください。"
+    },
+    "label_scanning": {
+        "message": "スキャン中..."
+    },
+    "hint_scan_failed": {
+        "message": "スキャンに失敗しました。"
+    },
+    "hint_auto_canvas_on": {
+        "message": "自動キャンバスが有効になりました。"
+    },
+    "hint_auto_images_on": {
+        "message": "自動画像が有効になりました。"
+    },
+    "label_overlay_threshold_value": {
+        "message": "$1%"
+    },
+    "hint_enable_success": {
+        "message": "右クリックとドラッグが有効になりました。オーバーレイが軽減されました。"
+    },
+    "hint_overlay_removed": {
+        "message": "オーバーレイのクリーンアップが$1要素に影響しました。"
+    },
+    "button_delete": {
+        "message": "削除"
+    },
+    "hint_overlay_preview": {
+        "message": "$1件の潜在的なオーバーレイをプレビュー中です。"
+    },
+    "hint_overlay_undo": {
+        "message": "$1件のオーバーレイ要素を復元しました。"
+    },
+    "hint_overlay_nothing_to_undo": {
+        "message": "元に戻すオーバーレイのクリーンアップがありません。"
+    },
+    "hint_enter_keywords": {
+        "message": "まずキーワードを入力してください。"
+    },
+    "confirm_keyword_remove": {
+        "message": "キーワードでオーバーレイを削除すると、サイトの機能が壊れる可能性があります。続行しますか？"
+    },
+    "hint_keywords_removed": {
+        "message": "キーワードで$1件の要素を削除しました。"
+    },
+    "label_progress_preparing": {
+        "message": "準備中…"
+    },
+    "hint_download_failed": {
+        "message": "ダウンロード要求に失敗しました。"
+    },
+    "label_processing_blob": {
+        "message": "blobプレビューを準備中..."
+    },
+    "button_advanced_collapse": {
+        "message": "詳細 [v]"
+    },
+    "button_advanced_expand": {
+        "message": "詳細 [>]"
+    },
+    "hint_sidepanel_enabled": {
+        "message": "サイドパネルがデフォルトで有効になりました。"
+    },
+    "hint_popup_enabled": {
+        "message": "ポップアップがデフォルトで有効になりました。"
+    },
+    "tooltip_settings": {
+        "message": "設定"
+    },
+    "tooltip_open_mode": {
+        "message": "拡張機能アイコンクリック時のUI表示方法を選択"
+    },
+    "label_popup": {
+        "message": "ポップアップ"
+    },
+    "label_side_panel": {
+        "message": "サイドパネル"
+    },
+    "aria_toggle_mode": {
+        "message": "ポップアップとサイドパネルを切り替え"
+    },
+    "note_toggle_mode": {
+        "message": "ポップアップウィンドウモードを使用するにはオフにしてください。"
+    },
+    "button_scan": {
+        "message": "スキャン"
+    },
+    "tooltip_scan": {
+        "message": "画像をスキャン：直接、背景、Data URI、Blob、SVG"
+    },
+    "button_canvas": {
+        "message": "キャンバス"
+    },
+    "tooltip_canvas": {
+        "message": "同一オリジンのキャンバスをキャプチャ"
+    },
+    "label_auto_images": {
+        "message": "自動画像"
+    },
+    "label_auto_canvas": {
+        "message": "自動キャンバス"
+    },
+    "button_advanced_plain": {
+        "message": "詳細"
+    },
+    "aria_advanced_section": {
+        "message": "詳細オプション"
+    },
+    "heading_advanced": {
+        "message": "詳細オプション"
+    },
+    "button_enable_interactions": {
+        "message": "右クリックを有効にする"
+    },
+    "button_overlay_preview": {
+        "message": "影響を受けるオーバーレイをプレビュー"
+    },
+    "button_overlay_remove": {
+        "message": "クリーンアップを適用"
+    },
+    "button_overlay_undo": {
+        "message": "オーバーレイのクリーンアップを元に戻す"
+    },
+    "label_overlay_threshold": {
+        "message": "表面カバレッジしきい値"
+    },
+    "placeholder_overlay_keywords": {
+        "message": "削除するキーワード（カンマ区切り）"
+    },
+    "button_overlay_keywords": {
+        "message": "キーワードを適用"
+    },
+    "button_overlay_keyword_preview": {
+        "message": "キーワードをプレビュー"
+    },
+    "label_overlay_mode": {
+        "message": "モード:"
+    },
+    "label_overlay_mode_soft": {
+        "message": "軽減"
+    },
+    "label_overlay_mode_hard": {
+        "message": "削除"
+    },
+    "aria_overlay_mode": {
+        "message": "オーバーレイのクリーンアップモードを選択"
+    },
+    "label_overlay_z": {
+        "message": "最小z-index"
+    },
+    "label_overlay_preview_idle": {
+        "message": "まだプレビューがありません。"
+    },
+    "label_overlay_preview_running": {
+        "message": "オーバーレイをハイライト中..."
+    },
+    "label_overlay_preview_match": {
+        "message": "$1件のオーバーレイをハイライトしました。"
+    },
+    "label_overlay_preview_none": {
+        "message": "しきい値を満たすオーバーレイ候補がありません。"
+    },
+    "label_overlay_preview_failed": {
+        "message": "オーバーレイのプレビューに失敗しました。"
+    },
+    "hint_overlay_preview_match": {
+        "message": "$1件のオーバーレイ要素をハイライトしました。"
+    },
+    "hint_overlay_preview_none": {
+        "message": "しきい値を満たすオーバーレイ候補がありません。"
+    },
+    "hint_overlay_preview_failed": {
+        "message": "オーバーレイのプレビューに失敗しました。"
+    },
+    "hint_keywords_preview": {
+        "message": "$1件の要素がそれらのキーワードと一致します。"
+    },
+    "hint_keywords_preview_none": {
+        "message": "それらのキーワードと一致するオーバーレイ要素がありません。"
+    },
+    "hint_keywords_preview_failed": {
+        "message": "キーワードのプレビューに失敗しました。"
+    },
+    "hint_keywords_softened": {
+        "message": "$1件のキーワードオーバーレイを軽減しました。"
+    },
+    "label_overlay_recent_tags": {
+        "message": "最近のタグ"
+    },
+    "label_overlay_suggested_tags": {
+        "message": "おすすめのタグ"
+    },
+    "label_overlay_no_recent": {
+        "message": "最近のタグはまだありません。"
+    },
+    "label_min_width": {
+        "message": "最小幅:"
+    },
+    "label_min_height": {
+        "message": "最小高さ:"
+    },
+    "label_format": {
+        "message": "形式:"
+    },
+    "option_format_any": {
+        "message": "すべて"
+    },
+    "option_format_png": {
+        "message": "PNG"
+    },
+    "option_format_jpg": {
+        "message": "JPG"
+    },
+    "option_format_webp": {
+        "message": "WEBP"
+    },
+    "option_format_gif": {
+        "message": "GIF"
+    },
+    "option_format_svg": {
+        "message": "SVG"
+    },
+    "button_select_all": {
+        "message": "すべて選択"
+    },
+    "button_select_none": {
+        "message": "選択解除"
+    },
+    "label_convert": {
+        "message": "変換:"
+    },
+    "option_convert_original": {
+        "message": "オリジナル"
+    },
+    "button_download_selected": {
+        "message": "選択をダウンロード"
+    },
+    "button_zip_selected": {
+        "message": "選択をZIP"
+    },
+    "button_rename_serial": {
+        "message": "連番でリネーム"
+    },
+    "tooltip_rename_serial": {
+        "message": "検出順で項目名を変更"
+    },
+    "label_sort": {
+        "message": "並べ替え:"
+    },
+    "option_sort_detected": {
+        "message": "検出順"
+    },
+    "option_sort_name": {
+        "message": "名前 (A-Z)"
+    },
+    "option_sort_pixels": {
+        "message": "ピクセルサイズ（最大）"
+    },
+    "option_sort_filesize": {
+        "message": "ファイルサイズ（最大）"
+    },
+    "link_tip": {
+        "message": "チップ"
+    },
+    "link_contact": {
+        "message": "お問い合わせ"
+    },
+    "link_help": {
+        "message": "ヘルプとモードガイド"
+    },
+    "confirm_host_permission": {
+        "message": "Unshackleはスキャンをクリックした後にのみアクセス許可を要求します。\n画像を読み取るために$1への一時的なアクセスが必要です。続行しますか？"
+    },
+    "menu_enable_context": {
+        "message": "このサイトで右クリックとドラッグを有効にする"
+    },
+    "button_progress_cancel": {
+        "message": "キャンセル"
+    },
+    "tooltip_telemetry": {
+        "message": "スキャンとオーバーレイ調整のローカルカウンターを保存"
+    },
+    "label_telemetry_toggle": {
+        "message": "診断カウンター（ローカルのみ）"
+    },
+    "aria_toggle_telemetry": {
+        "message": "テレメトリのオプトインを切り替え"
+    },
+    "label_telemetry_off": {
+        "message": "テレメトリは無効です（ローカルのみ）。"
+    },
+    "label_telemetry_stats": {
+        "message": "スキャン: $1 | オーバーレイ調整: $2"
+    },
+    "button_show_onboarding": {
+        "message": "チュートリアルを表示"
+    },
+    "tooltip_permission_prompt": {
+        "message": "スキャン前にサイトアクセスを要求する方法を選択"
+    },
+    "label_permission_prompt": {
+        "message": "スキャンごとにサイトアクセスを要求"
+    },
+    "aria_toggle_permission_prompt": {
+        "message": "サイト権限プロンプトを切り替え"
+    },
+    "note_permission_prompt": {
+        "message": "プロンプトなしでアクセスを維持するには無効にしてください。"
+    },
+    "toast_permission_prompt_disabled": {
+        "message": "サイトアクセスは維持されます。プロンプトは表示されなくなります。"
+    },
+    "toast_permission_prompt_enabled": {
+        "message": "サイトごとにアクセスを要求します。"
+    },
+    "toast_permission_prompt_denied": {
+        "message": "サイトアクセスの要求が拒否されました。"
+    },
+    "hint_permission_global_required": {
+        "message": "サイトアクセスが許可されていません。プロンプトを再度有効にするか、設定でアクセスを許可してください。"
+    },
+    "badge_download_queued": {
+        "message": "キュー中"
+    },
+    "badge_download_done": {
+        "message": "ダウンロード済み"
+    },
+    "badge_download_failed": {
+        "message": "ダウンロード失敗"
+    },
+    "toast_downloads": {
+        "message": "$1件のダウンロードを要求しました。"
+    },
+    "toast_downloads_link": {
+        "message": "ダウンロードを開く"
+    },
+    "toast_downloads_partial": {
+        "message": "$1件のダウンロードがキューに追加され、$2件が失敗しました。"
+    },
+    "toast_zip": {
+        "message": "$1件の項目でZIPがキューに追加されました。"
+    },
+    "toast_first_run": {
+        "message": "Unshackleはスキャンまたはキャプチャを実行するときのみサイトアクセスを要求します。"
+    },
+    "toast_first_run_link": {
+        "message": "詳細を見る"
+    },
+    "hint_progress_cancelled": {
+        "message": "操作がキャンセルされました。"
+    },
+    "label_progress_cancelled": {
+        "message": "キャンセル済み"
+    },
+    "label_progress_done": {
+        "message": "完了"
+    },
+    "label_progress_converting": {
+        "message": "変換中..."
+    },
+    "label_progress_converting_step": {
+        "message": "$1 / $2 を変換中"
+    },
+    "label_progress_download": {
+        "message": "$1 / $2 のダウンロードを要求中"
+    },
+    "hint_download_complete": {
+        "message": "$1 / $2 件のダウンロードを要求しました。"
+    },
+    "label_staging_items": {
+        "message": "$1 / $2 を準備中"
+    },
+    "label_zip_packing": {
+        "message": "ZIPを圧縮中..."
+    },
+    "label_zip_packing_progress": {
+        "message": "ZIP圧縮中 $1%"
+    },
+    "label_zip_finalizing": {
+        "message": "ZIPを完了中..."
+    },
+    "notice_first_run": {
+        "message": "Unshackleはスキャンまたはキャプチャを開始するときのみサイトアクセスを要求します。"
+    },
+    "notice_first_run_help": {
+        "message": "クイックガイドを読む"
+    },
+    "notice_first_run_dismiss": {
+        "message": "了解"
+    },
+    "tooltip_help": {
+        "message": "Unshackleガイドを開く"
+    },
+    "option_kind_gv": {
+        "message": "GigaViewer"
+    },
+    "option_kind_speedbinb": {
+        "message": "Speedbinb"
+    },
+    "option_kind_bellaciao": {
+        "message": "BellaCiao"
+    },
+    "option_kind_lezhin": {
+        "message": "Lezhin"
+    },
+    "option_theme_lightdark": {
+        "message": "暗闇の光"
+    },
+    "toast_theme_applied": {
+        "message": "テーマが更新されました。"
+    },
+    "label_locale": {
+        "message": "言語"
+    },
+    "toast_locale_applied": {
+        "message": "言語が更新されました。"
+    },
+    "toast_help_opened": {
+        "message": "新しいタブでヘルプが開きました。"
+    },
+    "gv_option_only_first": {
+        "message": "最初のページのみ"
+    },
+    "gv_option_save_metadata": {
+        "message": "metadata.jsonを保存"
+    },
+    "gv_option_purchase_guard": {
+        "message": "未購入の場合は停止"
+    },
+    "gv_option_zip": {
+        "message": "ZIPでダウンロード"
+    },
+    "label_gv_gallery_hidden": {
+        "message": "ビューアのダウンロードはメイングリッドに表示されます。ここではサムネイルは非表示です。"
+    },
+    "heading_chapters": {
+        "message": "チャプター"
+    },
+    "button_chapter_refresh": {
+        "message": "リストを更新"
+    },
+    "label_chapter_idle": {
+        "message": "チャプターはまだ読み込まれていません。"
+    },
+    "label_chapter_loading": {
+        "message": "チャプターを読み込み中..."
+    },
+    "label_chapter_empty": {
+        "message": "このページには利用可能なチャプターがありません。"
+    },
+    "label_chapter_error": {
+        "message": "チャプターを読み込めません。コミックの概要を開いてもう一度お試しください。"
+    },
+    "label_chapter_loaded": {
+        "message": "$1件のチャプターを読み込みました。"
+    },
+    "label_chapter_free": {
+        "message": "無料"
+    },
+    "label_chapter_locked": {
+        "message": "ロック中"
+    },
+    "label_chapter_purchased": {
+        "message": "購入済み"
+    },
+    "label_chapter_added": {
+        "message": "チャプターがグリッドに追加されました。"
+    },
+    "aria_chapter_add": {
+        "message": "$1をパネルグリッドに追加"
+    },
+    "option_hk_loader_auto": {
+        "message": "自動（Runner + Manager）"
+    },
+    "option_hk_loader_runner": {
+        "message": "互換性（Runnerのみ）"
+    },
+    "option_hk_loader_manager": {
+        "message": "Managerのみ（実験的）"
+    },
+    "note_hk_loader": {
+        "message": "自動は両方のパスを試し、画像モードを安全に保ちます。デバッグ時のみManagerを使用してください。"
+    },
+    "button_reset_manga_defaults": {
+        "message": "安全なデフォルトにリセット"
+    },
+    "note_reset_manga_defaults": {
+        "message": "マンガモードを無効にし、元のシリーズ/ローダー設定を復元します。"
+    },
+    "toast_reset_safe_defaults": {
+        "message": "設定が安全なデフォルトに復元されました。"
+    },
+    "toast_reset_safe_defaults_failed": {
+        "message": "設定をリセットできません。もう一度お試しください。"
+    },
+    "confirm_reset_manga_defaults": {
+        "message": "安全なデフォルトにリセットしますか？再度有効にするまでマンガモードは無効になります。"
+    },
+    "button_download": {
+        "message": "ダウンロード"
+    },
+    "button_zip": {
+        "message": "ZIP"
+    },
+    "button_select_invert": {
+        "message": "選択を反転"
+    },
+    "label_search": {
+        "message": "検索:"
+    },
+    "placeholder_search": {
+        "message": "ファイル名またはURL"
+    },
+    "label_kind": {
+        "message": "種類:"
+    },
+    "option_kind_all": {
+        "message": "すべて"
+    },
+    "option_kind_img": {
+        "message": "画像"
+    },
+    "option_kind_background": {
+        "message": "背景"
+    },
+    "option_kind_blob": {
+        "message": "Blob"
+    },
+    "option_kind_data": {
+        "message": "Data URI"
+    },
+    "option_kind_canvas": {
+        "message": "キャンバス"
+    },
+    "option_kind_svg": {
+        "message": "SVG"
+    },
+    "label_discovery": {
+        "message": "発見:"
+    },
+    "option_discovery_all": {
+        "message": "すべて"
+    },
+    "option_discovery_new": {
+        "message": "このセッションで新規"
+    },
+    "option_discovery_seen": {
+        "message": "以前に表示"
+    },
+    "label_overlay_aggressiveness": {
+        "message": "積極性"
+    },
+    "heading_quick_settings": {
+        "message": "クイック設定"
+    },
+    "label_theme": {
+        "message": "テーマ"
+    },
+    "option_theme_contrast": {
+        "message": "ハイコントラスト"
+    },
+    "option_theme_dark": {
+        "message": "ダーク"
+    },
+    "heading_manga_settings": {
+        "message": "マンガモード"
+    },
+    "label_enable_manga": {
+        "message": "マンガモードを有効にする"
+    },
+    "tooltip_enable_manga": {
+        "message": "HakuNekoコネクタ付きのマンガベータパネルを有効にする"
+    },
+    "aria_toggle_manga_mode": {
+        "message": "マンガモードを切り替え"
+    },
+    "label_hk_loader": {
+        "message": "ローダー"
+    },
+    "tooltip_hk_loader": {
+        "message": "HakuNekoコネクタの読み込み方法を選択（runner、manager、または自動）"
+    },
+    "heading_privacy": {
+        "message": "プライバシー"
+    },
+    "button_open_bookmarks": {
+        "message": "ブックマークを開く"
+    },
+    "heading_donation_prompt": {
+        "message": "Unshackleをサポート"
+    },
+    "label_donation_frequency": {
+        "message": "多数のファイルをダウンロードした場合、月に最大1回表示されます。"
+    },
+    "onboarding_title": {
+        "message": "Unshackleへようこそ"
+    },
+    "onboarding_step_language": {
+        "message": "言語を選択"
+    },
+    "onboarding_step_theme": {
+        "message": "テーマを選択"
+    },
+    "onboarding_step_features": {
+        "message": "クイックツアー"
+    },
+    "onboarding_btn_next": {
+        "message": "次へ"
+    },
+    "onboarding_btn_back": {
+        "message": "戻る"
+    },
+    "onboarding_btn_start": {
+        "message": "始める"
+    },
+    "onboarding_btn_skip": {
+        "message": "スキップ"
+    },
+    "onboarding_feature_scan_title": {
+        "message": "画像をスキャン"
+    },
+    "onboarding_feature_scan_desc": {
+        "message": "背景、キャンバス、Blobを含むWebページから画像を抽出"
+    },
+    "onboarding_feature_overlay_title": {
+        "message": "オーバーレイを削除"
+    },
+    "onboarding_feature_overlay_desc": {
+        "message": "右クリックブロッカーを無効にし、邪魔なオーバーレイを削除"
+    },
+    "onboarding_feature_manga_title": {
+        "message": "マンガモード"
+    },
+    "onboarding_feature_manga_desc": {
+        "message": "HakuNekoコネクタでマンガサイトからチャプターをダウンロード"
+    },
+    "onboarding_feature_download_title": {
+        "message": "一括ダウンロード"
+    },
+    "onboarding_feature_download_desc": {
+        "message": "複数の画像を一度にダウンロードするか、ZIPにまとめて保存"
+    },
+    "onboarding_lang_en": {
+        "message": "English"
+    },
+    "onboarding_lang_de": {
+        "message": "Deutsch"
+    },
+    "onboarding_lang_es": {
+        "message": "Español"
+    },
+    "onboarding_lang_fr": {
+        "message": "Français"
+    },
+    "onboarding_lang_ja": {
+        "message": "日本語"
+    },
+    "onboarding_lang_ko": {
+        "message": "한국어"
+    },
+    "onboarding_lang_zh_CN": {
+        "message": "简体中文"
+    },
+    "onboarding_lang_zh_TW": {
+        "message": "繁體中文"
+    },
+    "option_theme_blueberry": {
+        "message": "ブルーベリー"
+    },
+    "onboarding_feature_network_title": {
+        "message": "ネットワークキャプチャ"
+    },
+    "onboarding_feature_network_desc": {
+        "message": "ネットワークリクエストで動的に読み込まれる画像をキャプチャ"
+    },
+    "onboarding_feature_convert_title": {
+        "message": "画像を変換"
+    },
+    "onboarding_feature_convert_desc": {
+        "message": "ダウンロード前にPNG、JPEG、WebPなど形式を変換"
+    },
+    "tooltip_delete": {
+        "message": "選択した画像をリストから削除"
+    },
+    "hint_deleted": {
+        "message": "$1 件をリストから削除しました。"
+    },
+    "heading_stats": {
+        "message": "統計"
+    },
+    "label_stats_scans": {
+        "message": "スキャン回数:"
+    },
+    "label_stats_images_scanned": {
+        "message": "スキャンした画像:"
+    },
+    "label_stats_overlays_nuked": {
+        "message": "除去したオーバーレイ:"
+    },
+    "label_stats_overlay_tweaks": {
+        "message": "オーバーレイ調整:"
+    },
+    "label_stats_images_downloaded": {
+        "message": "ダウンロードした画像:"
+    }
+}

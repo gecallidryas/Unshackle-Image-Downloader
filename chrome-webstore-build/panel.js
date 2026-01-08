@@ -2141,6 +2141,7 @@
     hkMangaPanelEl = document.getElementById("hkMangaPanel");
     hkImagePanelEl = document.getElementById("hkImagePanel");
     bindMangaSettingsToggle();
+    bindMangaBlockedModal();
     bindHKLoaderSelect();
     bindHKResetButton();
 
@@ -4545,19 +4546,44 @@
   function bindMangaSettingsToggle() {
     const toggle = $("#enableMangaSwitch");
     if (!toggle) return;
-    toggle.checked = hkMangaEnabled;
-    toggle.addEventListener("change", async (event) => {
-      const enabled = !!event.target.checked;
-      const wasManga = hkCurrentMode === "manga";
-      logHKDevEvent(`[Settings] Manga mode ${enabled ? "enabled" : "disabled"}`);
-      await updateHKSetting("manga.enabled", enabled);
-      if (!enabled && wasManga) {
-        await setHKMode(HK_MODE_DEFAULT, { reason: "manga-disabled", forceEmit: true });
-      } else {
-        emitHKModeChanged(hkCurrentMode, { reason: "settings-toggle" });
+    // Chrome Web Store version: manga mode is always disabled
+    toggle.checked = false;
+    toggle.addEventListener("change", (event) => {
+      if (event.target.checked) {
+        // Prevent enabling manga mode and show the blocked modal
+        event.target.checked = false;
+        showMangaBlockedModal();
       }
     });
   }
+
+  // ---- Manga Blocked Modal (Chrome Web Store version) ----
+  function showMangaBlockedModal() {
+    const modal = document.getElementById("mangaBlockedModal");
+    if (!modal) return;
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  function hideMangaBlockedModal() {
+    const modal = document.getElementById("mangaBlockedModal");
+    if (!modal) return;
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  function bindMangaBlockedModal() {
+    const modal = document.getElementById("mangaBlockedModal");
+    if (!modal) return;
+    const closeBtn = document.getElementById("mangaBlockedClose");
+    const cancelBtn = document.getElementById("mangaBlockedCancel");
+    const overlay = modal.querySelector(".hk-modal-overlay");
+
+    if (closeBtn) closeBtn.addEventListener("click", hideMangaBlockedModal);
+    if (cancelBtn) cancelBtn.addEventListener("click", hideMangaBlockedModal);
+    if (overlay) overlay.addEventListener("click", hideMangaBlockedModal);
+  }
+
 
   function bindHKLoaderSelect() {
     hkLoaderSelectEl = document.getElementById("hkLoaderModeSelect");

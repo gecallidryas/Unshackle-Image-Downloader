@@ -551,6 +551,26 @@
       </div>
     </div>
   </div>
+  <!-- Manga Mode Blocked Modal -->
+  <div id="mangaBlockedModal" class="hk-modal" style="display: none;" aria-hidden="true">
+    <div class="hk-modal-overlay"></div>
+    <div class="hk-modal-content">
+      <div class="hk-modal-header">
+        <h3>Manga Mode Not Available</h3>
+        <button type="button" class="hk-modal-close" id="mangaBlockedClose">&times;</button>
+      </div>
+      <div class="hk-modal-body">
+        <p style="margin-bottom: 12px;">Manga Mode is not available in this Chrome Web Store version due to policy restrictions.</p>
+        <p style="margin-bottom: 16px;">To access the full version with Manga Mode, please download from GitHub:</p>
+        <div class="hk-modal-actions" style="display: flex; gap: 8px; justify-content: center;">
+          <a id="mangaBlockedDownload" class="hk-button hk-primary" target="_blank" rel="noopener" href="https://github.com/gecallidryas/unshackle-final">
+            Download Full Version
+          </a>
+          <button type="button" id="mangaBlockedCancel" class="hk-button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Onboarding Modal (at body root for proper z-index) -->
   <div id="onboardingModal" class="hk-modal onboarding-modal" style="display: none;" aria-hidden="true">
     <div class="hk-modal-overlay"></div>
@@ -719,8 +739,7 @@
   <script src="src/settings.js"></script>
   <script src="modes/manager.js"></script>
   <script src="jszip.min.js"></script>
-  <script src="hk-proxy.js"></script>
-  <script src="src/hk-connectors.js"></script>
+
   <script src="panel.js"></script>
 </body>
 
