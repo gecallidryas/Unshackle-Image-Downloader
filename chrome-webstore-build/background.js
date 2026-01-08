@@ -1,34 +1,15 @@
 if (typeof importScripts === "function") {
   const toURL = (path) => (chrome?.runtime?.getURL ? chrome.runtime.getURL(path) : path);
   try {
+    // Chrome Web Store version: Only load settings.js (manga/hakuneko files not included)
     importScripts(
-      toURL("src/settings.js"),
-      toURL("src/hk-debug.js"),
-      toURL("src/hk-connectors.js"),
-      toURL("vendor/hakuneko/engine/ComicInfoGenerator.js"),
-      toURL("vendor/hakuneko/engine/EbookGenerator.js")
+      toURL("src/settings.js")
     );
   } catch (error) {
     console.error("[HK] Failed to import background dependencies:", error);
   }
-
-  // Load deduplication modules
-  try {
-    importScripts(
-      toURL("src/dedupe/db.js"),
-      toURL("src/dedupe/queue.js"),
-      toURL("src/dedupe/messages.js"),
-      toURL("src/dedupe/byte-hash.js"),
-      toURL("src/dedupe/pixel-hash.js"),
-      toURL("src/dedupe/perceptual.js"),
-      toURL("src/dedupe/ssim.js"),
-      toURL("src/dedupe/pipeline.js")
-    );
-    console.log("[Dedupe] Modules loaded successfully");
-  } catch (error) {
-    console.warn("[Dedupe] Failed to import dedupe modules:", error);
-  }
 }
+
 
 if (typeof UnshackleSettings !== "undefined") {
   UnshackleSettings.ensureDefaults()
