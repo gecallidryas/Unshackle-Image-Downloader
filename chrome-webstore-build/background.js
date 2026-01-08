@@ -8,7 +8,25 @@ if (typeof importScripts === "function") {
   } catch (error) {
     console.error("[HK] Failed to import background dependencies:", error);
   }
+
+  // Load deduplication modules (still available in webstore version)
+  try {
+    importScripts(
+      toURL("src/dedupe/db.js"),
+      toURL("src/dedupe/queue.js"),
+      toURL("src/dedupe/messages.js"),
+      toURL("src/dedupe/byte-hash.js"),
+      toURL("src/dedupe/pixel-hash.js"),
+      toURL("src/dedupe/perceptual.js"),
+      toURL("src/dedupe/ssim.js"),
+      toURL("src/dedupe/pipeline.js")
+    );
+    console.log("[Dedupe] Modules loaded successfully");
+  } catch (error) {
+    console.warn("[Dedupe] Failed to import dedupe modules:", error);
+  }
 }
+
 
 
 if (typeof UnshackleSettings !== "undefined") {
