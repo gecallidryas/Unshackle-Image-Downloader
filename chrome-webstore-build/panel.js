@@ -34,8 +34,9 @@
   });
   const HK_PREVIEW_SOURCE = "manga-preview";
   const CHROME_DOWNLOADS_URL = "chrome://downloads/";
-  const HELP_PAGE_PATH = "help.html";
-  const HELP_FALLBACK_URL = "https://www.unshackle.scernix.com/";
+  const HELP_PAGE_URL = "https://www.scernix.com/unshackle-image";
+  const TIP_LINK_URL = "https://www.scernix.com/donate";
+  const CONTACT_LINK_URL = "https://www.scernix.com/contact";
   const THEME_KEY = "__unshackle_theme";
   const DEFAULT_THEME = "contrast";
   const ALLOWED_THEMES = new Set(["contrast", "blueberry", "lightdark", "noirgold", "purplefanatic", "sakura", "ocean", "forest", "slate", "ember"]);
@@ -2419,7 +2420,11 @@
   }
 
   function syncHKStateFromSettings() {
-    hkMangaEnabled = Boolean(getHKSetting("manga.enabled", false));
+    if (hkSettingsSnapshot?.manga && hkSettingsSnapshot.manga.enabled) {
+      hkSettingsSnapshot.manga.enabled = false;
+      hkSettingsSnapshot.mode = HK_MODE_DEFAULT;
+    }
+    hkMangaEnabled = false;
     const storedMode = getHKSetting("mode", HK_MODE_DEFAULT);
     hkLoaderMode = normalizeHKLoaderMode(getHKSetting("manga.loader", "auto"));
     hkCurrentMode = storedMode === "manga" ? "manga" : HK_MODE_DEFAULT;
@@ -2457,6 +2462,13 @@
     hkSettingsSnapshot.manga = hkSettingsSnapshot.manga && typeof hkSettingsSnapshot.manga === "object"
       ? hkSettingsSnapshot.manga
       : JSON.parse(JSON.stringify(defaults.manga));
+    if (hkSettingsSnapshot.manga.enabled) {
+      hkSettingsSnapshot.manga.enabled = false;
+      hkSettingsSnapshot.mode = HK_MODE_DEFAULT;
+      try {
+        await chrome.storage.local.set({ settings: hkSettingsSnapshot });
+      } catch { }
+    }
     hkSettingsSnapshot.manga.families = buildHKFamilyMap(hkSettingsSnapshot.manga.families);
     const syncMode = syncResult?.[HK_SYNC_KEYS.MODE];
     if (syncMode === "manga" || syncMode === "image") {
@@ -4640,12 +4652,7 @@
   }
 
   function resolveHelpPageUrl() {
-    try {
-      if (typeof chrome !== "undefined" && chrome?.runtime?.getURL) {
-        return chrome.runtime.getURL(HELP_PAGE_PATH);
-      }
-    } catch { }
-    return HELP_FALLBACK_URL;
+    return HELP_PAGE_URL;
   }
 
   function bindHelpButton() {
@@ -8929,24 +8936,6 @@
       closeBtn?.focus?.();
     }
 
-    const bookmarksBtn = document.getElementById("openBookmarksBtn");
-    if (bookmarksBtn) {
-      bookmarksBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        close({ returnFocus: false });
-        const targetUrl = chrome.runtime.getURL("bookmarks.html");
-        if (chrome?.tabs?.create) {
-          try {
-            const created = chrome.tabs.create({ url: targetUrl });
-            if (created && typeof created.catch === "function") {
-              created.catch(() => { });
-            }
-          } catch (err) {
-            console.warn("[HK] Failed to open bookmarks", err);
-          }
-        }
-      });
-    }
     const overlay = modal.querySelector(".hk-modal-overlay");
     overlay?.addEventListener("click", () => close());
     closeBtn?.addEventListener("click", () => close());
@@ -8965,16 +8954,23 @@
 
   // Load tip/contact links
   async function loadLinks() {
+    let tipUrl = TIP_LINK_URL;
     try {
       const resTip = await fetch(chrome.runtime.getURL("tip_link.txt"));
-      const tipUrl = (await resTip.text()).trim();
-      if (tipUrl) $("#tipLink").href = tipUrl;
+      const fileUrl = (await resTip.text()).trim();
+      if (fileUrl) tipUrl = fileUrl;
     } catch { }
+    const tipLink = $("#tipLink");
+    if (tipLink && tipUrl) tipLink.href = tipUrl;
+
+    let contactUrl = CONTACT_LINK_URL;
     try {
       const resContact = await fetch(chrome.runtime.getURL("contact_link.txt"));
-      const contactUrl = (await resContact.text()).trim();
-      if (contactUrl) $("#contactLink").href = contactUrl;
+      const fileUrl = (await resContact.text()).trim();
+      if (fileUrl) contactUrl = fileUrl;
     } catch { }
+    const contactLink = $("#contactLink");
+    if (contactLink && contactUrl) contactLink.href = contactUrl;
   }
 
   // Download selected items individually

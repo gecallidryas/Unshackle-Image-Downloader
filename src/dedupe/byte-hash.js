@@ -7,6 +7,12 @@
 
 // ==================== SHA-256 HASHING ====================
 
+function ensureNotAborted(signal) {
+    if (signal?.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+    }
+}
+
 /**
  * Compute SHA-256 hash of an ArrayBuffer
  * @param {ArrayBuffer} arrayBuffer
@@ -148,18 +154,21 @@ async function fetchBytes(url, { referrer, cacheMode = "force-cache", timeoutMs 
  * @param {number} params.tabId
  * @param {string} params.pageUrl
  * @param {object} params.context
+ * @param {string} [params.imageId]
  * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>} Result with status, sha256, etc.
  */
 async function processL1(params) {
-    const { url, scanId, tabId, pageUrl, context, signal } = params;
+    const { url, scanId, tabId, pageUrl, context, signal, imageId } = params;
 
     try {
+        ensureNotAborted(signal);
         // Fetch bytes
         const { bytes, contentType } = await fetchBytes(url, {
             referrer: pageUrl,
             signal
         });
+        ensureNotAborted(signal);
 
         // Compute SHA-256
         const sha256 = await sha256Hex(bytes);
@@ -168,12 +177,18 @@ async function processL1(params) {
         const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
 
         if (existing) {
+            if (!existing.representativeImageId && imageId) {
+                await globalThis.DedupeDB.putByteCanonical({
+                    ...existing,
+                    representativeImageId: imageId
+                });
+            }
             // DUPLICATE - add occurrence
             await globalThis.DedupeDB.addOccurrence({
                 scanId,
                 sha256,
                 pixelHash: null,
-                imageId: null,
+                imageId: imageId || null,
                 url,
                 pageUrl,
                 tabId,
@@ -187,6 +202,7 @@ async function processL1(params) {
                 status: "DUP",
                 sha256,
                 canonicalId: sha256,
+                representativeImageId: existing.representativeImageId || imageId || null,
                 byteLength: bytes.byteLength,
                 contentType,
                 bytes // Pass bytes for L2 processing
@@ -199,7 +215,8 @@ async function processL1(params) {
             byteLength: bytes.byteLength,
             contentType,
             firstSeenAt: Date.now(),
-            representative: { url, tabId, pageUrl }
+            representative: { url, tabId, pageUrl },
+            representativeImageId: imageId || null
         };
 
         await globalThis.DedupeDB.putByteCanonical(canonical);
@@ -208,7 +225,7 @@ async function processL1(params) {
             scanId,
             sha256,
             pixelHash: null,
-            imageId: null,
+            imageId: imageId || null,
             url,
             pageUrl,
             tabId,
@@ -222,6 +239,7 @@ async function processL1(params) {
             status: "NEW",
             sha256,
             canonicalId: sha256,
+            representativeImageId: imageId || null,
             byteLength: bytes.byteLength,
             contentType,
             bytes // Pass bytes for L2 processing
@@ -264,12 +282,15 @@ async function processL1(params) {
  * @param {number} params.tabId
  * @param {string} params.pageUrl
  * @param {object} params.context
+ * @param {string} [params.imageId]
+ * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>}
  */
 async function processL1Bytes(params) {
-    const { bytes, url, scanId, tabId, pageUrl, context } = params;
+    const { bytes, url, scanId, tabId, pageUrl, context, imageId, signal } = params;
 
     try {
+        ensureNotAborted(signal);
         // Compute SHA-256
         const sha256 = await sha256Hex(bytes);
 
@@ -277,11 +298,17 @@ async function processL1Bytes(params) {
         const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
 
         if (existing) {
+            if (!existing.representativeImageId && imageId) {
+                await globalThis.DedupeDB.putByteCanonical({
+                    ...existing,
+                    representativeImageId: imageId
+                });
+            }
             await globalThis.DedupeDB.addOccurrence({
                 scanId,
                 sha256,
                 pixelHash: null,
-                imageId: null,
+                imageId: imageId || null,
                 url,
                 pageUrl,
                 tabId,
@@ -295,6 +322,7 @@ async function processL1Bytes(params) {
                 status: "DUP",
                 sha256,
                 canonicalId: sha256,
+                representativeImageId: existing.representativeImageId || imageId || null,
                 byteLength: bytes.byteLength,
                 bytes
             };
@@ -306,7 +334,8 @@ async function processL1Bytes(params) {
             byteLength: bytes.byteLength,
             contentType: "application/octet-stream",
             firstSeenAt: Date.now(),
-            representative: { url, tabId, pageUrl }
+            representative: { url, tabId, pageUrl },
+            representativeImageId: imageId || null
         };
 
         await globalThis.DedupeDB.putByteCanonical(canonical);
@@ -315,7 +344,7 @@ async function processL1Bytes(params) {
             scanId,
             sha256,
             pixelHash: null,
-            imageId: null,
+            imageId: imageId || null,
             url,
             pageUrl,
             tabId,
@@ -329,6 +358,7 @@ async function processL1Bytes(params) {
             status: "NEW",
             sha256,
             canonicalId: sha256,
+            representativeImageId: imageId || null,
             byteLength: bytes.byteLength,
             bytes
         };

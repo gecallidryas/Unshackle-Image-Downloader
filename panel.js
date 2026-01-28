@@ -34,8 +34,9 @@
   });
   const HK_PREVIEW_SOURCE = "manga-preview";
   const CHROME_DOWNLOADS_URL = "chrome://downloads/";
-  const HELP_PAGE_PATH = "help.html";
-  const HELP_FALLBACK_URL = "https://www.unshackle.scernix.com/";
+  const HELP_PAGE_URL = "https://www.scernix.com/unshackle-image";
+  const TIP_LINK_URL = "https://www.scernix.com/donate";
+  const CONTACT_LINK_URL = "https://www.scernix.com/contact";
   const THEME_KEY = "__unshackle_theme";
   const DEFAULT_THEME = "contrast";
   const ALLOWED_THEMES = new Set(["contrast", "blueberry", "lightdark", "noirgold", "purplefanatic", "sakura", "ocean", "forest", "slate", "ember"]);
@@ -4614,12 +4615,7 @@
   }
 
   function resolveHelpPageUrl() {
-    try {
-      if (typeof chrome !== "undefined" && chrome?.runtime?.getURL) {
-        return chrome.runtime.getURL(HELP_PAGE_PATH);
-      }
-    } catch { }
-    return HELP_FALLBACK_URL;
+    return HELP_PAGE_URL;
   }
 
   function bindHelpButton() {
@@ -8939,16 +8935,23 @@
 
   // Load tip/contact links
   async function loadLinks() {
+    let tipUrl = TIP_LINK_URL;
     try {
       const resTip = await fetch(chrome.runtime.getURL("tip_link.txt"));
-      const tipUrl = (await resTip.text()).trim();
-      if (tipUrl) $("#tipLink").href = tipUrl;
+      const fileUrl = (await resTip.text()).trim();
+      if (fileUrl) tipUrl = fileUrl;
     } catch { }
+    const tipLink = $("#tipLink");
+    if (tipLink && tipUrl) tipLink.href = tipUrl;
+
+    let contactUrl = CONTACT_LINK_URL;
     try {
       const resContact = await fetch(chrome.runtime.getURL("contact_link.txt"));
-      const contactUrl = (await resContact.text()).trim();
-      if (contactUrl) $("#contactLink").href = contactUrl;
+      const fileUrl = (await resContact.text()).trim();
+      if (fileUrl) contactUrl = fileUrl;
     } catch { }
+    const contactLink = $("#contactLink");
+    if (contactLink && contactUrl) contactLink.href = contactUrl;
   }
 
   // Download selected items individually

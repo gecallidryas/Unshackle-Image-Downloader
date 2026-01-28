@@ -16,8 +16,20 @@ const DHASH_HEIGHT = 8;
 const DHASH_THRESHOLD = 4;
 const PHASH_THRESHOLD = 6; // If implementing pHash later
 
-// Bucket prefix bits for LSH-style lookup
-const BUCKET_PREFIX_BITS = 16;
+// Multi-index hashing bands (sum must be 64)
+const HASH_BANDS = [13, 13, 13, 13, 12];
+
+// Max dimension for perceptual processing
+const PERCEPTUAL_MAX_DIMENSION = 512;
+
+// Max dimension for stored confirmation thumbnails
+const CONFIRM_THUMBNAIL_MAX_SIZE = 256;
+
+function ensureNotAborted(signal) {
+    if (signal?.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+    }
+}
 
 // ==================== IMAGE PROCESSING ====================
 
@@ -79,6 +91,52 @@ function resizeGray(pixels, srcW, srcH, dstW, dstH) {
     }
 
     return dst;
+}
+
+function getScaledDimensions(width, height, maxDim) {
+    if (!Number.isFinite(maxDim) || maxDim <= 0) {
+        return { width, height };
+    }
+    const maxSide = Math.max(1, Math.max(width, height));
+    if (maxSide <= maxDim) return { width, height };
+    const scale = maxDim / maxSide;
+    return {
+        width: Math.max(1, Math.round(width * scale)),
+        height: Math.max(1, Math.round(height * scale))
+    };
+}
+
+function getScaledRgbaFromBitmap(bitmap, maxDim) {
+    const { width, height } = getScaledDimensions(bitmap.width, bitmap.height, maxDim);
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    const imageData = ctx.getImageData(0, 0, width, height);
+    return { rgba: imageData.data, width, height };
+}
+
+/**
+ * Create a grayscale thumbnail for SSIM confirmation
+ * @param {Uint8ClampedArray} rgba
+ * @param {number} width
+ * @param {number} height
+ * @param {number} maxSize
+ * @returns {{pixels: Uint8Array, width: number, height: number}}
+ */
+function createConfirmThumbnail(rgba, width, height, maxSize = CONFIRM_THUMBNAIL_MAX_SIZE) {
+    const gray = toGrayscale(rgba, width, height);
+    let dstW, dstH;
+    if (width > height) {
+        dstW = Math.min(width, maxSize);
+        dstH = Math.round(height * (dstW / width));
+    } else {
+        dstH = Math.min(height, maxSize);
+        dstW = Math.round(width * (dstH / height));
+    }
+    dstW = Math.max(dstW, 8);
+    dstH = Math.max(dstH, 8);
+    const resized = resizeGray(gray, width, height, dstW, dstH);
+    return { pixels: resized, width: dstW, height: dstH };
 }
 
 /**
@@ -245,14 +303,33 @@ function findBestMatch(hashesA, hashesB, threshold = DHASH_THRESHOLD) {
 // ==================== BUCKETING (LSH-STYLE) ====================
 
 /**
- * Get bucket key from hash (prefix-based)
+ * Get bucket key from hash (multi-index band)
  * @param {{hi: number, lo: number}} hash
  * @returns {string}
  */
 function getBucketKey(hash) {
-    // Use top 16 bits of hi as bucket key
-    const prefix = hash.hi >>> (32 - BUCKET_PREFIX_BITS);
-    return `dhash:${prefix.toString(16).padStart(4, "0")}`;
+    return getBucketKeysForHash(hash)[0];
+}
+
+/**
+ * Get multiple bucket keys for a hash (banding across hi/lo parts)
+ * @param {{hi: number, lo: number}} hash
+ * @returns {string[]}
+ */
+function getBucketKeysForHash(hash) {
+    const full = (BigInt(hash.hi) << 32n) | BigInt(hash.lo);
+    const keys = [];
+    let offset = 0;
+    for (let i = 0; i < HASH_BANDS.length; i++) {
+        const length = HASH_BANDS[i];
+        const shift = 64 - (offset + length);
+        const mask = (1n << BigInt(length)) - 1n;
+        const value = Number((full >> BigInt(shift)) & mask);
+        const pad = Math.ceil(length / 4);
+        keys.push(`dhash:b${i}:${value.toString(16).padStart(pad, "0")}`);
+        offset += length;
+    }
+    return keys;
 }
 
 /**
@@ -263,7 +340,10 @@ function getBucketKey(hash) {
 function getAllBucketKeys(hashes) {
     const keys = new Set();
     for (const hash of hashes) {
-        keys.add(getBucketKey(hash));
+        const bucketKeys = getBucketKeysForHash(hash);
+        for (const key of bucketKeys) {
+            keys.add(key);
+        }
     }
     return [...keys];
 }
@@ -281,24 +361,39 @@ function getAllBucketKeys(hashes) {
  * @param {number} params.tabId
  * @param {string} params.pageUrl
  * @param {object} params.context
+ * @param {string} [params.imageId]
+ * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>}
  */
 async function processL3(params) {
-    const { bitmap, pixelHash, sha256, url, scanId, tabId, pageUrl, context } = params;
+    const { bitmap, pixelHash, sha256, url, scanId, tabId, pageUrl, context, imageId: suppliedImageId, signal } = params;
 
     try {
-        // Extract RGBA from bitmap (no orientation needed, L2 handled it if available)
-        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        ctx.drawImage(bitmap, 0, 0);
-        const imageData = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+        ensureNotAborted(signal);
+        // Extract RGBA from bitmap (scaled down to limit memory)
+        const scaled = getScaledRgbaFromBitmap(bitmap, PERCEPTUAL_MAX_DIMENSION);
+        ensureNotAborted(signal);
 
         // Compute multi-rotation dHash
-        const dhashes = multiRotationDHash(imageData.data, bitmap.width, bitmap.height);
+        const dhashes = multiRotationDHash(scaled.rgba, scaled.width, scaled.height);
         const primaryHash = dhashes[0]; // 0° rotation
 
         // Generate image ID
-        const imageId = globalThis.DedupeDB.generateImageId(url, scanId);
+        const imageId = suppliedImageId || globalThis.DedupeDB.generateImageId(url, scanId);
+
+        // Store confirmation thumbnail for SSIM checks
+        try {
+            const thumb = createConfirmThumbnail(scaled.rgba, scaled.width, scaled.height);
+            await globalThis.DedupeDB.putThumbnail({
+                imageId,
+                width: thumb.width,
+                height: thumb.height,
+                pixels: thumb.pixels,
+                createdAt: Date.now()
+            });
+        } catch (error) {
+            console.warn("[Perceptual] Failed to store thumbnail:", error.message);
+        }
 
         // Store image record
         const imageRecord = {
@@ -316,7 +411,11 @@ async function processL3(params) {
             groupId: null
         };
 
-        await globalThis.DedupeDB.putImage(imageRecord);
+        if (typeof globalThis.DedupeDB.upsertImage === "function") {
+            await globalThis.DedupeDB.upsertImage(imageRecord);
+        } else {
+            await globalThis.DedupeDB.putImage(imageRecord);
+        }
 
         // Add to buckets for all rotation hashes
         const bucketKeys = getAllBucketKeys(dhashes);
@@ -340,6 +439,7 @@ async function processL3(params) {
         // Check candidates with Hamming distance
         const candidates = [];
         for (const candidateId of candidateIds) {
+            ensureNotAborted(signal);
             const candidate = await globalThis.DedupeDB.getImage(candidateId);
             if (!candidate || !candidate.dhashRotations) continue;
 
@@ -383,6 +483,7 @@ if (typeof globalThis !== "undefined") {
         DHASH_THRESHOLD,
         toGrayscale,
         resizeGray,
+        createConfirmThumbnail,
         rotateGray90CW,
         computeDHash,
         dHashFromRgba,
@@ -391,6 +492,7 @@ if (typeof globalThis !== "undefined") {
         hammingDistance,
         findBestMatch,
         getBucketKey,
+        getBucketKeysForHash,
         getAllBucketKeys,
         processL3
     };

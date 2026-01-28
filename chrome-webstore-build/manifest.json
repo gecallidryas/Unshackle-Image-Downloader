@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Unshackle Image Downloader",
     "version": "1.0.1",
-    "version_name": "1.0.0-webstore",
+    "version_name": "1.0-beta",
     "description": "Scan, filter, and download page images with advanced extraction, overlay cleanup, and ZIP export.",
     "default_locale": "en",
     "permissions": [

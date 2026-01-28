@@ -10,11 +10,12 @@
  * - occurrences: Auto-increment → where each image was found
  * - hash_buckets: bucketKey → imageIds for fast perceptual lookup
  * - pair_confirms: pairKey → confirmation result cache
+ * - thumbnails: imageId → stored grayscale thumbnails for SSIM confirmation
  * - scan_runs: scanId → scan metadata and stats
  */
 
 const DB_NAME = "img_dedupe_db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 /** @type {IDBDatabase|null} */
 let dbInstance = null;
@@ -75,6 +76,11 @@ async function openDB() {
             // pair_confirms: keyed by pairKey
             if (!db.objectStoreNames.contains("pair_confirms")) {
                 db.createObjectStore("pair_confirms", { keyPath: "pairKey" });
+            }
+
+            // thumbnails: keyed by imageId
+            if (!db.objectStoreNames.contains("thumbnails")) {
+                db.createObjectStore("thumbnails", { keyPath: "imageId" });
             }
 
             // scan_runs: keyed by scanId
@@ -209,6 +215,21 @@ async function putImage(image) {
 }
 
 /**
+ * Merge and store an image record
+ * @param {object} partial
+ * @returns {Promise<object>}
+ */
+async function upsertImage(partial) {
+    if (!partial || !partial.imageId) {
+        throw new Error("imageId required");
+    }
+    const existing = await getImage(partial.imageId);
+    const merged = { ...(existing || {}), ...partial };
+    await putImage(merged);
+    return merged;
+}
+
+/**
  * Get all images in a group
  * @param {string} groupId 
  * @returns {Promise<object[]>}
@@ -254,6 +275,22 @@ async function putGroup(group) {
         const tx = db.transaction("groups", "readwrite");
         const store = tx.objectStore("groups");
         const request = store.put(group);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+
+/**
+ * Delete group by ID
+ * @param {string} groupId
+ * @returns {Promise<void>}
+ */
+async function deleteGroup(groupId) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("groups", "readwrite");
+        const store = tx.objectStore("groups");
+        const request = store.delete(groupId);
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
     });
@@ -396,6 +433,40 @@ async function putPairConfirm(imageIdA, imageIdB, result) {
     });
 }
 
+// ==================== THUMBNAILS ====================
+
+/**
+ * Get stored thumbnail by image ID
+ * @param {string} imageId
+ * @returns {Promise<object|null>}
+ */
+async function getThumbnail(imageId) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("thumbnails", "readonly");
+        const store = tx.objectStore("thumbnails");
+        const request = store.get(imageId);
+        request.onsuccess = () => resolve(request.result || null);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+/**
+ * Store thumbnail
+ * @param {object} thumbnail
+ * @returns {Promise<void>}
+ */
+async function putThumbnail(thumbnail) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("thumbnails", "readwrite");
+        const store = tx.objectStore("thumbnails");
+        const request = store.put(thumbnail);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+
 // ==================== SCAN RUNS ====================
 
 /**
@@ -500,7 +571,7 @@ async function clearAllData() {
     const db = await openDB();
     const storeNames = [
         "byte_canonicals", "pixel_canonicals", "images", "groups",
-        "occurrences", "hash_buckets", "pair_confirms", "scan_runs"
+        "occurrences", "hash_buckets", "pair_confirms", "thumbnails", "scan_runs"
     ];
 
     return new Promise((resolve, reject) => {
@@ -539,10 +610,12 @@ if (typeof globalThis !== "undefined") {
         // Images
         getImage,
         putImage,
+        upsertImage,
         getImagesByGroup,
         // Groups
         getGroup,
         putGroup,
+        deleteGroup,
         getAllGroups,
         // Occurrences
         addOccurrence,
@@ -554,6 +627,9 @@ if (typeof globalThis !== "undefined") {
         // Pair confirms
         getPairConfirm,
         putPairConfirm,
+        // Thumbnails
+        getThumbnail,
+        putThumbnail,
         // Scan runs
         getScanRun,
         putScanRun,

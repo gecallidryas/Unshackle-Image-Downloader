@@ -598,6 +598,30 @@
   }
   const ESSENTIAL_TAGS = /^(MAIN|NAV|HEADER|FOOTER|VIDEO|AUDIO|DIALOG)$/;
   const ESSENTIAL_ROLES = /^(dialog|navigation|main|search|banner|alertdialog)$/i;
+  const OVERLAY_ALLOWLIST_SELECTORS = [
+    "[data-unshackle-keep='1']",
+    "[data-unshackle-allow='1']",
+    "[data-unshackle-ignore='1']",
+    "header",
+    "nav",
+    "footer",
+    "main",
+    "[role='banner']",
+    "[role='navigation']",
+    "[role='main']",
+    "[role='contentinfo']"
+  ];
+  const OVERLAY_ALLOWLIST_SELECTOR_QUERY = OVERLAY_ALLOWLIST_SELECTORS.join(",");
+  const OVERLAY_ALLOWLIST_TOKENS = new Set([
+    "header",
+    "footer",
+    "navbar",
+    "nav",
+    "navigation",
+    "toolbar",
+    "topbar",
+    "masthead"
+  ]);
   const CANVAS_NAME_CACHE = (globalThis.__UNSHACKLE_CANVAS_NAME_CACHE = globalThis.__UNSHACKLE_CANVAS_NAME_CACHE || {
     counter: 1,
     hashToName: new Map(),
@@ -1143,6 +1167,41 @@
     }
   }
 
+  function getOverlayZIndex(cs) {
+    const raw = cs?.zIndex;
+    const z = parseFloat(raw);
+    return Number.isFinite(z) ? z : 0;
+  }
+
+  function overlayBlocksPointer(cs) {
+    if (!cs) return false;
+    if (cs.pointerEvents === "none") return false;
+    if (cs.display === "none") return false;
+    if (cs.visibility === "hidden") return false;
+    return true;
+  }
+
+  function isAllowlistedOverlay(el, opts = {}) {
+    if (!(el instanceof Element)) return false;
+    const extraSelectors = Array.isArray(opts.allowlistSelectors) ? opts.allowlistSelectors.filter(Boolean) : [];
+    const selectorQuery = [OVERLAY_ALLOWLIST_SELECTOR_QUERY, ...extraSelectors].filter(Boolean).join(",");
+    if (selectorQuery) {
+      try {
+        if (el.closest(selectorQuery)) return true;
+      } catch { }
+    }
+    const extraTokens = Array.isArray(opts.allowlistTokens) ? opts.allowlistTokens : [];
+    const tokenAllowlist = new Set([...OVERLAY_ALLOWLIST_TOKENS, ...extraTokens.map((t) => String(t).toLowerCase())]);
+    if (!tokenAllowlist.size) return false;
+    const className = (el.getAttribute("class") || "").toLowerCase();
+    const idName = (el.getAttribute("id") || "").toLowerCase();
+    const tokens = `${className} ${idName}`.split(/[^a-z0-9_-]+/).filter(Boolean);
+    for (const token of tokens) {
+      if (tokenAllowlist.has(token)) return true;
+    }
+    return false;
+  }
+
   function clearOverlayPreview() {
     if (!OVERLAY_PREVIEW.size) return;
     OVERLAY_PREVIEW.forEach((el) => {
@@ -1215,7 +1274,11 @@
     ["contextmenu", "dragstart", "selectstart", "mousedown", "mouseup", "click"].forEach((t) => {
       document.addEventListener(t, (ev) => {
         if (!ev) return;
-        ev.stopPropagation();
+        const target = ev.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest("[data-unshackle-softened], [data-unshackle-hidden], [data-unshackle-preview]")) {
+          ev.stopPropagation();
+        }
       }, { capture: true, passive: true });
     });
   }
@@ -1247,16 +1310,17 @@
       if (ESSENTIAL_ROLES.test(role)) continue;
       if (el.getAttribute("aria-modal") === "true") continue;
       if (el.dataset && el.dataset.unshackleKeep === "1") continue;
+      if (isAllowlistedOverlay(el, opts)) continue;
       const cs = getComputedStyle(el);
-      if (!cs) continue;
+      if (!cs || !overlayBlocksPointer(cs)) continue;
       const pos = cs.position;
       if (!(pos === "fixed" || pos === "absolute" || pos === "sticky")) continue;
       const r = el.getBoundingClientRect();
       if (r.width <= 0 || r.height <= 0) continue;
       const coverage = (Math.max(0, Math.min(r.width, innerWidth)) * Math.max(0, Math.min(r.height, innerHeight))) / vw;
       if (coverage < minCoverage) continue;
-      const zVal = parseFloat(cs.zIndex || "0") || 0;
-      if (zVal < minZ && coverage < 0.75) continue;
+      const zVal = getOverlayZIndex(cs);
+      if (zVal < minZ) continue;
       out.push({ el, coverage, z: zVal });
       if (out.length >= maxCandidates) break;
     }
@@ -1376,8 +1440,9 @@
       if (el.getAttribute("aria-modal") === "true") continue;
       if (el.closest("main, nav, header, footer, video, audio, dialog, [data-focus-lock-disabled=true]")) continue;
       if (touched.has(el)) continue;
+      if (isAllowlistedOverlay(el, opts)) continue;
       const cs = getComputedStyle(el);
-      if (!cs) continue;
+      if (!cs || !overlayBlocksPointer(cs)) continue;
       const pos = cs.position;
       if (!(pos === "fixed" || pos === "absolute" || pos === "sticky")) continue;
       const className = (el.getAttribute("class") || "").toLowerCase();
@@ -1392,11 +1457,21 @@
         el.getAttribute("role") || "",
         el.tagName || ""
       ].join(" ").toLowerCase();
+      const tokens = sample.split(/[^a-z0-9_-]+/).filter(Boolean);
+      const minZ = Number.isFinite(opts.minZ) ? opts.minZ : 0;
+      const zVal = getOverlayZIndex(cs);
+      if (zVal < minZ) continue;
 
       // Check for keyword matches
       let matched = null;
       for (const k of keys) {
-        if (k && sample.includes(k)) { matched = k; break; }
+        if (!k) continue;
+        if (k.length <= 3) {
+          if (tokens.includes(k)) { matched = k; break; }
+        } else if (sample.includes(k)) {
+          matched = k;
+          break;
+        }
       }
 
       // If no keyword match, check for suffix/prefix patterns on class/id
@@ -1471,7 +1546,12 @@
     const minZ = opts.minZ ?? 999;
     const touched = new Set();
     const records = [];
-    const candidates = await findOverlayCandidates({ minCoverage, minZ });
+    const candidates = await findOverlayCandidates({
+      minCoverage,
+      minZ,
+      allowlistSelectors: opts.allowlistSelectors,
+      allowlistTokens: opts.allowlistTokens
+    });
     for (const { el } of candidates) {
       if (!el || touched.has(el)) continue;
       try {
@@ -1494,7 +1574,10 @@
       const kwRes = await nukeByKeywords(merged, {
         touched,
         mode: opts.keywordMode === "hard" ? "hard" : "soft",
-        maxAffect: opts.maxKeywords ?? MAX_OVERLAY_ACTIONS
+        maxAffect: opts.maxKeywords ?? MAX_OVERLAY_ACTIONS,
+        minZ,
+        allowlistSelectors: opts.allowlistSelectors,
+        allowlistTokens: opts.allowlistTokens
       });
       if (kwRes && kwRes.ok) {
         removedCount = kwRes.removed || 0;

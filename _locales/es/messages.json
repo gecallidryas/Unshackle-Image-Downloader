@@ -1,773 +1,848 @@
 {
-    "summary_counts": {
-        "message": "$1 total | $2 visibles | $3 seleccionados"
-    },
-    "label_discovery_stats": {
-        "message": "$1 nuevos | $2 vistos"
-    },
-    "button_preview": {
-        "message": "Vista previa"
-    },
-    "hint_select_items": {
-        "message": "Primero selecciona algunos elementos."
-    },
-    "hint_download_requested": {
-        "message": "$1 descarga(s) solicitada(s)."
-    },
-    "hint_convert_requested": {
-        "message": "$1 archivo(s) convertido(s) y descarga(s) solicitada(s)."
-    },
-    "hint_zip_no_items": {
-        "message": "No se pudieron agregar archivos al ZIP."
-    },
-    "hint_zip_failed": {
-        "message": "Error al crear el ZIP."
-    },
-    "hint_zip_success": {
-        "message": "Archivo ZIP creado con $1 elemento(s)."
-    },
-    "hint_zip_download_failed": {
-        "message": "Error en la solicitud de descarga del ZIP."
-    },
-    "label_footer_logs_empty": {
-        "message": "No hay mensajes recientes."
-    },
-    "button_hide_messages": {
-        "message": "Ocultar mensajes"
-    },
-    "button_show_messages": {
-        "message": "Mostrar mensajes"
-    },
-    "label_no_results": {
-        "message": "Sin capturas para estos filtros. Intente escanear o ajustar filtros."
-    },
-    "prompt_rename_start": {
-        "message": "Comenzar numeración desde:"
-    },
-    "prompt_rename_default": {
-        "message": "1"
-    },
-    "hint_rename_success": {
-        "message": "Se renombraron $1 elemento(s) comenzando en $2."
-    },
-    "hint_no_active_tab": {
-        "message": "No hay pestaña activa."
-    },
-    "hint_connect_retry": {
-        "message": "No se pudo conectar a la página (intenta recargar)."
-    },
-    "hint_connect_failed": {
-        "message": "No se pudo conectar a la página."
-    },
-    "hint_permission_cancelled": {
-        "message": "La solicitud de permisos fue cancelada."
-    },
-    "hint_permission_denied": {
-        "message": "Chrome no otorgó acceso a este sitio."
-    },
-    "hint_tab_not_supported": {
-        "message": "Primero abre una página web (http/https/file) en la ventana principal del navegador."
-    },
-    "label_scanning": {
-        "message": "Escaneando..."
-    },
-    "hint_scan_failed": {
-        "message": "El escaneo falló."
-    },
-    "hint_auto_canvas_on": {
-        "message": "Canvas automático habilitado."
-    },
-    "hint_auto_images_on": {
-        "message": "Imágenes automáticas habilitadas."
-    },
-    "label_overlay_threshold_value": {
-        "message": "$1%"
-    },
-    "hint_enable_success": {
-        "message": "Clic derecho y arrastre habilitados; superposiciones suavizadas."
-    },
-    "hint_overlay_removed": {
-        "message": "La limpieza de superposición afectó a $1 elemento(s)."
-    },
-    "button_delete": {
-        "message": "Eliminar"
-    },
-    "hint_overlay_preview": {
-        "message": "Previsualizando $1 superposiciones potenciales."
-    },
-    "hint_overlay_undo": {
-        "message": "Se restauraron $1 elemento(s) de superposición."
-    },
-    "hint_overlay_nothing_to_undo": {
-        "message": "No hay limpieza de superposición para deshacer."
-    },
-    "hint_enter_keywords": {
-        "message": "Primero ingresa las palabras clave."
-    },
-    "confirm_keyword_remove": {
-        "message": "Eliminar superposiciones por palabra clave puede afectar la funcionalidad del sitio. ¿Continuar?"
-    },
-    "hint_keywords_removed": {
-        "message": "Se eliminaron $1 elemento(s) por palabra clave."
-    },
-    "label_progress_preparing": {
-        "message": "Preparando…"
-    },
-    "hint_download_failed": {
-        "message": "Error en la solicitud de descarga."
-    },
-    "label_processing_blob": {
-        "message": "Preparando vistas previas de blob..."
-    },
-    "button_advanced_collapse": {
-        "message": "Avanzado [v]"
-    },
-    "button_advanced_expand": {
-        "message": "Avanzado [>]"
-    },
-    "hint_sidepanel_enabled": {
-        "message": "Panel lateral habilitado por defecto."
-    },
-    "hint_popup_enabled": {
-        "message": "Ventana emergente habilitada por defecto."
-    },
-    "tooltip_settings": {
-        "message": "Configuración"
-    },
-    "tooltip_open_mode": {
-        "message": "Elige cómo se abre la interfaz al hacer clic en el icono de la extensión"
-    },
-    "label_popup": {
-        "message": "Emergente"
-    },
-    "label_side_panel": {
-        "message": "Panel lateral"
-    },
-    "aria_toggle_mode": {
-        "message": "Cambiar entre Emergente y Panel lateral"
-    },
-    "note_toggle_mode": {
-        "message": "Desactiva para usar el modo de ventana emergente."
-    },
-    "button_scan": {
-        "message": "Escanear"
-    },
-    "tooltip_scan": {
-        "message": "Escanear imágenes: directas, fondo, Data URI, Blob, SVG"
-    },
-    "button_canvas": {
-        "message": "Canvas"
-    },
-    "tooltip_canvas": {
-        "message": "Capturar canvas del mismo origen"
-    },
-    "label_auto_images": {
-        "message": "Imágenes auto"
-    },
-    "label_auto_canvas": {
-        "message": "Canvas auto"
-    },
-    "button_advanced_plain": {
-        "message": "Avanzado"
-    },
-    "aria_advanced_section": {
-        "message": "Opciones avanzadas"
-    },
-    "heading_advanced": {
-        "message": "Opciones avanzadas"
-    },
-    "button_enable_interactions": {
-        "message": "Habilitar clic derecho"
-    },
-    "button_overlay_preview": {
-        "message": "Previsualizar superposiciones afectadas"
-    },
-    "button_overlay_remove": {
-        "message": "Aplicar limpieza"
-    },
-    "button_overlay_undo": {
-        "message": "Deshacer limpieza de superposición"
-    },
-    "label_overlay_threshold": {
-        "message": "Umbral de cobertura superficial"
-    },
-    "placeholder_overlay_keywords": {
-        "message": "Palabras clave a eliminar (separadas por coma)"
-    },
-    "button_overlay_keywords": {
-        "message": "Aplicar palabras clave"
-    },
-    "button_overlay_keyword_preview": {
-        "message": "Previsualizar palabras clave"
-    },
-    "label_overlay_mode": {
-        "message": "Modo:"
-    },
-    "label_overlay_mode_soft": {
-        "message": "Suavizar"
-    },
-    "label_overlay_mode_hard": {
-        "message": "Eliminar"
-    },
-    "aria_overlay_mode": {
-        "message": "Elegir modo de limpieza de superposición"
-    },
-    "label_overlay_z": {
-        "message": "z-index mínimo"
-    },
-    "label_overlay_preview_idle": {
-        "message": "Sin vista previa aún."
-    },
-    "label_overlay_preview_running": {
-        "message": "Resaltando superposiciones..."
-    },
-    "label_overlay_preview_match": {
-        "message": "$1 superposición(es) resaltada(s)."
-    },
-    "label_overlay_preview_none": {
-        "message": "Ningún candidato de superposición cumplió los umbrales."
-    },
-    "label_overlay_preview_failed": {
-        "message": "Error en la vista previa de superposición."
-    },
-    "hint_overlay_preview_match": {
-        "message": "$1 elemento(s) de superposición resaltado(s)."
-    },
-    "hint_overlay_preview_none": {
-        "message": "Ningún candidato de superposición cumplió los umbrales."
-    },
-    "hint_overlay_preview_failed": {
-        "message": "Error en la vista previa de superposición."
-    },
-    "hint_keywords_preview": {
-        "message": "$1 elemento(s) coinciden con esas palabras clave."
-    },
-    "hint_keywords_preview_none": {
-        "message": "Ningún elemento de superposición coincide con esas palabras clave."
-    },
-    "hint_keywords_preview_failed": {
-        "message": "Error en la vista previa de palabras clave."
-    },
-    "hint_keywords_softened": {
-        "message": "Se suavizaron $1 superposición(es) por palabra clave."
-    },
-    "label_overlay_recent_tags": {
-        "message": "Etiquetas recientes"
-    },
-    "label_overlay_suggested_tags": {
-        "message": "Etiquetas sugeridas"
-    },
-    "label_overlay_no_recent": {
-        "message": "Sin etiquetas recientes aún."
-    },
-    "label_min_width": {
-        "message": "Ancho mín:"
-    },
-    "label_min_height": {
-        "message": "Alto mín:"
-    },
-    "label_format": {
-        "message": "Formato:"
-    },
-    "option_format_any": {
-        "message": "Cualquiera"
-    },
-    "option_format_png": {
-        "message": "PNG"
-    },
-    "option_format_jpg": {
-        "message": "JPG"
-    },
-    "option_format_webp": {
-        "message": "WEBP"
-    },
-    "option_format_gif": {
-        "message": "GIF"
-    },
-    "option_format_svg": {
-        "message": "SVG"
-    },
-    "button_select_all": {
-        "message": "Seleccionar todo"
-    },
-    "button_select_none": {
-        "message": "Ninguno"
-    },
-    "label_convert": {
-        "message": "Convertir:"
-    },
-    "option_convert_original": {
-        "message": "Original"
-    },
-    "button_download_selected": {
-        "message": "Descargar selección"
-    },
-    "button_zip_selected": {
-        "message": "ZIP selección"
-    },
-    "button_rename_serial": {
-        "message": "Renombrar en serie"
-    },
-    "tooltip_rename_serial": {
-        "message": "Renombrar elementos por orden de detección"
-    },
-    "label_sort": {
-        "message": "Ordenar:"
-    },
-    "option_sort_detected": {
-        "message": "Orden de detección"
-    },
-    "option_sort_name": {
-        "message": "Nombre (A-Z)"
-    },
-    "option_sort_pixels": {
-        "message": "Tamaño en píxeles (mayor)"
-    },
-    "option_sort_filesize": {
-        "message": "Tamaño de archivo (mayor)"
-    },
-    "link_tip": {
-        "message": "Propina"
-    },
-    "link_contact": {
-        "message": "Contáctanos"
-    },
-    "link_help": {
-        "message": "Ayuda y guía de modos"
-    },
-    "confirm_host_permission": {
-        "message": "Unshackle solo solicita acceso después de hacer clic en escanear.\nNecesitamos acceso temporal a $1 para leer imágenes. ¿Continuar?"
-    },
-    "menu_enable_context": {
-        "message": "Habilitar clic derecho y arrastre en este sitio"
-    },
-    "button_progress_cancel": {
-        "message": "Cancelar"
-    },
-    "tooltip_telemetry": {
-        "message": "Almacenar contadores locales para escaneos y ajustes de superposición"
-    },
-    "label_telemetry_toggle": {
-        "message": "Contadores de diagnóstico (solo local)"
-    },
-    "aria_toggle_telemetry": {
-        "message": "Alternar participación en telemetría"
-    },
-    "label_telemetry_off": {
-        "message": "Telemetría deshabilitada (solo local)."
-    },
-    "label_telemetry_stats": {
-        "message": "Escaneos: $1 | Ajustes de superposición: $2"
-    },
-    "button_show_onboarding": {
-        "message": "Mostrar introducción"
-    },
-    "tooltip_permission_prompt": {
-        "message": "Elegir cómo se solicita el acceso al sitio antes de escanear"
-    },
-    "label_permission_prompt": {
-        "message": "Solicitar acceso al sitio en cada escaneo"
-    },
-    "aria_toggle_permission_prompt": {
-        "message": "Alternar avisos de permisos del sitio"
-    },
-    "note_permission_prompt": {
-        "message": "Desactiva para mantener el acceso sin avisos."
-    },
-    "toast_permission_prompt_disabled": {
-        "message": "El acceso al sitio se mantiene; no más avisos."
-    },
-    "toast_permission_prompt_enabled": {
-        "message": "Se te pedirá acceso al sitio por sitio."
-    },
-    "toast_permission_prompt_denied": {
-        "message": "La solicitud de acceso al sitio fue rechazada."
-    },
-    "hint_permission_global_required": {
-        "message": "No se otorgó acceso al sitio. Reactiva los avisos o permite el acceso en la configuración."
-    },
-    "badge_download_queued": {
-        "message": "En cola"
-    },
-    "badge_download_done": {
-        "message": "Descargado"
-    },
-    "badge_download_failed": {
-        "message": "Descarga fallida"
-    },
-    "toast_downloads": {
-        "message": "Se solicitaron $1 descarga(s)."
-    },
-    "toast_downloads_link": {
-        "message": "Abrir descargas"
-    },
-    "toast_downloads_partial": {
-        "message": "$1 descarga(s) en cola, $2 fallida(s)."
-    },
-    "toast_zip": {
-        "message": "ZIP en cola con $1 elemento(s)."
-    },
-    "toast_first_run": {
-        "message": "Unshackle solo solicita acceso al sitio cuando ejecutas escaneos o capturas."
-    },
-    "toast_first_run_link": {
-        "message": "Más información"
-    },
-    "hint_progress_cancelled": {
-        "message": "Operación cancelada."
-    },
-    "label_progress_cancelled": {
-        "message": "Cancelado"
-    },
-    "label_progress_done": {
-        "message": "Listo"
-    },
-    "label_progress_converting": {
-        "message": "Convirtiendo..."
-    },
-    "label_progress_converting_step": {
-        "message": "Convirtiendo $1 de $2"
-    },
-    "label_progress_download": {
-        "message": "Solicitando descarga $1 de $2"
-    },
-    "hint_download_complete": {
-        "message": "Se solicitaron $1 de $2 descarga(s)."
-    },
-    "label_staging_items": {
-        "message": "Preparando $1 de $2"
-    },
-    "label_zip_packing": {
-        "message": "Empaquetando ZIP..."
-    },
-    "label_zip_packing_progress": {
-        "message": "Empaquetando ZIP $1%"
-    },
-    "label_zip_finalizing": {
-        "message": "Finalizando ZIP..."
-    },
-    "notice_first_run": {
-        "message": "Unshackle solo solicita acceso al sitio cuando inicias un escaneo o captura."
-    },
-    "notice_first_run_help": {
-        "message": "Leer la guía rápida"
-    },
-    "notice_first_run_dismiss": {
-        "message": "Entendido"
-    },
-    "tooltip_help": {
-        "message": "Abrir la guía de Unshackle"
-    },
-    "option_kind_gv": {
-        "message": "GigaViewer"
-    },
-    "option_kind_speedbinb": {
-        "message": "Speedbinb"
-    },
-    "option_kind_bellaciao": {
-        "message": "BellaCiao"
-    },
-    "option_kind_lezhin": {
-        "message": "Lezhin"
-    },
-    "option_theme_lightdark": {
-        "message": "Luz en la oscuridad"
-    },
-    "toast_theme_applied": {
-        "message": "Tema actualizado."
-    },
-    "label_locale": {
-        "message": "Idioma"
-    },
-    "toast_locale_applied": {
-        "message": "Idioma actualizado."
-    },
-    "toast_help_opened": {
-        "message": "Ayuda abierta en una nueva pestaña."
-    },
-    "gv_option_only_first": {
-        "message": "Solo primera página"
-    },
-    "gv_option_save_metadata": {
-        "message": "Guardar metadata.json"
-    },
-    "gv_option_purchase_guard": {
-        "message": "Detener si no está comprado"
-    },
-    "gv_option_zip": {
-        "message": "Descargar como ZIP"
-    },
-    "label_gv_gallery_hidden": {
-        "message": "Las descargas del visor aparecen en la cuadrícula principal. Las miniaturas están ocultas aquí."
-    },
-    "heading_chapters": {
-        "message": "Capítulos"
-    },
-    "button_chapter_refresh": {
-        "message": "Actualizar lista"
-    },
-    "label_chapter_idle": {
-        "message": "Capítulos no cargados aún."
-    },
-    "label_chapter_loading": {
-        "message": "Cargando capítulos..."
-    },
-    "label_chapter_empty": {
-        "message": "No hay capítulos disponibles en esta página."
-    },
-    "label_chapter_error": {
-        "message": "No se pudieron cargar los capítulos. Abre la vista general del cómic e intenta de nuevo."
-    },
-    "label_chapter_loaded": {
-        "message": "Se cargaron $1 capítulo(s)."
-    },
-    "label_chapter_free": {
-        "message": "Gratis"
-    },
-    "label_chapter_locked": {
-        "message": "Bloqueado"
-    },
-    "label_chapter_purchased": {
-        "message": "Comprado"
-    },
-    "label_chapter_added": {
-        "message": "Capítulo agregado a la cuadrícula."
-    },
-    "aria_chapter_add": {
-        "message": "Agregar $1 a la cuadrícula del panel"
-    },
-    "option_hk_loader_auto": {
-        "message": "Automático (Runner + Manager)"
-    },
-    "option_hk_loader_runner": {
-        "message": "Compatibilidad (solo Runner)"
-    },
-    "option_hk_loader_manager": {
-        "message": "Solo Manager (experimental)"
-    },
-    "note_hk_loader": {
-        "message": "Automático prueba ambas rutas y mantiene el modo de imagen seguro. Usa Manager solo para depuración."
-    },
-    "button_reset_manga_defaults": {
-        "message": "Restablecer valores seguros"
-    },
-    "note_reset_manga_defaults": {
-        "message": "Deshabilita el modo Manga y restaura la configuración original de serie/cargador."
-    },
-    "toast_reset_safe_defaults": {
-        "message": "Configuración restaurada a valores seguros."
-    },
-    "toast_reset_safe_defaults_failed": {
-        "message": "No se pudo restablecer la configuración. Intenta de nuevo."
-    },
-    "confirm_reset_manga_defaults": {
-        "message": "¿Restablecer a valores seguros? Esto deshabilita el modo Manga hasta que lo reactives."
-    },
-    "button_download": {
-        "message": "Descargar"
-    },
-    "button_zip": {
-        "message": "ZIP"
-    },
-    "button_select_invert": {
-        "message": "Invertir"
-    },
-    "label_search": {
-        "message": "Buscar:"
-    },
-    "placeholder_search": {
-        "message": "Nombre de archivo o URL"
-    },
-    "label_kind": {
-        "message": "Tipo:"
-    },
-    "option_kind_all": {
-        "message": "Todo"
-    },
-    "option_kind_img": {
-        "message": "Imágenes"
-    },
-    "option_kind_background": {
-        "message": "Fondos"
-    },
-    "option_kind_blob": {
-        "message": "Blob"
-    },
-    "option_kind_data": {
-        "message": "Data URI"
-    },
-    "option_kind_canvas": {
-        "message": "Canvas"
-    },
-    "option_kind_svg": {
-        "message": "SVG"
-    },
-    "label_discovery": {
-        "message": "Descubrimiento:"
-    },
-    "option_discovery_all": {
-        "message": "Todo"
-    },
-    "option_discovery_new": {
-        "message": "Nuevos esta sesión"
-    },
-    "option_discovery_seen": {
-        "message": "Vistos anteriormente"
-    },
-    "label_overlay_aggressiveness": {
-        "message": "Agresividad"
-    },
-    "heading_quick_settings": {
-        "message": "Configuración rápida"
-    },
-    "label_theme": {
-        "message": "Tema"
-    },
-    "option_theme_contrast": {
-        "message": "Alto contraste"
-    },
-    "option_theme_dark": {
-        "message": "Oscuro"
-    },
-    "heading_manga_settings": {
-        "message": "Modo Manga"
-    },
-    "label_enable_manga": {
-        "message": "Habilitar modo Manga"
-    },
-    "tooltip_enable_manga": {
-        "message": "Habilitar el panel beta de Manga con conectores HakuNeko"
-    },
-    "aria_toggle_manga_mode": {
-        "message": "Alternar modo Manga"
-    },
-    "label_hk_loader": {
-        "message": "Cargador"
-    },
-    "tooltip_hk_loader": {
-        "message": "Elegir cómo cargan los conectores HakuNeko (runner, manager o auto)"
-    },
-    "heading_privacy": {
-        "message": "Privacidad"
-    },
-    "button_open_bookmarks": {
-        "message": "Abrir marcadores"
-    },
-    "heading_donation_prompt": {
-        "message": "Apoya a Unshackle"
-    },
-    "label_donation_frequency": {
-        "message": "Se muestra como máximo una vez al mes cuando descargas mucho."
-    },
-    "onboarding_title": {
-        "message": "Bienvenido a Unshackle"
-    },
-    "onboarding_step_language": {
-        "message": "Elige tu idioma"
-    },
-    "onboarding_step_theme": {
-        "message": "Elige un tema"
-    },
-    "onboarding_step_features": {
-        "message": "Recorrido rápido"
-    },
-    "onboarding_btn_next": {
-        "message": "Siguiente"
-    },
-    "onboarding_btn_back": {
-        "message": "Atrás"
-    },
-    "onboarding_btn_start": {
-        "message": "Comenzar"
-    },
-    "onboarding_btn_skip": {
-        "message": "Omitir"
-    },
-    "onboarding_feature_scan_title": {
-        "message": "Escanear imágenes"
-    },
-    "onboarding_feature_scan_desc": {
-        "message": "Extrae imágenes de cualquier página web, incluyendo fondos, canvas y blobs"
-    },
-    "onboarding_feature_overlay_title": {
-        "message": "Eliminar superposiciones"
-    },
-    "onboarding_feature_overlay_desc": {
-        "message": "Desactiva bloqueos de clic derecho y elimina superposiciones molestas"
-    },
-    "onboarding_feature_manga_title": {
-        "message": "Modo Manga"
-    },
-    "onboarding_feature_manga_desc": {
-        "message": "Descarga capítulos de sitios de manga con conectores HakuNeko"
-    },
-    "onboarding_feature_download_title": {
-        "message": "Descarga masiva"
-    },
-    "onboarding_feature_download_desc": {
-        "message": "Descarga múltiples imágenes a la vez o empáquétalas en un ZIP"
-    },
-    "onboarding_lang_en": {
-        "message": "English"
-    },
-    "onboarding_lang_de": {
-        "message": "Deutsch"
-    },
-    "onboarding_lang_es": {
-        "message": "Español"
-    },
-    "onboarding_lang_fr": {
-        "message": "Français"
-    },
-    "onboarding_lang_ja": {
-        "message": "日本語"
-    },
-    "onboarding_lang_ko": {
-        "message": "한국어"
-    },
-    "onboarding_lang_zh_CN": {
-        "message": "简体中文"
-    },
-    "onboarding_lang_zh_TW": {
-        "message": "繁體中文"
-    },
-    "option_theme_blueberry": {
-        "message": "Arándano"
-    },
-    "onboarding_feature_network_title": {
-        "message": "Captura de red"
-    },
-    "onboarding_feature_network_desc": {
-        "message": "Interceptar imágenes cargadas dinámicamente a través de solicitudes de red"
-    },
-    "onboarding_feature_convert_title": {
-        "message": "Convertir imágenes"
-    },
-    "onboarding_feature_convert_desc": {
-        "message": "Convertir imágenes entre formatos como PNG, JPEG y WebP antes de descargar"
-    },
-    "tooltip_delete": {
-        "message": "Eliminar imágenes seleccionadas de la lista"
-    },
-    "hint_deleted": {
-        "message": "$1 elemento(s) eliminado(s) de la lista."
-    },
-    "heading_stats": {
-        "message": "Estadísticas"
-    },
-    "label_stats_scans": {
-        "message": "Escaneos:"
-    },
-    "label_stats_images_scanned": {
-        "message": "Imágenes escaneadas:"
-    },
-    "label_stats_overlays_nuked": {
-        "message": "Overlays eliminados:"
-    },
-    "label_stats_overlay_tweaks": {
-        "message": "Ajustes de overlay:"
-    },
-    "label_stats_images_downloaded": {
-        "message": "Imágenes descargadas:"
-    }
+  "summary_counts": {
+    "message": "$1 total | $2 visibles | $3 seleccionados"
+  },
+  "label_discovery_stats": {
+    "message": "$1 nuevos | $2 vistos"
+  },
+  "button_preview": {
+    "message": "Vista previa"
+  },
+  "hint_select_items": {
+    "message": "Primero selecciona algunos elementos."
+  },
+  "hint_download_requested": {
+    "message": "$1 descarga(s) solicitada(s)."
+  },
+  "hint_convert_requested": {
+    "message": "$1 archivo(s) convertido(s) y descarga(s) solicitada(s)."
+  },
+  "hint_zip_no_items": {
+    "message": "No se pudieron agregar archivos al ZIP."
+  },
+  "hint_zip_failed": {
+    "message": "Error al crear el ZIP."
+  },
+  "hint_zip_success": {
+    "message": "Archivo ZIP creado con $1 elemento(s)."
+  },
+  "hint_zip_download_failed": {
+    "message": "Error en la solicitud de descarga del ZIP."
+  },
+  "label_footer_logs_empty": {
+    "message": "No hay mensajes recientes."
+  },
+  "button_hide_messages": {
+    "message": "Ocultar mensajes"
+  },
+  "button_show_messages": {
+    "message": "Mostrar mensajes"
+  },
+  "label_no_results": {
+    "message": "Sin capturas para estos filtros. Intente escanear o ajustar filtros."
+  },
+  "prompt_rename_start": {
+    "message": "Comenzar numeración desde:"
+  },
+  "prompt_rename_default": {
+    "message": "1"
+  },
+  "hint_rename_success": {
+    "message": "Se renombraron $1 elemento(s) comenzando en $2."
+  },
+  "hint_no_active_tab": {
+    "message": "No hay pestaña activa."
+  },
+  "hint_connect_retry": {
+    "message": "No se pudo conectar a la página (intenta recargar)."
+  },
+  "hint_connect_failed": {
+    "message": "No se pudo conectar a la página."
+  },
+  "hint_permission_cancelled": {
+    "message": "La solicitud de permisos fue cancelada."
+  },
+  "hint_permission_denied": {
+    "message": "Chrome no otorgó acceso a este sitio."
+  },
+  "hint_tab_not_supported": {
+    "message": "Primero abre una página web (http/https/file) en la ventana principal del navegador."
+  },
+  "label_scanning": {
+    "message": "Escaneando..."
+  },
+  "hint_scan_failed": {
+    "message": "El escaneo falló."
+  },
+  "hint_auto_canvas_on": {
+    "message": "Canvas automático habilitado."
+  },
+  "hint_auto_images_on": {
+    "message": "Imágenes automáticas habilitadas."
+  },
+  "label_overlay_threshold_value": {
+    "message": "$1%"
+  },
+  "hint_enable_success": {
+    "message": "Clic derecho y arrastre habilitados; superposiciones suavizadas."
+  },
+  "hint_overlay_removed": {
+    "message": "La limpieza de superposición afectó a $1 elemento(s)."
+  },
+  "button_delete": {
+    "message": "Eliminar"
+  },
+  "hint_overlay_preview": {
+    "message": "Previsualizando $1 superposiciones potenciales."
+  },
+  "hint_overlay_undo": {
+    "message": "Se restauraron $1 elemento(s) de superposición."
+  },
+  "hint_overlay_nothing_to_undo": {
+    "message": "No hay limpieza de superposición para deshacer."
+  },
+  "hint_enter_keywords": {
+    "message": "Primero ingresa las palabras clave."
+  },
+  "confirm_keyword_remove": {
+    "message": "Eliminar superposiciones por palabra clave puede afectar la funcionalidad del sitio. ¿Continuar?"
+  },
+  "hint_keywords_removed": {
+    "message": "Se eliminaron $1 elemento(s) por palabra clave."
+  },
+  "label_progress_preparing": {
+    "message": "Preparando…"
+  },
+  "hint_download_failed": {
+    "message": "Error en la solicitud de descarga."
+  },
+  "label_processing_blob": {
+    "message": "Preparando vistas previas de blob..."
+  },
+  "button_advanced_collapse": {
+    "message": "Avanzado [v]"
+  },
+  "button_advanced_expand": {
+    "message": "Avanzado [>]"
+  },
+  "hint_sidepanel_enabled": {
+    "message": "Panel lateral habilitado por defecto."
+  },
+  "hint_popup_enabled": {
+    "message": "Ventana emergente habilitada por defecto."
+  },
+  "tooltip_settings": {
+    "message": "Configuración"
+  },
+  "tooltip_open_mode": {
+    "message": "Elige cómo se abre la interfaz al hacer clic en el icono de la extensión"
+  },
+  "label_popup": {
+    "message": "Emergente"
+  },
+  "label_side_panel": {
+    "message": "Panel lateral"
+  },
+  "aria_toggle_mode": {
+    "message": "Cambiar entre Emergente y Panel lateral"
+  },
+  "note_toggle_mode": {
+    "message": "Desactiva para usar el modo de ventana emergente."
+  },
+  "button_scan": {
+    "message": "Escanear"
+  },
+  "tooltip_scan": {
+    "message": "Escanear imágenes: directas, fondo, Data URI, Blob, SVG"
+  },
+  "button_canvas": {
+    "message": "Canvas"
+  },
+  "tooltip_canvas": {
+    "message": "Capturar canvas del mismo origen"
+  },
+  "label_auto_images": {
+    "message": "Imágenes auto"
+  },
+  "label_auto_canvas": {
+    "message": "Canvas auto"
+  },
+  "button_advanced_plain": {
+    "message": "Avanzado"
+  },
+  "aria_advanced_section": {
+    "message": "Opciones avanzadas"
+  },
+  "heading_advanced": {
+    "message": "Opciones avanzadas"
+  },
+  "button_enable_interactions": {
+    "message": "Habilitar clic derecho"
+  },
+  "button_overlay_preview": {
+    "message": "Previsualizar superposiciones afectadas"
+  },
+  "button_overlay_remove": {
+    "message": "Aplicar limpieza"
+  },
+  "button_overlay_undo": {
+    "message": "Deshacer limpieza de superposición"
+  },
+  "label_overlay_threshold": {
+    "message": "Umbral de cobertura superficial"
+  },
+  "placeholder_overlay_keywords": {
+    "message": "Palabras clave a eliminar (separadas por coma)"
+  },
+  "button_overlay_keywords": {
+    "message": "Aplicar palabras clave"
+  },
+  "button_overlay_keyword_preview": {
+    "message": "Previsualizar palabras clave"
+  },
+  "label_overlay_mode": {
+    "message": "Modo:"
+  },
+  "label_overlay_mode_soft": {
+    "message": "Suavizar"
+  },
+  "label_overlay_mode_hard": {
+    "message": "Eliminar"
+  },
+  "aria_overlay_mode": {
+    "message": "Elegir modo de limpieza de superposición"
+  },
+  "label_overlay_z": {
+    "message": "z-index mínimo"
+  },
+  "label_overlay_preview_idle": {
+    "message": "Sin vista previa aún."
+  },
+  "label_overlay_preview_running": {
+    "message": "Resaltando superposiciones..."
+  },
+  "label_overlay_preview_match": {
+    "message": "$1 superposición(es) resaltada(s)."
+  },
+  "label_overlay_preview_none": {
+    "message": "Ningún candidato de superposición cumplió los umbrales."
+  },
+  "label_overlay_preview_failed": {
+    "message": "Error en la vista previa de superposición."
+  },
+  "hint_overlay_preview_match": {
+    "message": "$1 elemento(s) de superposición resaltado(s)."
+  },
+  "hint_overlay_preview_none": {
+    "message": "Ningún candidato de superposición cumplió los umbrales."
+  },
+  "hint_overlay_preview_failed": {
+    "message": "Error en la vista previa de superposición."
+  },
+  "hint_keywords_preview": {
+    "message": "$1 elemento(s) coinciden con esas palabras clave."
+  },
+  "hint_keywords_preview_none": {
+    "message": "Ningún elemento de superposición coincide con esas palabras clave."
+  },
+  "hint_keywords_preview_failed": {
+    "message": "Error en la vista previa de palabras clave."
+  },
+  "hint_keywords_softened": {
+    "message": "Se suavizaron $1 superposición(es) por palabra clave."
+  },
+  "label_overlay_recent_tags": {
+    "message": "Etiquetas recientes"
+  },
+  "label_overlay_suggested_tags": {
+    "message": "Etiquetas sugeridas"
+  },
+  "label_overlay_no_recent": {
+    "message": "Sin etiquetas recientes aún."
+  },
+  "label_min_width": {
+    "message": "Ancho mín:"
+  },
+  "label_min_height": {
+    "message": "Alto mín:"
+  },
+  "label_format": {
+    "message": "Formato:"
+  },
+  "option_format_any": {
+    "message": "Cualquiera"
+  },
+  "option_format_png": {
+    "message": "PNG"
+  },
+  "option_format_jpg": {
+    "message": "JPG"
+  },
+  "option_format_webp": {
+    "message": "WEBP"
+  },
+  "option_format_gif": {
+    "message": "GIF"
+  },
+  "option_format_svg": {
+    "message": "SVG"
+  },
+  "button_select_all": {
+    "message": "Seleccionar todo"
+  },
+  "button_select_none": {
+    "message": "Ninguno"
+  },
+  "label_convert": {
+    "message": "Convertir:"
+  },
+  "option_convert_original": {
+    "message": "Original"
+  },
+  "button_download_selected": {
+    "message": "Descargar selección"
+  },
+  "button_zip_selected": {
+    "message": "ZIP selección"
+  },
+  "button_rename_serial": {
+    "message": "Renombrar en serie"
+  },
+  "tooltip_rename_serial": {
+    "message": "Renombrar elementos por orden de detección"
+  },
+  "label_sort": {
+    "message": "Ordenar:"
+  },
+  "option_sort_detected": {
+    "message": "Orden de detección"
+  },
+  "option_sort_name": {
+    "message": "Nombre (A-Z)"
+  },
+  "option_sort_pixels": {
+    "message": "Tamaño en píxeles (mayor)"
+  },
+  "option_sort_filesize": {
+    "message": "Tamaño de archivo (mayor)"
+  },
+  "link_tip": {
+    "message": "Propina"
+  },
+  "link_contact": {
+    "message": "Contáctanos"
+  },
+  "link_help": {
+    "message": "Ayuda y guía de modos"
+  },
+  "confirm_host_permission": {
+    "message": "Unshackle solo solicita acceso después de hacer clic en escanear.\nNecesitamos acceso temporal a $1 para leer imágenes. ¿Continuar?"
+  },
+  "menu_enable_context": {
+    "message": "Habilitar clic derecho y arrastre en este sitio"
+  },
+  "button_progress_cancel": {
+    "message": "Cancelar"
+  },
+  "tooltip_telemetry": {
+    "message": "Almacenar contadores locales para escaneos y ajustes de superposición"
+  },
+  "label_telemetry_toggle": {
+    "message": "Contadores de diagnóstico (solo local)"
+  },
+  "aria_toggle_telemetry": {
+    "message": "Alternar participación en telemetría"
+  },
+  "label_telemetry_off": {
+    "message": "Telemetría deshabilitada (solo local)."
+  },
+  "label_telemetry_stats": {
+    "message": "Escaneos: $1 | Ajustes de superposición: $2"
+  },
+  "button_show_onboarding": {
+    "message": "Mostrar introducción"
+  },
+  "tooltip_permission_prompt": {
+    "message": "Elegir cómo se solicita el acceso al sitio antes de escanear"
+  },
+  "label_permission_prompt": {
+    "message": "Solicitar acceso al sitio en cada escaneo"
+  },
+  "aria_toggle_permission_prompt": {
+    "message": "Alternar avisos de permisos del sitio"
+  },
+  "note_permission_prompt": {
+    "message": "Desactiva para mantener el acceso sin avisos."
+  },
+  "toast_permission_prompt_disabled": {
+    "message": "El acceso al sitio se mantiene; no más avisos."
+  },
+  "toast_permission_prompt_enabled": {
+    "message": "Se te pedirá acceso al sitio por sitio."
+  },
+  "toast_permission_prompt_denied": {
+    "message": "La solicitud de acceso al sitio fue rechazada."
+  },
+  "hint_permission_global_required": {
+    "message": "No se otorgó acceso al sitio. Reactiva los avisos o permite el acceso en la configuración."
+  },
+  "badge_download_queued": {
+    "message": "En cola"
+  },
+  "badge_download_done": {
+    "message": "Descargado"
+  },
+  "badge_download_failed": {
+    "message": "Descarga fallida"
+  },
+  "toast_downloads": {
+    "message": "Se solicitaron $1 descarga(s)."
+  },
+  "toast_downloads_link": {
+    "message": "Abrir descargas"
+  },
+  "toast_downloads_partial": {
+    "message": "$1 descarga(s) en cola, $2 fallida(s)."
+  },
+  "toast_zip": {
+    "message": "ZIP en cola con $1 elemento(s)."
+  },
+  "toast_first_run": {
+    "message": "Unshackle solo solicita acceso al sitio cuando ejecutas escaneos o capturas."
+  },
+  "toast_first_run_link": {
+    "message": "Más información"
+  },
+  "hint_progress_cancelled": {
+    "message": "Operación cancelada."
+  },
+  "label_progress_cancelled": {
+    "message": "Cancelado"
+  },
+  "label_progress_done": {
+    "message": "Listo"
+  },
+  "label_progress_converting": {
+    "message": "Convirtiendo..."
+  },
+  "label_progress_converting_step": {
+    "message": "Convirtiendo $1 de $2"
+  },
+  "label_progress_download": {
+    "message": "Solicitando descarga $1 de $2"
+  },
+  "hint_download_complete": {
+    "message": "Se solicitaron $1 de $2 descarga(s)."
+  },
+  "label_staging_items": {
+    "message": "Preparando $1 de $2"
+  },
+  "label_zip_packing": {
+    "message": "Empaquetando ZIP..."
+  },
+  "label_zip_packing_progress": {
+    "message": "Empaquetando ZIP $1%"
+  },
+  "label_zip_finalizing": {
+    "message": "Finalizando ZIP..."
+  },
+  "notice_first_run": {
+    "message": "Unshackle solo solicita acceso al sitio cuando inicias un escaneo o captura."
+  },
+  "notice_first_run_help": {
+    "message": "Leer la guía rápida"
+  },
+  "notice_first_run_dismiss": {
+    "message": "Entendido"
+  },
+  "tooltip_help": {
+    "message": "Abrir la guía de Unshackle"
+  },
+  "option_kind_gv": {
+    "message": "GigaViewer"
+  },
+  "option_kind_speedbinb": {
+    "message": "Speedbinb"
+  },
+  "option_kind_bellaciao": {
+    "message": "BellaCiao"
+  },
+  "option_kind_lezhin": {
+    "message": "Lezhin"
+  },
+  "option_theme_lightdark": {
+    "message": "Luz en la oscuridad"
+  },
+  "toast_theme_applied": {
+    "message": "Tema actualizado."
+  },
+  "label_locale": {
+    "message": "Idioma"
+  },
+  "toast_locale_applied": {
+    "message": "Idioma actualizado."
+  },
+  "toast_help_opened": {
+    "message": "Ayuda abierta en una nueva pestaña."
+  },
+  "gv_option_only_first": {
+    "message": "Solo primera página"
+  },
+  "gv_option_save_metadata": {
+    "message": "Guardar metadata.json"
+  },
+  "gv_option_purchase_guard": {
+    "message": "Detener si no está comprado"
+  },
+  "gv_option_zip": {
+    "message": "Descargar como ZIP"
+  },
+  "label_gv_gallery_hidden": {
+    "message": "Las descargas del visor aparecen en la cuadrícula principal. Las miniaturas están ocultas aquí."
+  },
+  "heading_chapters": {
+    "message": "Capítulos"
+  },
+  "button_chapter_refresh": {
+    "message": "Actualizar lista"
+  },
+  "label_chapter_idle": {
+    "message": "Capítulos no cargados aún."
+  },
+  "label_chapter_loading": {
+    "message": "Cargando capítulos..."
+  },
+  "label_chapter_empty": {
+    "message": "No hay capítulos disponibles en esta página."
+  },
+  "label_chapter_error": {
+    "message": "No se pudieron cargar los capítulos. Abre la vista general del cómic e intenta de nuevo."
+  },
+  "label_chapter_loaded": {
+    "message": "Se cargaron $1 capítulo(s)."
+  },
+  "label_chapter_free": {
+    "message": "Gratis"
+  },
+  "label_chapter_locked": {
+    "message": "Bloqueado"
+  },
+  "label_chapter_purchased": {
+    "message": "Comprado"
+  },
+  "label_chapter_added": {
+    "message": "Capítulo agregado a la cuadrícula."
+  },
+  "aria_chapter_add": {
+    "message": "Agregar $1 a la cuadrícula del panel"
+  },
+  "option_hk_loader_auto": {
+    "message": "Automático (Runner + Manager)"
+  },
+  "option_hk_loader_runner": {
+    "message": "Compatibilidad (solo Runner)"
+  },
+  "option_hk_loader_manager": {
+    "message": "Solo Manager (experimental)"
+  },
+  "note_hk_loader": {
+    "message": "Automático prueba ambas rutas y mantiene el modo de imagen seguro. Usa Manager solo para depuración."
+  },
+  "button_reset_manga_defaults": {
+    "message": "Restablecer valores seguros"
+  },
+  "note_reset_manga_defaults": {
+    "message": "Deshabilita el modo Manga y restaura la configuración original de serie/cargador."
+  },
+  "toast_reset_safe_defaults": {
+    "message": "Configuración restaurada a valores seguros."
+  },
+  "toast_reset_safe_defaults_failed": {
+    "message": "No se pudo restablecer la configuración. Intenta de nuevo."
+  },
+  "confirm_reset_manga_defaults": {
+    "message": "¿Restablecer a valores seguros? Esto deshabilita el modo Manga hasta que lo reactives."
+  },
+  "button_download": {
+    "message": "Descargar"
+  },
+  "button_zip": {
+    "message": "ZIP"
+  },
+  "button_select_invert": {
+    "message": "Invertir"
+  },
+  "label_search": {
+    "message": "Buscar:"
+  },
+  "placeholder_search": {
+    "message": "Nombre de archivo o URL"
+  },
+  "label_kind": {
+    "message": "Tipo:"
+  },
+  "option_kind_all": {
+    "message": "Todo"
+  },
+  "option_kind_img": {
+    "message": "Imágenes"
+  },
+  "option_kind_background": {
+    "message": "Fondos"
+  },
+  "option_kind_blob": {
+    "message": "Blob"
+  },
+  "option_kind_data": {
+    "message": "Data URI"
+  },
+  "option_kind_canvas": {
+    "message": "Canvas"
+  },
+  "option_kind_svg": {
+    "message": "SVG"
+  },
+  "label_discovery": {
+    "message": "Descubrimiento:"
+  },
+  "option_discovery_all": {
+    "message": "Todo"
+  },
+  "option_discovery_new": {
+    "message": "Nuevos esta sesión"
+  },
+  "option_discovery_seen": {
+    "message": "Vistos anteriormente"
+  },
+  "label_overlay_aggressiveness": {
+    "message": "Agresividad"
+  },
+  "heading_quick_settings": {
+    "message": "Configuración rápida"
+  },
+  "label_theme": {
+    "message": "Tema"
+  },
+  "option_theme_contrast": {
+    "message": "Alto contraste"
+  },
+  "option_theme_dark": {
+    "message": "Oscuro"
+  },
+  "heading_manga_settings": {
+    "message": "Modo Manga"
+  },
+  "label_enable_manga": {
+    "message": "Habilitar modo Manga"
+  },
+  "tooltip_enable_manga": {
+    "message": "Habilitar el panel beta de Manga con conectores HakuNeko"
+  },
+  "aria_toggle_manga_mode": {
+    "message": "Alternar modo Manga"
+  },
+  "label_hk_loader": {
+    "message": "Cargador"
+  },
+  "tooltip_hk_loader": {
+    "message": "Elegir cómo cargan los conectores HakuNeko (runner, manager o auto)"
+  },
+  "heading_privacy": {
+    "message": "Privacidad"
+  },
+  "button_open_bookmarks": {
+    "message": "Abrir marcadores"
+  },
+  "heading_donation_prompt": {
+    "message": "Apoya a Unshackle"
+  },
+  "label_donation_frequency": {
+    "message": "Se muestra como máximo una vez al mes cuando descargas mucho."
+  },
+  "onboarding_title": {
+    "message": "Bienvenido a Unshackle"
+  },
+  "onboarding_step_language": {
+    "message": "Elige tu idioma"
+  },
+  "onboarding_step_theme": {
+    "message": "Elige un tema"
+  },
+  "onboarding_step_features": {
+    "message": "Recorrido rápido"
+  },
+  "onboarding_btn_next": {
+    "message": "Siguiente"
+  },
+  "onboarding_btn_back": {
+    "message": "Atrás"
+  },
+  "onboarding_btn_start": {
+    "message": "Comenzar"
+  },
+  "onboarding_btn_skip": {
+    "message": "Omitir"
+  },
+  "onboarding_feature_scan_title": {
+    "message": "Escanear imágenes"
+  },
+  "onboarding_feature_scan_desc": {
+    "message": "Extrae imágenes de cualquier página web, incluyendo fondos, canvas y blobs"
+  },
+  "onboarding_feature_overlay_title": {
+    "message": "Eliminar superposiciones"
+  },
+  "onboarding_feature_overlay_desc": {
+    "message": "Desactiva bloqueos de clic derecho y elimina superposiciones molestas"
+  },
+  "onboarding_feature_manga_title": {
+    "message": "Modo Manga"
+  },
+  "onboarding_feature_manga_desc": {
+    "message": "Descarga capítulos de sitios de manga con conectores HakuNeko"
+  },
+  "onboarding_feature_download_title": {
+    "message": "Descarga masiva"
+  },
+  "onboarding_feature_download_desc": {
+    "message": "Descarga múltiples imágenes a la vez o empáquétalas en un ZIP"
+  },
+  "onboarding_lang_en": {
+    "message": "English"
+  },
+  "onboarding_lang_de": {
+    "message": "Deutsch"
+  },
+  "onboarding_lang_es": {
+    "message": "Español"
+  },
+  "onboarding_lang_fr": {
+    "message": "Français"
+  },
+  "onboarding_lang_ja": {
+    "message": "日本語"
+  },
+  "onboarding_lang_ko": {
+    "message": "한국어"
+  },
+  "onboarding_lang_zh_CN": {
+    "message": "简体中文"
+  },
+  "onboarding_lang_zh_TW": {
+    "message": "繁體中文"
+  },
+  "option_theme_blueberry": {
+    "message": "Arándano"
+  },
+  "onboarding_feature_network_title": {
+    "message": "Captura de red"
+  },
+  "onboarding_feature_network_desc": {
+    "message": "Interceptar imágenes cargadas dinámicamente a través de solicitudes de red"
+  },
+  "onboarding_feature_convert_title": {
+    "message": "Convertir imágenes"
+  },
+  "onboarding_feature_convert_desc": {
+    "message": "Convertir imágenes entre formatos como PNG, JPEG y WebP antes de descargar"
+  },
+  "tooltip_delete": {
+    "message": "Eliminar imágenes seleccionadas de la lista"
+  },
+  "hint_deleted": {
+    "message": "$1 elemento(s) eliminado(s) de la lista."
+  },
+  "heading_stats": {
+    "message": "Estadísticas"
+  },
+  "label_stats_scans": {
+    "message": "Escaneos:"
+  },
+  "label_stats_images_scanned": {
+    "message": "Imágenes escaneadas:"
+  },
+  "label_stats_overlays_nuked": {
+    "message": "Overlays eliminados:"
+  },
+  "label_stats_overlay_tweaks": {
+    "message": "Ajustes de overlay:"
+  },
+  "label_stats_images_downloaded": {
+    "message": "Imágenes descargadas:"
+  },
+  "aria_theme_select": {
+    "message": "Choose panel theme"
+  },
+  "aria_toggle_dedupe_auto_remove": {
+    "message": "Toggle auto removal of duplicates"
+  },
+  "button_dedupe_manual": {
+    "message": "Remove duplicates"
+  },
+  "heading_deduplication": {
+    "message": "Deduplication"
+  },
+  "label_dedupe_auto_remove": {
+    "message": "Auto remove duplicates"
+  },
+  "tooltip_dedupe_auto_remove": {
+    "message": "Automatically remove detected duplicates from the list"
+  },
+  "tooltip_dedupe_manual": {
+    "message": "Remove duplicates detected in this scan"
+  },
+  "tooltip_theme": {
+    "message": "Choose the panel theme"
+  },
+  "badge_new": {
+    "message": "New"
+  },
+  "badge_seen": {
+    "message": "Seen"
+  },
+  "badge_seen_count": {
+    "message": "Seen $1x"
+  },
+  "hint_blob_missing": {
+    "message": "Blob bytes unavailable for preview."
+  },
+  "hint_blob_preview_unavailable": {
+    "message": "Preview unavailable for this item."
+  },
+  "hint_blob_too_large": {
+    "message": "Blob exceeds 25 MB limit; preview unavailable."
+  },
+  "hint_nothing_to_rename": {
+    "message": "Nothing to rename."
+  },
+  "kind_background": {
+    "message": "Background"
+  },
+  "kind_blob": {
+    "message": "Blob"
+  },
+  "kind_canvas": {
+    "message": "Canvas"
+  },
+  "kind_data": {
+    "message": "Data URI"
+  },
+  "kind_img": {
+    "message": "Image"
+  },
+  "kind_svg": {
+    "message": "SVG"
+  },
+  "kind_unknown": {
+    "message": "Item"
+  },
+  "label_scanning_connect": {
+    "message": "Connecting to page..."
+  },
+  "label_scanning_prepare": {
+    "message": "Preparing scan..."
+  },
+  "label_scanning_sync": {
+    "message": "Preparing canvas registry..."
+  }
 }

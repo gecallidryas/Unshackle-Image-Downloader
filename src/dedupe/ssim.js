@@ -17,6 +17,12 @@ const L = 255; // Dynamic range
 const C1 = (K1 * L) ** 2;
 const C2 = (K2 * L) ** 2;
 
+function ensureNotAborted(signal) {
+    if (signal?.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+    }
+}
+
 // ==================== THUMBNAIL GENERATION ====================
 
 /**
@@ -309,19 +315,60 @@ async function confirmPair(bitmapA, bitmapB, threshold = SSIM_THRESHOLD) {
 }
 
 /**
+ * Confirm a pair of stored thumbnails using SSIM
+ * @param {{pixels: Uint8Array, width: number, height: number}} thumbA
+ * @param {{pixels: Uint8Array, width: number, height: number}} thumbB
+ * @param {number} threshold
+ * @returns {{confirmed: boolean, score: number, transform: object}|null}
+ */
+function confirmThumbnailPair(thumbA, thumbB, threshold = SSIM_THRESHOLD) {
+    try {
+        if (!thumbA || !thumbB) return null;
+
+        for (const transform of TRANSFORMS) {
+            let { pixels, width, height } = rotateGray(thumbB.pixels, thumbB.width, thumbB.height, transform.rotation);
+            if (transform.mirror) {
+                pixels = mirrorGray(pixels, width, height);
+            }
+            const resizedB = resizeGray(pixels, width, height, thumbA.width, thumbA.height);
+            const score = computeSSIM(thumbA.pixels, resizedB);
+            if (score >= threshold) {
+                return {
+                    confirmed: true,
+                    score,
+                    transform
+                };
+            }
+        }
+
+        return {
+            confirmed: false,
+            score: 0,
+            transform: null
+        };
+    } catch (error) {
+        console.warn("[SSIM] Thumbnail confirmation failed:", error.message);
+        return null;
+    }
+}
+
+/**
  * Process candidate confirmations for an image
  * @param {Object} params
  * @param {string} params.imageId
  * @param {ImageBitmap} params.bitmap
  * @param {Array<{imageId: string, distance: number}>} params.candidates
  * @param {string} params.scanId
+ * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>}
  */
 async function confirmCandidates(params) {
-    const { imageId, bitmap, candidates, scanId } = params;
+    const { imageId, bitmap, candidates, scanId, signal } = params;
     const confirmed = [];
+    const thumbA = createThumbnail(bitmap, THUMBNAIL_MAX_SIZE);
 
     for (const candidate of candidates) {
+        ensureNotAborted(signal);
         // Check cache first
         const cached = await globalThis.DedupeDB.getPairConfirm(imageId, candidate.imageId);
         if (cached) {
@@ -335,22 +382,54 @@ async function confirmCandidates(params) {
             continue;
         }
 
-        // Get candidate's image record
-        const candidateRecord = await globalThis.DedupeDB.getImage(candidate.imageId);
-        if (!candidateRecord) continue;
+        const candidateThumb = await globalThis.DedupeDB.getThumbnail(candidate.imageId);
+        const candidatePixels = candidateThumb?.pixels instanceof Uint8Array
+            ? candidateThumb.pixels
+            : (candidateThumb?.pixels instanceof ArrayBuffer
+                ? new Uint8Array(candidateThumb.pixels)
+                : (ArrayBuffer.isView(candidateThumb?.pixels)
+                    ? new Uint8Array(candidateThumb.pixels.buffer.slice(candidateThumb.pixels.byteOffset, candidateThumb.pixels.byteOffset + candidateThumb.pixels.byteLength))
+                    : (Array.isArray(candidateThumb?.pixels)
+                        ? new Uint8Array(candidateThumb.pixels)
+                        : null)));
 
-        // We need the candidate's bitmap - this is a limitation
-        // In a full implementation, we'd store thumbnails or re-fetch
-        // For now, we'll skip candidates we can't load
-        // TODO: Store thumbnails in IndexedDB for confirmation
+        if (!candidateThumb || !candidatePixels || !candidateThumb.width || !candidateThumb.height) {
+            await globalThis.DedupeDB.putPairConfirm(imageId, candidate.imageId, {
+                status: "REJECTED",
+                score: 0,
+                transform: null,
+                confirmedAt: Date.now()
+            });
+            continue;
+        }
 
-        // Cache the rejection for now
-        await globalThis.DedupeDB.putPairConfirm(imageId, candidate.imageId, {
-            status: "REJECTED",
-            score: 0,
-            transform: null,
-            confirmedAt: Date.now()
-        });
+        ensureNotAborted(signal);
+        const result = confirmThumbnailPair(thumbA, {
+            pixels: candidatePixels,
+            width: candidateThumb.width,
+            height: candidateThumb.height
+        }, SSIM_THRESHOLD);
+
+        if (result?.confirmed) {
+            confirmed.push({
+                imageId: candidate.imageId,
+                score: result.score,
+                transform: result.transform
+            });
+            await globalThis.DedupeDB.putPairConfirm(imageId, candidate.imageId, {
+                status: "CONFIRMED",
+                score: result.score,
+                transform: result.transform,
+                confirmedAt: Date.now()
+            });
+        } else {
+            await globalThis.DedupeDB.putPairConfirm(imageId, candidate.imageId, {
+                status: "REJECTED",
+                score: result?.score || 0,
+                transform: result?.transform || null,
+                confirmedAt: Date.now()
+            });
+        }
     }
 
     return {
@@ -373,6 +452,7 @@ if (typeof globalThis !== "undefined") {
         covariance,
         computeSSIM,
         confirmPair,
+        confirmThumbnailPair,
         confirmCandidates
     };
 }

@@ -39,6 +39,9 @@ var detectCsrfTokenFromResponseText = function(responseText, formId) {
 };
 
 var submitFormSecurely = function(formObj) {
+  if (!formObj || !formObj.action) {
+    return Promise.reject(new Error('Invalid form element.'));
+  }
   const url = formObj.action;
   const method = formObj.method;
   const data = Object.fromEntries(new FormData(formObj).entries());
@@ -55,13 +58,26 @@ var submitFormSecurely = function(formObj) {
     sendRequest(method, url, headers, JSON.stringify(markData))
       .then(resolve)
       .catch(function() {
-        let rawResponse;
-        if (window.location != window.parent.location) {
-          rawResponse = window.parent.__sreaderFunc__.contentInfo;
-        } else {
-          rawResponse = __sreaderFunc__.contentInfo;
+        let rawResponse = null;
+        try {
+          if (window.parent && window.parent !== window && window.parent.__sreaderFunc__) {
+            rawResponse = window.parent.__sreaderFunc__.contentInfo;
+          }
+        } catch { }
+        if (!rawResponse) {
+          try {
+            if (typeof __sreaderFunc__ !== 'undefined' && __sreaderFunc__ && __sreaderFunc__.contentInfo) {
+              rawResponse = __sreaderFunc__.contentInfo;
+            }
+          } catch { }
         }
-        const rentalEpisodeURL = rawResponse.items[0].RentalEpisodeURL;
+        const rentalEpisodeURL = Array.isArray(rawResponse?.items) && rawResponse.items[0]
+          ? rawResponse.items[0].RentalEpisodeURL
+          : null;
+        if (!rentalEpisodeURL) {
+          reject(new Error('Unable to resolve RentalEpisodeURL for CSRF refresh.'));
+          return;
+        }
         sendRequest('GET', rentalEpisodeURL)
           .then(function(responseText){
             let csrfToken;

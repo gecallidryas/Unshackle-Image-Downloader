@@ -111,7 +111,7 @@
     "message": "Removed $1 element(s) by keyword."
   },
   "label_progress_preparing": {
-    "message": "Preparing\u2026"
+    "message": "Preparing…"
   },
   "hint_download_failed": {
     "message": "Download request failed."
@@ -673,5 +673,173 @@
   },
   "label_stats_images_downloaded": {
     "message": "Images downloaded:"
+  },
+  "aria_theme_select": {
+    "message": "Choose panel theme"
+  },
+  "aria_toggle_dedupe_auto_remove": {
+    "message": "Toggle auto removal of duplicates"
+  },
+  "aria_toggle_manga_mode": {
+    "message": "Toggle Manga mode"
+  },
+  "button_dedupe_manual": {
+    "message": "Remove duplicates"
+  },
+  "button_download": {
+    "message": "Download"
+  },
+  "button_open_bookmarks": {
+    "message": "Open bookmarks"
+  },
+  "button_select_invert": {
+    "message": "Invert"
+  },
+  "button_zip": {
+    "message": "ZIP"
+  },
+  "heading_deduplication": {
+    "message": "Deduplication"
+  },
+  "heading_donation_prompt": {
+    "message": "Support Unshackle"
+  },
+  "heading_manga_settings": {
+    "message": "Manga mode"
+  },
+  "heading_privacy": {
+    "message": "Privacy"
+  },
+  "heading_quick_settings": {
+    "message": "Quick settings"
+  },
+  "label_dedupe_auto_remove": {
+    "message": "Auto remove duplicates"
+  },
+  "label_discovery": {
+    "message": "Discovery:"
+  },
+  "label_donation_frequency": {
+    "message": "Shown at most once per month when you download a lot."
+  },
+  "label_enable_manga": {
+    "message": "Enable Manga Mode"
+  },
+  "label_hk_loader": {
+    "message": "Loader"
+  },
+  "label_kind": {
+    "message": "Kind:"
+  },
+  "label_overlay_aggressiveness": {
+    "message": "Aggressiveness"
+  },
+  "label_search": {
+    "message": "Search:"
+  },
+  "label_theme": {
+    "message": "Theme"
+  },
+  "option_discovery_all": {
+    "message": "All"
+  },
+  "option_discovery_new": {
+    "message": "New this session"
+  },
+  "option_discovery_seen": {
+    "message": "Previously seen"
+  },
+  "option_kind_all": {
+    "message": "All"
+  },
+  "option_kind_background": {
+    "message": "Backgrounds"
+  },
+  "option_kind_blob": {
+    "message": "Blob"
+  },
+  "option_kind_canvas": {
+    "message": "Canvas"
+  },
+  "option_kind_data": {
+    "message": "Data URI"
+  },
+  "option_kind_img": {
+    "message": "Images"
+  },
+  "option_kind_svg": {
+    "message": "SVG"
+  },
+  "option_theme_contrast": {
+    "message": "High Contrast"
+  },
+  "placeholder_search": {
+    "message": "Filename or URL"
+  },
+  "tooltip_dedupe_auto_remove": {
+    "message": "Automatically remove detected duplicates from the list"
+  },
+  "tooltip_dedupe_manual": {
+    "message": "Remove duplicates detected in this scan"
+  },
+  "tooltip_enable_manga": {
+    "message": "Enable the Manga beta panel with HakuNeko connectors"
+  },
+  "tooltip_hk_loader": {
+    "message": "Choose how HakuNeko connectors load (runner vs manager vs auto)"
+  },
+  "tooltip_theme": {
+    "message": "Choose the panel theme"
+  },
+  "badge_new": {
+    "message": "New"
+  },
+  "badge_seen": {
+    "message": "Seen"
+  },
+  "badge_seen_count": {
+    "message": "Seen $1x"
+  },
+  "hint_blob_missing": {
+    "message": "Blob bytes unavailable for preview."
+  },
+  "hint_blob_preview_unavailable": {
+    "message": "Preview unavailable for this item."
+  },
+  "hint_blob_too_large": {
+    "message": "Blob exceeds 25 MB limit; preview unavailable."
+  },
+  "hint_nothing_to_rename": {
+    "message": "Nothing to rename."
+  },
+  "kind_background": {
+    "message": "Background"
+  },
+  "kind_blob": {
+    "message": "Blob"
+  },
+  "kind_canvas": {
+    "message": "Canvas"
+  },
+  "kind_data": {
+    "message": "Data URI"
+  },
+  "kind_img": {
+    "message": "Image"
+  },
+  "kind_svg": {
+    "message": "SVG"
+  },
+  "kind_unknown": {
+    "message": "Item"
+  },
+  "label_scanning_connect": {
+    "message": "Connecting to page..."
+  },
+  "label_scanning_prepare": {
+    "message": "Preparing scan..."
+  },
+  "label_scanning_sync": {
+    "message": "Preparing canvas registry..."
   }
 }

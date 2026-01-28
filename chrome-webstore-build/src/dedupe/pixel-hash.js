@@ -25,6 +25,12 @@ const EXIF_TRANSFORMS = {
     8: { rotate: 270, flip: false }     // Rotated 90 CCW
 };
 
+function ensureNotAborted(signal) {
+    if (signal?.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+    }
+}
+
 // ==================== EXIF PARSING ====================
 
 /**
@@ -252,17 +258,22 @@ async function pixelHash(canonicalBuffer) {
  * @param {number} params.tabId
  * @param {string} params.pageUrl
  * @param {object} params.context
+ * @param {string} [params.imageId]
+ * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>}
  */
 async function processL2(params) {
-    const { bytes, sha256, url, scanId, tabId, pageUrl, context } = params;
+    const { bytes, sha256, url, scanId, tabId, pageUrl, context, imageId, signal } = params;
+    let bitmap = null;
 
     try {
+        ensureNotAborted(signal);
         // Parse EXIF orientation
         const orientation = parseExifOrientation(bytes);
 
         // Decode to bitmap
-        const bitmap = await decodeToBitmap(bytes);
+        bitmap = await decodeToBitmap(bytes);
+        ensureNotAborted(signal);
 
         // Check pixel count (skip if too large)
         const pixelCount = bitmap.width * bitmap.height;
@@ -284,10 +295,28 @@ async function processL2(params) {
         const canonicalBuffer = createCanonicalBuffer(rgba, width, height);
         const hash = await pixelHash(canonicalBuffer);
 
+        await globalThis.DedupeDB.addOccurrence({
+            scanId,
+            sha256,
+            pixelHash: hash,
+            imageId: imageId || null,
+            url,
+            pageUrl,
+            tabId,
+            foundAt: Date.now(),
+            context
+        });
+
         // Check if pixel canonical exists
         const existing = await globalThis.DedupeDB.getPixelCanonical(hash);
 
         if (existing) {
+            if (!existing.representativeImageId && imageId) {
+                await globalThis.DedupeDB.putPixelCanonical({
+                    ...existing,
+                    representativeImageId: imageId
+                });
+            }
             // DUPLICATE by pixel content
             await globalThis.DedupeDB.updateScanStats(scanId, { l2Dup: 1 });
 
@@ -295,6 +324,7 @@ async function processL2(params) {
                 status: "DUP",
                 pixelHash: hash,
                 canonicalId: hash,
+                representativeImageId: existing.representativeImageId || imageId || null,
                 width,
                 height,
                 bitmap // Pass for L3 (may still want perceptual grouping)
@@ -308,7 +338,8 @@ async function processL2(params) {
             height,
             byteSha256: sha256,
             firstSeenAt: Date.now(),
-            representative: { url, tabId, pageUrl }
+            representative: { url, tabId, pageUrl },
+            representativeImageId: imageId || null
         };
 
         await globalThis.DedupeDB.putPixelCanonical(canonical);
@@ -318,12 +349,14 @@ async function processL2(params) {
             status: "NEW",
             pixelHash: hash,
             canonicalId: hash,
+            representativeImageId: imageId || null,
             width,
             height,
             bitmap // Pass for L3
         };
 
     } catch (error) {
+        try { bitmap?.close?.(); } catch { }
         console.warn("[PixelHash] L2 processing failed:", error.message);
         await globalThis.DedupeDB.updateScanStats(scanId, { errors: 1 });
 

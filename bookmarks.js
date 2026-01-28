@@ -129,6 +129,15 @@
     }
     if (!fromSync) {
       try {
+        const storedTheme = localStorage.getItem(THEME_KEY);
+        if (typeof storedTheme === "string" && storedTheme.trim().length) {
+          theme = normalizeThemeKey(storedTheme);
+          fromSync = true;
+        }
+      } catch { }
+    }
+    if (!fromSync) {
+      try {
         const stored = await getLocalStorage({ [THEME_KEY]: DEFAULT_THEME });
         if (stored && typeof stored[THEME_KEY] === "string") {
           theme = normalizeThemeKey(stored[THEME_KEY]);
