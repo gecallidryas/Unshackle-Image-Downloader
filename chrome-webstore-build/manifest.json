@@ -6,6 +6,7 @@
     "description": "Scan, filter, and download page images with advanced extraction, overlay cleanup, and ZIP export.",
     "default_locale": "en",
     "permissions": [
+        "debugger",
         "sidePanel",
         "offscreen",
         "scripting",
