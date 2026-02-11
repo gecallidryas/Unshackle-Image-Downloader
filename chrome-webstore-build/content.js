@@ -180,6 +180,146 @@
     return entries;
   }
 
+  function splitCssArgs(value) {
+    if (typeof value !== "string" || !value.length) return [];
+    const parts = [];
+    let current = "";
+    let depth = 0;
+    let quote = null;
+    for (let i = 0; i < value.length; i++) {
+      const ch = value[i];
+      if (quote) {
+        if (ch === "\\" && i + 1 < value.length) {
+          current += ch + value[i + 1];
+          i++;
+          continue;
+        }
+        if (ch === quote) quote = null;
+        current += ch;
+        continue;
+      }
+      if (ch === "\"" || ch === "'") {
+        quote = ch;
+        current += ch;
+        continue;
+      }
+      if (ch === "(") {
+        depth++;
+        current += ch;
+        continue;
+      }
+      if (ch === ")") {
+        if (depth > 0) depth--;
+        current += ch;
+        continue;
+      }
+      if (ch === "," && depth === 0) {
+        if (current.trim()) parts.push(current.trim());
+        current = "";
+        continue;
+      }
+      current += ch;
+    }
+    if (current.trim()) parts.push(current.trim());
+    return parts;
+  }
+
+  function readCssFunctionBody(value, openIndex) {
+    let quote = null;
+    let depth = 0;
+    for (let i = openIndex + 1; i < value.length; i++) {
+      const ch = value[i];
+      if (quote) {
+        if (ch === "\\" && i + 1 < value.length) {
+          i++;
+          continue;
+        }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "\"" || ch === "'") {
+        quote = ch;
+        continue;
+      }
+      if (ch === "(") {
+        depth++;
+        continue;
+      }
+      if (ch === ")") {
+        if (depth === 0) {
+          return { body: value.slice(openIndex + 1, i), endIndex: i };
+        }
+        depth--;
+      }
+    }
+    return { body: value.slice(openIndex + 1), endIndex: value.length - 1 };
+  }
+
+  function extractCssImageUrls(value) {
+    if (typeof value !== "string" || !value.length) return [];
+    const urls = [];
+    const lower = value.toLowerCase();
+    const addUrl = (raw) => {
+      if (!raw) return;
+      let cleaned = raw.trim();
+      if (!cleaned) return;
+      if ((cleaned.startsWith("\"") && cleaned.endsWith("\"")) || (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
+        cleaned = cleaned.slice(1, -1);
+      }
+      if (cleaned) urls.push(cleaned);
+    };
+
+    let idx = 0;
+    while ((idx = lower.indexOf("url(", idx)) !== -1) {
+      const openIndex = idx + 3;
+      const parsed = readCssFunctionBody(value, openIndex);
+      addUrl(parsed.body);
+      idx = parsed.endIndex + 1;
+    }
+
+    const imageSetTokens = ["image-set(", "-webkit-image-set("];
+    for (const token of imageSetTokens) {
+      let pos = 0;
+      while ((pos = lower.indexOf(token, pos)) !== -1) {
+        const openIndex = pos + token.length - 1;
+        const parsed = readCssFunctionBody(value, openIndex);
+        const candidates = splitCssArgs(parsed.body);
+        for (const part of candidates) {
+          const candidate = part.trim();
+          if (!candidate) continue;
+          if (candidate.toLowerCase().startsWith("url(")) {
+            const inner = readCssFunctionBody(candidate, candidate.toLowerCase().indexOf("url(") + 3);
+            addUrl(inner.body);
+            continue;
+          }
+          if (candidate.startsWith("\"") || candidate.startsWith("'")) {
+            const quote = candidate[0];
+            const end = candidate.indexOf(quote, 1);
+            if (end > 1) {
+              addUrl(candidate.slice(1, end));
+              continue;
+            }
+          }
+          const first = candidate.split(/\s+/)[0];
+          addUrl(first);
+        }
+        pos = parsed.endIndex + 1;
+      }
+    }
+
+    return urls;
+  }
+
+  function mimeFromDataUrl(url) {
+    if (typeof url !== "string" || !url.startsWith("data:")) return null;
+    const comma = url.indexOf(",");
+    const header = comma >= 0 ? url.slice(5, comma) : url.slice(5);
+    if (!header) return null;
+    const semi = header.indexOf(";");
+    const mime = (semi >= 0 ? header.slice(0, semi) : header).trim();
+    return mime || null;
+  }
+
   function sendExtensionMessage(payload) {
     if (!chrome?.runtime?.sendMessage) {
       return Promise.resolve(null);
@@ -1612,18 +1752,6 @@
     const inlineAreaThreshold = aggressive ? 1536 : 4096;
     const rectAreaThreshold = aggressive ? 1024 : 2048;
 
-    const extractUrls = (value) => {
-      if (typeof value !== "string" || !value.length) return [];
-      const matches = value.matchAll(/url\(["']?(.+?)["']?\)/g);
-      const urls = [];
-      for (const match of matches) {
-        if (match && match[1]) {
-          urls.push(match[1]);
-        }
-      }
-      return urls;
-    };
-
     const shouldInspect = (el, forceRect = false) => {
       if (!(el instanceof HTMLElement)) return null;
       let rect = null;
@@ -1656,13 +1784,20 @@
         cs = null;
       }
       if (!cs) return 0;
-      const bg = cs.getPropertyValue("background-image");
-      if (!bg || bg === "none") return 0;
+      const props = ["background-image", "mask-image", "-webkit-mask-image", "border-image-source", "list-style-image", "content"];
+      const urls = new Set();
+      for (const prop of props) {
+        const value = cs.getPropertyValue(prop);
+        if (!value || value === "none" || value === "normal") continue;
+        const extracted = extractCssImageUrls(value);
+        for (const item of extracted) {
+          if (item) urls.add(item);
+        }
+      }
+      if (!urls.size) return 0;
       if (!rect) rect = el.getBoundingClientRect();
       if (!rect) return 0;
       if (!forceRect && (rect.width * rect.height) < rectAreaThreshold) return 0;
-      const urls = extractUrls(bg);
-      if (!urls.length) return 0;
       let added = 0;
       for (const raw of urls) {
         const abs = toAbsURL(raw);
@@ -2749,12 +2884,19 @@
                 const src = el.src || el.getAttribute('src');
                 if (src?.startsWith('blob:')) blobUrls.add(src);
               });
-              // Check CSS background-images
+              // Check CSS image properties
               document.querySelectorAll('*').forEach(el => {
                 try {
-                  const bg = getComputedStyle(el).backgroundImage;
-                  const match = bg?.match(/url\(["']?(blob:[^"')]+)["']?\)/);
-                  if (match) blobUrls.add(match[1]);
+                  const cs = getComputedStyle(el);
+                  const props = ["background-image", "mask-image", "-webkit-mask-image", "border-image-source", "list-style-image", "content"];
+                  for (const prop of props) {
+                    const value = cs.getPropertyValue(prop);
+                    if (!value || value === "none" || value === "normal") continue;
+                    const urls = extractCssImageUrls(value);
+                    for (const url of urls) {
+                      if (typeof url === "string" && url.startsWith("blob:")) blobUrls.add(url);
+                    }
+                  }
                 } catch { }
               });
 
@@ -2847,14 +2989,17 @@
             }
 
             // 4. Collect background images
-            const bgResults = await collectBackgroundImages({ minW: 32, minH: 32, allowKinds: { img: true, background: true }, profile: 'aggressive' });
+            const bgResults = await collectBackgroundImages({ minW: 32, minH: 32, allowKinds: { background: true, dataUri: true, blob: true }, profile: 'aggressive' });
             for (const bg of bgResults) {
               if (!bg.url || seen.has(bg.url)) continue;
               seen.add(bg.url);
+              const kind = bg.kind || 'background';
+              const dataMime = bg.url && bg.url.startsWith("data:") ? mimeFromDataUrl(bg.url) : null;
+              const guessed = typeof guessMimeFromURL === "function" ? guessMimeFromURL(bg.url) : null;
               assets.push({
-                kind: 'background',
+                kind,
                 url: bg.url,
-                mime: bg.mime || guessMimeFromURL(bg.url) || 'image/unknown',
+                mime: bg.mime || dataMime || guessed || 'image/unknown',
                 width: bg.width || 0,
                 height: bg.height || 0,
                 source: 'cssBackground'
