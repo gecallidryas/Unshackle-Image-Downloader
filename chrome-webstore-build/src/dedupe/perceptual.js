@@ -24,11 +24,51 @@ const PERCEPTUAL_MAX_DIMENSION = 512;
 
 // Max dimension for stored confirmation thumbnails
 const CONFIRM_THUMBNAIL_MAX_SIZE = 256;
+const L0_RENDER_TOLERANCE_PX = 1;
 
 function ensureNotAborted(signal) {
     if (signal?.aborted) {
         throw new DOMException("Aborted", "AbortError");
     }
+}
+
+function toFiniteIntOrNull(value) {
+    if (!Number.isFinite(value)) return null;
+    if (value <= 0) return null;
+    return Math.round(value);
+}
+
+function l0IntrinsicEqual(source, candidate) {
+    const srcW = toFiniteIntOrNull(source?.intrinsicWidth ?? source?.width);
+    const srcH = toFiniteIntOrNull(source?.intrinsicHeight ?? source?.height);
+    const candW = toFiniteIntOrNull(candidate?.intrinsicWidth ?? candidate?.width);
+    const candH = toFiniteIntOrNull(candidate?.intrinsicHeight ?? candidate?.height);
+    if (srcW == null || srcH == null || candW == null || candH == null) return true;
+    return srcW === candW && srcH === candH;
+}
+
+function l0ByteLengthEqualWhenKnown(source, candidate) {
+    const srcLen = toFiniteIntOrNull(source?.byteLength);
+    const candLen = toFiniteIntOrNull(candidate?.byteLength);
+    if (srcLen == null || candLen == null) return true;
+    return srcLen === candLen;
+}
+
+function l0RenderedWithinTolerance(source, candidate, tolerancePx = L0_RENDER_TOLERANCE_PX) {
+    const srcW = toFiniteIntOrNull(source?.renderedWidth);
+    const srcH = toFiniteIntOrNull(source?.renderedHeight);
+    const candW = toFiniteIntOrNull(candidate?.renderedWidth);
+    const candH = toFiniteIntOrNull(candidate?.renderedHeight);
+    // Missing render dimensions on either side means no L0 render gate for this pair.
+    if (srcW == null || srcH == null || candW == null || candH == null) return true;
+    return Math.abs(srcW - candW) <= tolerancePx && Math.abs(srcH - candH) <= tolerancePx;
+}
+
+function passesL0MetadataPrefilter(source, candidate) {
+    if (!l0IntrinsicEqual(source, candidate)) return false;
+    if (!l0ByteLengthEqualWhenKnown(source, candidate)) return false;
+    if (!l0RenderedWithinTolerance(source, candidate, L0_RENDER_TOLERANCE_PX)) return false;
+    return true;
 }
 
 // ==================== IMAGE PROCESSING ====================
@@ -362,11 +402,12 @@ function getAllBucketKeys(hashes) {
  * @param {string} params.pageUrl
  * @param {object} params.context
  * @param {string} [params.imageId]
+ * @param {number} [params.byteLength]
  * @param {AbortSignal} [params.signal]
  * @returns {Promise<Object>}
  */
 async function processL3(params) {
-    const { bitmap, pixelHash, sha256, url, scanId, tabId, pageUrl, context, imageId: suppliedImageId, signal } = params;
+    const { bitmap, pixelHash, sha256, url, scanId, tabId, pageUrl, context, imageId: suppliedImageId, byteLength, signal } = params;
 
     try {
         ensureNotAborted(signal);
@@ -404,6 +445,11 @@ async function processL3(params) {
             foundAt: Date.now(),
             width: bitmap.width,
             height: bitmap.height,
+            intrinsicWidth: toFiniteIntOrNull(context?.intrinsicWidth) ?? bitmap.width,
+            intrinsicHeight: toFiniteIntOrNull(context?.intrinsicHeight) ?? bitmap.height,
+            renderedWidth: toFiniteIntOrNull(context?.renderedWidth),
+            renderedHeight: toFiniteIntOrNull(context?.renderedHeight),
+            byteLength: toFiniteIntOrNull(byteLength) ?? toFiniteIntOrNull(context?.byteHint),
             byteSha256: sha256,
             pixelHash: pixelHash || null,
             dhash64: primaryHash,
@@ -442,6 +488,21 @@ async function processL3(params) {
             ensureNotAborted(signal);
             const candidate = await globalThis.DedupeDB.getImage(candidateId);
             if (!candidate || !candidate.dhashRotations) continue;
+
+            if (!passesL0MetadataPrefilter(imageRecord, candidate)) {
+                continue;
+            }
+
+            if ((pixelHash && candidate.pixelHash && pixelHash === candidate.pixelHash)
+                || (sha256 && candidate.byteSha256 && sha256 === candidate.byteSha256)) {
+                candidates.push({
+                    imageId: candidateId,
+                    distance: 0,
+                    rotationA: 0,
+                    rotationB: 0
+                });
+                continue;
+            }
 
             const match = findBestMatch(dhashes, candidate.dhashRotations, DHASH_THRESHOLD);
             if (match.match) {

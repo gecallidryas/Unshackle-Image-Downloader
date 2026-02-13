@@ -112,6 +112,7 @@ async function decodeToBitmap(bytes, contentType = "") {
 
     // Decode without auto-orientation - we'll handle it manually
     const bitmap = await createImageBitmap(blob, {
+        imageOrientation: "none",
         premultiplyAlpha: "none",
         colorSpaceConversion: "default"
     });
@@ -307,31 +308,6 @@ async function processL2(params) {
             context
         });
 
-        // Check if pixel canonical exists
-        const existing = await globalThis.DedupeDB.getPixelCanonical(hash);
-
-        if (existing) {
-            if (!existing.representativeImageId && imageId) {
-                await globalThis.DedupeDB.putPixelCanonical({
-                    ...existing,
-                    representativeImageId: imageId
-                });
-            }
-            // DUPLICATE by pixel content
-            await globalThis.DedupeDB.updateScanStats(scanId, { l2Dup: 1 });
-
-            return {
-                status: "DUP",
-                pixelHash: hash,
-                canonicalId: hash,
-                representativeImageId: existing.representativeImageId || imageId || null,
-                width,
-                height,
-                bitmap // Pass for L3 (may still want perceptual grouping)
-            };
-        }
-
-        // NEW pixel content
         const canonical = {
             pixelHash: hash,
             width,
@@ -341,15 +317,36 @@ async function processL2(params) {
             representative: { url, tabId, pageUrl },
             representativeImageId: imageId || null
         };
-
-        await globalThis.DedupeDB.putPixelCanonical(canonical);
-        await globalThis.DedupeDB.updateScanStats(scanId, { l2New: 1 });
+        let canonicalState = null;
+        if (typeof globalThis.DedupeDB.ensurePixelCanonical === "function") {
+            canonicalState = await globalThis.DedupeDB.ensurePixelCanonical({
+                pixelHash: hash,
+                canonical,
+                representativeImageId: imageId || null
+            });
+        } else {
+            const existing = await globalThis.DedupeDB.getPixelCanonical(hash);
+            if (existing) {
+                if (!existing.representativeImageId && imageId) {
+                    await globalThis.DedupeDB.putPixelCanonical({
+                        ...existing,
+                        representativeImageId: imageId
+                    });
+                }
+                canonicalState = { status: "DUP", record: existing };
+            } else {
+                await globalThis.DedupeDB.putPixelCanonical(canonical);
+                canonicalState = { status: "NEW", record: canonical };
+            }
+        }
+        const isDup = canonicalState?.status === "DUP";
+        await globalThis.DedupeDB.updateScanStats(scanId, isDup ? { l2Dup: 1 } : { l2New: 1 });
 
         return {
-            status: "NEW",
+            status: isDup ? "DUP" : "NEW",
             pixelHash: hash,
             canonicalId: hash,
-            representativeImageId: imageId || null,
+            representativeImageId: canonicalState?.record?.representativeImageId || imageId || null,
             width,
             height,
             bitmap // Pass for L3

@@ -37,6 +37,9 @@
   const HELP_PAGE_URL = "https://www.scernix.com/unshackle-image";
   const TIP_LINK_URL = "https://www.scernix.com/donate";
   const CONTACT_LINK_URL = "https://www.scernix.com/contact";
+  const HELP_LINK_REMOTE_FILE_URL = "https://www.scernix.com/help_link.txt";
+  const TIP_LINK_REMOTE_FILE_URL = "https://www.scernix.com/tip_link.txt";
+  const CONTACT_LINK_REMOTE_FILE_URL = "https://www.scernix.com/contact_link.txt";
   const THEME_KEY = "__unshackle_theme";
   const DEFAULT_THEME = "contrast";
   const ALLOWED_THEMES = new Set(["contrast", "blueberry", "lightdark", "noirgold", "purplefanatic", "sakura", "ocean", "forest", "slate", "ember"]);
@@ -57,6 +60,7 @@
   const DEDUPE_NOTICE_SENT = new Set();
   const DEDUPE_ERROR_SEEN = new Set();
   const DEDUPE_DUPLICATE_URLS = new Set();
+  const ACTIVE_DEDUPE_SCANS = new Map(); // scanId -> { tabId: number|null, startedAt: number, lastSeenAt: number }
   let autoRemoveDuplicates = true;
   let toastHost = null;
   let progressState = null;
@@ -74,6 +78,7 @@
   let alwaysAskDownloadPath = true;
   let downloadPathPromptedForScanId = null;
   let recentOverlayTags = [];
+  let resolvedHelpPageUrl = HELP_PAGE_URL;
   const CANVAS_NAME_CACHE = new Map();
   const FOOTER_LOG_LIMIT = 5;
   const FOOTER_LOG = [];
@@ -206,6 +211,10 @@
   let hkLastActiveTabInfo = null;
   let hkDetectedSeriesTitle = "";
   let hkBookmarks = [];
+
+  function isAutoDedupeEnabled() {
+    return autoRemoveDuplicates && hkCurrentMode !== "manga";
+  }
   /**
    * ⚠️ CRITICAL: DO NOT MODIFY FAMILY ASSIGNMENTS
    * The "family" property MUST match the connector's actual family for descrambling to work.
@@ -2057,7 +2066,22 @@
     const mode = desired === "manga" && hkMangaEnabled ? "manga" : HK_MODE_DEFAULT;
     const previous = hkCurrentMode;
     hkCurrentMode = mode;
+    if (mode === "manga") {
+      if (ACTIVE_SCAN_SESSION?.dedupeScanId) {
+        await stopDedupeScan(ACTIVE_SCAN_SESSION.dedupeScanId);
+        ACTIVE_SCAN_SESSION.dedupeScanId = null;
+      }
+      if (AUTO_DEDUPE_SCAN_ID) {
+        await stopDedupeScan(AUTO_DEDUPE_SCAN_ID);
+        AUTO_DEDUPE_SCAN_ID = null;
+      }
+    }
     applyHKModeClasses();
+    await syncAutoScanDedupeState();
+    if (mode !== "manga" && isAutoDedupeEnabled()) {
+      applySourceLinkDedupeToCache();
+      removeDuplicatesFromCache();
+    }
     await updateHKSetting("mode", mode);
     if (globalThis.HKModes?.setMode) {
       hkIgnoreModeEventDepth += 1;
@@ -2081,7 +2105,7 @@
       const mode = nextMode === "manga" ? "manga" : "image";
       if (mode === "manga") {
         if (!hkMangaEnabled) {
-          recordUserNotice("warn", "Manga mode is disabled in settings.");
+          showMangaBlockedModal();
           return;
         }
         await ensureHKMangaPanelReady();
@@ -2187,7 +2211,22 @@
         }
         const nextMode = mode === "manga" ? "manga" : HK_MODE_DEFAULT;
         hkCurrentMode = nextMode;
+        if (nextMode === "manga") {
+          if (ACTIVE_SCAN_SESSION?.dedupeScanId) {
+            await stopDedupeScan(ACTIVE_SCAN_SESSION.dedupeScanId);
+            ACTIVE_SCAN_SESSION.dedupeScanId = null;
+          }
+          if (AUTO_DEDUPE_SCAN_ID) {
+            await stopDedupeScan(AUTO_DEDUPE_SCAN_ID);
+            AUTO_DEDUPE_SCAN_ID = null;
+          }
+        }
         applyHKModeClasses();
+        await syncAutoScanDedupeState();
+        if (nextMode !== "manga" && isAutoDedupeEnabled()) {
+          applySourceLinkDedupeToCache();
+          removeDuplicatesFromCache();
+        }
         await updateHKSetting("mode", nextMode);
         emitHKModeChanged(nextMode, { reason: "external" });
         logHKDevEvent(`[Mode] External -> ${nextMode}`);
@@ -4596,7 +4635,6 @@
     if (overlay) overlay.addEventListener("click", hideMangaBlockedModal);
   }
 
-
   function bindHKLoaderSelect() {
     hkLoaderSelectEl = document.getElementById("hkLoaderModeSelect");
     if (!hkLoaderSelectEl) return;
@@ -4652,7 +4690,48 @@
   }
 
   function resolveHelpPageUrl() {
-    return HELP_PAGE_URL;
+    return resolvedHelpPageUrl || HELP_PAGE_URL;
+  }
+
+  function parseExternalLinkUrl(rawValue) {
+    if (typeof rawValue !== "string") return "";
+    const normalized = rawValue.replace(/^\uFEFF/, "");
+    const line = normalized
+      .split(/\r?\n/)
+      .map((entry) => entry.trim())
+      .find(Boolean) || "";
+    if (!line) return "";
+    try {
+      const parsed = new URL(line);
+      const protocol = String(parsed.protocol || "").toLowerCase();
+      if (protocol !== "https:" && protocol !== "http:") return "";
+      return parsed.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function runtimeFileUrl(path) {
+    try {
+      if (chrome?.runtime?.getURL) {
+        return chrome.runtime.getURL(path);
+      }
+    } catch { }
+    return "";
+  }
+
+  async function resolveLinkFromFiles(candidates, fallbackUrl) {
+    const fallback = parseExternalLinkUrl(fallbackUrl) || fallbackUrl;
+    const urls = Array.isArray(candidates) ? candidates.filter((value) => typeof value === "string" && value) : [];
+    for (const url of urls) {
+      try {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response?.ok) continue;
+        const parsed = parseExternalLinkUrl(await response.text());
+        if (parsed) return parsed;
+      } catch { }
+    }
+    return fallback;
   }
 
   function bindHelpButton() {
@@ -4995,8 +5074,7 @@
       const id = ++zipJobId;
       ZIP_JOBS.set(id, { resolve, reject, progress: typeof onProgress === "function" ? onProgress : null });
       const payload = files.map(({ filename, buffer }) => ({ filename, buffer }));
-      const transfers = files.map(({ buffer }) => buffer).filter((buf) => buf instanceof ArrayBuffer);
-      zipWorker.postMessage({ id, files: payload }, transfers);
+      zipWorker.postMessage({ id, files: payload });
     });
   }
 
@@ -5781,8 +5859,123 @@
   // Selected items keyed by url
   let SELECTED = new Set();
 
+  function toDedupeInt(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return Math.round(n);
+  }
+
+  function parseSourceLinkAndFilename(value) {
+    if (typeof value !== "string" || !value) return null;
+    if (/^(?:data|blob|javascript|about):/i.test(value)) return null;
+    try {
+      const parsed = new URL(value, location.href);
+      const protocol = String(parsed.protocol || "").toLowerCase();
+      if (protocol !== "http:" && protocol !== "https:" && protocol !== "file:") return null;
+      let fullPath = "";
+      if (protocol === "file:") {
+        fullPath = `file://${parsed.pathname || ""}`;
+      } else {
+        fullPath = `${parsed.origin}${parsed.pathname || ""}`;
+      }
+      const cut = fullPath.lastIndexOf("/");
+      const rawSource = cut >= 0 ? fullPath.slice(0, cut) : fullPath;
+      const rawName = cut >= 0 ? fullPath.slice(cut + 1) : "";
+      const sourceLink = String(rawSource || "").replace(/\/+$/, "").toLowerCase();
+      const filename = rawName ? decodeURIComponent(rawName).trim().toLowerCase() : "";
+      if (!sourceLink || !filename) return null;
+      return { sourceLink, filename };
+    } catch {
+      return null;
+    }
+  }
+
+  function getSourceFilenameKey(item) {
+    if (!item || typeof item !== "object") return null;
+    if (item.__source === HK_PREVIEW_SOURCE) return null;
+    const kind = String(item.kind || item.type || "").toLowerCase();
+    if (!kind || kind === "canvas" || kind === "svg") return null;
+    const sourceCandidate = item.rawUrl || item.normalizedUrl || item.url;
+    const parsed = parseSourceLinkAndFilename(sourceCandidate);
+    if (!parsed) return null;
+    const fallbackName = typeof item.filename === "string" ? item.filename.trim().toLowerCase() : "";
+    const filename = parsed.filename || fallbackName;
+    if (!filename) return null;
+    return `${parsed.sourceLink}::${filename}`;
+  }
+
+  function getItemResolutionScore(item) {
+    const width = toDedupeInt(item?.intrinsicWidth) || toDedupeInt(item?.width) || toDedupeInt(item?.renderedWidth);
+    const height = toDedupeInt(item?.intrinsicHeight) || toDedupeInt(item?.height) || toDedupeInt(item?.renderedHeight);
+    const area = width > 0 && height > 0 ? (width * height) : 0;
+    return { width, height, area };
+  }
+
+  function compareSourceDedupeQuality(a, b) {
+    const ra = getItemResolutionScore(a);
+    const rb = getItemResolutionScore(b);
+    if (ra.area !== rb.area) return ra.area - rb.area;
+    if (ra.width !== rb.width) return ra.width - rb.width;
+    if (ra.height !== rb.height) return ra.height - rb.height;
+    const sizeA = toDedupeInt(a?.size);
+    const sizeB = toDedupeInt(b?.size);
+    if (sizeA !== sizeB) return sizeA - sizeB;
+    return 0;
+  }
+
+  function collectItemUrlAliases(item, extraAliases = null) {
+    const aliases = new Set();
+    const add = (value) => {
+      if (typeof value === "string" && value) aliases.add(value);
+    };
+    add(item?.url);
+    add(item?.rawUrl);
+    add(item?.normalizedUrl);
+    if (Array.isArray(extraAliases)) {
+      extraAliases.forEach(add);
+    } else {
+      add(extraAliases);
+    }
+    return aliases;
+  }
+
+  function cacheItemMatchesAnyAlias(item, aliases) {
+    if (!item || !(aliases instanceof Set) || !aliases.size) return false;
+    const itemAliases = collectItemUrlAliases(item);
+    for (const alias of itemAliases) {
+      if (aliases.has(alias)) return true;
+    }
+    return false;
+  }
+
+  function cacheItemMarkedDuplicate(item) {
+    if (!item || !DEDUPE_DUPLICATE_URLS.size) return false;
+    const aliases = collectItemUrlAliases(item);
+    for (const alias of aliases) {
+      if (DEDUPE_DUPLICATE_URLS.has(alias)) return true;
+    }
+    return false;
+  }
+
+  function purgeItemTracking(item, extraAliases = null) {
+    const aliases = collectItemUrlAliases(item, extraAliases);
+    const registryKey = discoveryKey(item);
+    if (registryKey) aliases.add(registryKey);
+    aliases.forEach((alias) => {
+      DISCOVERY_REGISTRY.delete(alias);
+      SELECTED.delete(alias);
+      DOWNLOAD_STATUS.delete(alias);
+    });
+  }
+
   function getCacheDedupKey(item) {
     if (!item || typeof item !== "object") return null;
+    if (isAutoDedupeEnabled()) {
+      const sourceFileKey = getSourceFilenameKey(item);
+      if (sourceFileKey) {
+        return `source:${sourceFileKey}`;
+      }
+    }
     if (typeof item.contentHash === "string" && item.contentHash.length) {
       return `hash:${item.contentHash}`;
     }
@@ -5811,6 +6004,49 @@
   function syncSelectionWithCache() {
     const valid = new Set(CACHE.map((item) => item && item.url).filter(Boolean));
     SELECTED = new Set(Array.from(SELECTED).filter((url) => valid.has(url)));
+  }
+
+  function applySourceLinkDedupeToCache() {
+    if (!isAutoDedupeEnabled()) return 0;
+    if (!Array.isArray(CACHE) || CACHE.length < 2) return 0;
+    const bestByKey = new Map();
+    const toRemove = new Set();
+    const removedItems = [];
+
+    for (let index = 0; index < CACHE.length; index++) {
+      const item = CACHE[index];
+      const key = getSourceFilenameKey(item);
+      if (!key) continue;
+      const existing = bestByKey.get(key);
+      if (!existing) {
+        bestByKey.set(key, { index, item });
+        continue;
+      }
+      const preferred = compareSourceDedupeQuality(item, existing.item);
+      if (preferred > 0) {
+        toRemove.add(existing.index);
+        if (existing.item?.url && SELECTED.has(existing.item.url) && item?.url) {
+          SELECTED.add(item.url);
+        }
+        bestByKey.set(key, { index, item });
+      } else {
+        toRemove.add(index);
+        if (item?.url && SELECTED.has(item.url) && existing.item?.url) {
+          SELECTED.add(existing.item.url);
+        }
+      }
+    }
+
+    if (!toRemove.size) return 0;
+    CACHE.forEach((item, index) => {
+      if (toRemove.has(index)) {
+        removedItems.push(item);
+      }
+    });
+    CACHE = CACHE.filter((_, index) => !toRemove.has(index));
+    removedItems.forEach((item) => purgeItemTracking(item));
+    syncSelectionWithCache();
+    return toRemove.size;
   }
 
   // Auto scan polling timer
@@ -5856,6 +6092,7 @@
           }
         });
       }
+      applySourceLinkDedupeToCache();
       annotateDiscovery(CACHE, CURRENT_SCAN_ID || SCAN_SEQUENCE);
       renderGrid();
       if (tabId != null) {
@@ -5884,6 +6121,7 @@
 
       if (newItems.length > 0) {
         CACHE = CACHE.concat(newItems);
+        applySourceLinkDedupeToCache();
         await incrementStat("imagesScanned", newItems.length);
         markBlobHydrationNeeded(tabId);
         await refreshCacheFromContent(tabId, new Set(SELECTED), { force: true });
@@ -5903,6 +6141,10 @@
     if (key && existingKeys.has(key)) return false;
     const scanId = CURRENT_SCAN_ID || (++SCAN_SEQUENCE);
     CACHE.push(candidate);
+    applySourceLinkDedupeToCache();
+    if (!CACHE.includes(candidate)) {
+      return false;
+    }
     annotateDiscovery([candidate], scanId);
     renderGrid();
     summarize();
@@ -6446,7 +6688,57 @@
     });
   }
 
+  function registerActiveDedupeScan(scanId, tabId = null) {
+    if (typeof scanId !== "string" || !scanId) return;
+    const resolvedTabId = Number.isInteger(tabId) ? tabId : null;
+    if (resolvedTabId != null) {
+      for (const [id, entry] of ACTIVE_DEDUPE_SCANS.entries()) {
+        if (id === scanId) continue;
+        if (entry && Number.isInteger(entry.tabId) && entry.tabId === resolvedTabId) {
+          ACTIVE_DEDUPE_SCANS.delete(id);
+        }
+      }
+    }
+    const existing = ACTIVE_DEDUPE_SCANS.get(scanId);
+    const now = Date.now();
+    ACTIVE_DEDUPE_SCANS.set(scanId, {
+      tabId: resolvedTabId != null ? resolvedTabId : (Number.isInteger(existing?.tabId) ? existing.tabId : null),
+      startedAt: existing?.startedAt || now,
+      lastSeenAt: now
+    });
+  }
+
+  function unregisterActiveDedupeScan(scanId) {
+    if (typeof scanId !== "string" || !scanId) return;
+    ACTIVE_DEDUPE_SCANS.delete(scanId);
+  }
+
+  function isActiveDedupeMessage(message) {
+    const scanId = typeof message?.scanId === "string" ? message.scanId : null;
+    if (!scanId) return false;
+    const entry = ACTIVE_DEDUPE_SCANS.get(scanId);
+    if (!entry) return false;
+    if (Number.isInteger(entry.tabId) && Number.isInteger(message?.tabId) && entry.tabId !== message.tabId) {
+      return false;
+    }
+    const activeTabId = Number.isInteger(ACTIVE_SCAN_SESSION?.tabId)
+      ? ACTIVE_SCAN_SESSION.tabId
+      : (Number.isInteger(AUTO_STREAM_TAB_ID) ? AUTO_STREAM_TAB_ID : null);
+    if (Number.isInteger(activeTabId) && Number.isInteger(message?.tabId) && message.tabId !== activeTabId) {
+      return false;
+    }
+    return true;
+  }
+
+  function touchActiveDedupeScan(scanId) {
+    const entry = ACTIVE_DEDUPE_SCANS.get(scanId);
+    if (!entry) return;
+    entry.lastSeenAt = Date.now();
+    ACTIVE_DEDUPE_SCANS.set(scanId, entry);
+  }
+
   async function startDedupeScan(tab, options = {}) {
+    if (!isAutoDedupeEnabled()) return null;
     if (!tab?.id || !chrome?.runtime?.sendMessage) return null;
     try {
       const response = await chrome.runtime.sendMessage({
@@ -6456,7 +6748,11 @@
         options
       });
       const scanId = response?.data?.scanId;
-      return typeof scanId === "string" ? scanId : null;
+      if (typeof scanId === "string" && scanId) {
+        registerActiveDedupeScan(scanId, tab.id);
+        return scanId;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -6467,13 +6763,71 @@
     try {
       await chrome.runtime.sendMessage({ type: "DEDUPE_SCAN_FINISH", scanId });
     } catch { }
+    unregisterActiveDedupeScan(scanId);
   }
 
   async function stopDedupeScan(scanId) {
     if (!scanId || !chrome?.runtime?.sendMessage) return;
     try {
-      await chrome.runtime.sendMessage({ type: "DEDUPE_SCAN_STOP", scanId });
+      const response = await chrome.runtime.sendMessage({ type: "DEDUPE_SCAN_STOP", scanId });
+      const stopped = Array.isArray(response?.data?.scanIds) ? response.data.scanIds : [];
+      if (stopped.length) {
+        stopped.forEach(unregisterActiveDedupeScan);
+      } else {
+        unregisterActiveDedupeScan(scanId);
+      }
     } catch { }
+  }
+
+  async function updateAutoScanOptions(tabId, options = {}) {
+    if (!Number.isInteger(tabId) || tabId < 0) return false;
+    const payload = {};
+    if (Object.prototype.hasOwnProperty.call(options, "dedupeEnabled")) {
+      payload.dedupeEnabled = options.dedupeEnabled !== false;
+    }
+    if (Object.prototype.hasOwnProperty.call(options, "dedupeScanId")) {
+      payload.dedupeScanId = typeof options.dedupeScanId === "string" && options.dedupeScanId
+        ? options.dedupeScanId
+        : null;
+    }
+    if (Object.prototype.hasOwnProperty.call(options, "dedupeTabId")) {
+      payload.dedupeTabId = Number.isInteger(options.dedupeTabId) ? options.dedupeTabId : null;
+    }
+    if (Object.prototype.hasOwnProperty.call(options, "dedupePageUrl")) {
+      payload.dedupePageUrl = typeof options.dedupePageUrl === "string" ? options.dedupePageUrl : "";
+    }
+    try {
+      const response = await sendToContent(tabId, { action: "updateAutoScanOptions", options: payload });
+      return !!response?.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async function syncAutoScanDedupeState() {
+    const tabId = Number.isInteger(AUTO_STREAM_TAB_ID) ? AUTO_STREAM_TAB_ID : null;
+    if (!Number.isInteger(tabId)) return;
+    let tab = null;
+    try {
+      tab = await chrome.tabs.get(tabId);
+    } catch {
+      tab = null;
+    }
+    const dedupeEnabled = isAutoDedupeEnabled();
+    if (!dedupeEnabled) {
+      if (AUTO_DEDUPE_SCAN_ID) {
+        await stopDedupeScan(AUTO_DEDUPE_SCAN_ID);
+        AUTO_DEDUPE_SCAN_ID = null;
+      }
+    } else if (!AUTO_DEDUPE_SCAN_ID && (autoImagesEnabled || autoCanvasEnabled) && tab) {
+      AUTO_DEDUPE_SCAN_ID = await startDedupeScan(tab, { source: autoCanvasEnabled ? "auto-canvas" : "auto-images", resumed: true });
+    }
+    await updateAutoScanOptions(tabId, {
+      dedupeEnabled,
+      dedupeScanId: AUTO_DEDUPE_SCAN_ID || null,
+      dedupeTabId: tabId,
+      dedupePageUrl: tab?.url || ""
+    });
   }
 
   async function ensureContent(tabId, retries = 3) {
@@ -6577,7 +6931,8 @@
     const dims = updateDimensionFilterFromInputs();
     const minW = dims.minWidth;
     const minH = dims.minHeight;
-    const dedupeScanId = await startDedupeScan(tab, { source: "manual", scanId: session?.id });
+    const dedupeEnabled = isAutoDedupeEnabled();
+    const dedupeScanId = dedupeEnabled ? await startDedupeScan(tab, { source: "manual", scanId: session?.id }) : null;
     if (session) session.dedupeScanId = dedupeScanId;
     CACHE = [];
     SELECTED = new Set();
@@ -6588,6 +6943,7 @@
       types: requestedTypes,
       scanId: session?.id,
       scanProfile: session?.profile || "primary",
+      dedupeEnabled,
       dedupeScanId,
       dedupeTabId: tab?.id ?? null,
       dedupePageUrl: tab?.url || ""
@@ -6640,7 +6996,7 @@
         const item = raw ? { ...raw } : null;
         if (!item) continue;
         applyCanonicalCanvasName(item);
-        if (autoRemoveDuplicates && item.url && DEDUPE_DUPLICATE_URLS.has(item.url)) {
+        if (isAutoDedupeEnabled() && cacheItemMarkedDuplicate(item)) {
           continue;
         }
         let key = getCacheDedupKey(item);
@@ -6654,6 +7010,7 @@
       }
       if (newItems.length) {
         CACHE = CACHE.concat(newItems);
+        applySourceLinkDedupeToCache();
         await incrementStat("imagesScanned", newItems.length);
         if (containsBlob && tabId != null) {
           markBlobHydrationNeeded(tabId);
@@ -6691,30 +7048,28 @@
     if (!DEDUPE_DUPLICATE_URLS.size || !CACHE.length) return [];
     const urls = new Set();
     for (const item of CACHE) {
-      const url = item?.url;
-      if (url && DEDUPE_DUPLICATE_URLS.has(url)) {
-        urls.add(url);
+      if (cacheItemMarkedDuplicate(item)) {
+        const key = item?.url || item?.rawUrl || item?.normalizedUrl;
+        if (key) urls.add(key);
       }
     }
     return Array.from(urls);
   }
 
   function removeItemsByUrl(urls) {
-    const urlSet = new Set(Array.isArray(urls) ? urls.filter(Boolean) : []);
-    if (!urlSet.size) return 0;
+    const aliasSet = new Set(Array.isArray(urls) ? urls.filter((value) => typeof value === "string" && value) : []);
+    if (!aliasSet.size) return 0;
     let removed = 0;
+    const removedItems = [];
     for (let i = CACHE.length - 1; i >= 0; i--) {
       const item = CACHE[i];
-      const key = item?.url;
-      if (key && urlSet.has(key)) {
+      if (cacheItemMatchesAnyAlias(item, aliasSet)) {
+        removedItems.push(item);
         CACHE.splice(i, 1);
         removed++;
       }
     }
-    urlSet.forEach((url) => {
-      DISCOVERY_REGISTRY.delete(url);
-      SELECTED.delete(url);
-    });
+    removedItems.forEach((item) => purgeItemTracking(item, aliasSet));
     if (removed) {
       renderGrid();
     }
@@ -6740,14 +7095,16 @@
   function updateDedupeManualButton() {
     const btn = $("#dedupeManual");
     if (!btn) return;
-    const show = !autoRemoveDuplicates;
+    const show = false;
     btn.hidden = !show;
+    btn.disabled = true;
     if (!show) return;
     const available = getDuplicateUrlsInCache().length > 0;
     btn.disabled = !available;
   }
 
   function registerDedupeDuplicate(url) {
+    if (!isAutoDedupeEnabled()) return;
     if (!url) return;
     DEDUPE_DUPLICATE_URLS.add(url);
     if (autoRemoveDuplicates) {
@@ -6759,6 +7116,9 @@
   function handleDedupeMessage(message) {
     if (!message || typeof message.type !== "string") return;
     if (!message.type.startsWith("DEDUPE_")) return;
+    if (!isAutoDedupeEnabled()) return;
+    if (!isActiveDedupeMessage(message)) return;
+    touchActiveDedupeScan(message.scanId);
 
     if (message.type === "DEDUPE_HASH_RESULT" || message.type === "DEDUPE_PIXEL_HASH_RESULT") {
       if (message.status === "DUP" && message.url) {
@@ -7968,55 +8328,6 @@
     const saveMetaEl = document.getElementById("gvSaveMetadata");
     const purchaseEl = document.getElementById("gvPurchaseGuard");
     const zipEl = document.getElementById("gvZipDownload");
-    const cookieBtn = document.getElementById("gvCopyCookie");
-    const cookieStatusEl = document.getElementById("gvCookieStatus");
-    const cookieInfoEl = document.getElementById("gvCookieInfo");
-    let cookieStatusTimer = null;
-
-    const setCookieStatus = (message, isError = false) => {
-      if (!cookieStatusEl) return;
-      cookieStatusEl.textContent = message || "";
-      if (message) {
-        cookieStatusEl.dataset.state = isError ? "error" : "ok";
-        if (cookieStatusTimer) clearTimeout(cookieStatusTimer);
-        cookieStatusTimer = setTimeout(() => {
-          if (cookieStatusEl) {
-            cookieStatusEl.textContent = "";
-            cookieStatusEl.dataset.state = "";
-          }
-          cookieStatusTimer = null;
-        }, 6000);
-      } else {
-        cookieStatusEl.dataset.state = "";
-      }
-    };
-
-    const renderCookieInfo = (cookies) => {
-      if (!cookieInfoEl) return;
-      cookieInfoEl.innerHTML = "";
-      if (!Array.isArray(cookies) || !cookies.length) return;
-      cookies.forEach((cookie, index) => {
-        const li = document.createElement("li");
-        const includeSubdomains = cookie.hostOnly ? "FALSE" : "TRUE";
-        const secureFlag = cookie.secure ? "TRUE" : "FALSE";
-        const expiry = typeof cookie.expirationDate === "number"
-          ? new Date(cookie.expirationDate * 1000).toUTCString()
-          : "Session";
-        const details = [
-          `Domain: ${cookie.domain || ""}`,
-          `Include Subdomains: ${includeSubdomains}`,
-          `Path: ${cookie.path || "/"}`,
-          `Secure: ${secureFlag}`,
-          `Expiry: ${expiry}`,
-          `Name: ${cookie.name || ""}`,
-          `Value: ${cookie.value || ""}`
-        ];
-        li.textContent = `#${index + 1} | ${details.join(" | ")}`;
-        cookieInfoEl.appendChild(li);
-      });
-    };
-
-    renderCookieInfo([]);
 
     if (onlyFirstEl) {
       onlyFirstEl.addEventListener("change", (e) => {
@@ -8036,73 +8347,6 @@
     if (zipEl) {
       zipEl.addEventListener("change", (e) => {
         updateGVOption("zipDownload", !!e.target.checked);
-      });
-    }
-    if (cookieBtn) {
-      cookieBtn.addEventListener("click", async () => {
-        const tab = await getActiveTab();
-        if (!tab || !tab.id) {
-          const message = "No active tab.";
-          recordUserNotice("error", message);
-          alert(message);
-          setCookieStatus("No active tab.", true);
-          return;
-        }
-        const perm = await ensureHostPermission(tab);
-        if (!perm.ok) {
-          if (perm.reason) {
-            recordUserNotice("warn", perm.reason);
-          }
-          return;
-        }
-        try {
-          const cookieList = await chrome.cookies.getAll({ url: tab.url });
-          if (!cookieList || !cookieList.length) {
-            const message = "No cookies were found for this site.";
-            recordUserNotice("warn", message);
-            alert(message);
-            setCookieStatus("No cookies found.", true);
-            return;
-          }
-          const loginCookies = cookieList.filter((entry) => {
-            const name = typeof entry?.name === "string" ? entry.name.toLowerCase() : "";
-            return name && GV_COOKIE_CANDIDATES.has(name);
-          });
-          const sourceCookies = loginCookies.length ? loginCookies : cookieList;
-          const pairs = sourceCookies.map((entry) => `${entry.name}=${entry.value}`);
-          const cookieString = pairs.join("; ");
-          if (!cookieString) {
-            const message = "Cookie extraction returned an empty result.";
-            recordUserNotice("warn", message);
-            alert(message);
-            setCookieStatus("Cookie not available.", true);
-            renderCookieInfo([]);
-            return;
-          }
-          let copied = false;
-          if (navigator?.clipboard?.writeText) {
-            try {
-              await navigator.clipboard.writeText(cookieString);
-              copied = true;
-            } catch { }
-          }
-          const count = sourceCookies.length;
-          const countLabel = `${count} cookie${count === 1 ? "" : "s"}`;
-          if (copied) {
-            setCookieStatus(`Copied ${countLabel} to clipboard.`);
-          } else {
-            setCookieStatus(`Cookie ready — copy from prompt (${countLabel}).`);
-            prompt("Copy this login cookie string", cookieString);
-          }
-          renderCookieInfo(sourceCookies);
-        } catch (err) {
-          const msg = String(err?.message || err || "Cookie extraction failed.");
-          const message = `Cookie extraction failed: ${msg}`;
-          recordUserNotice("error", message);
-          alert(message);
-          setCookieStatus("Cookie extraction failed.", true);
-          renderCookieInfo([]);
-        }
       });
     }
 
@@ -8186,9 +8430,10 @@
         const minW = dims.minWidth;
         const minH = dims.minHeight;
         const types = getSelectedExtractionTypes();
+        const dedupeEnabled = isAutoDedupeEnabled();
         CURRENT_SCAN_ID = ++SCAN_SEQUENCE;
         resetDedupeRuntime();
-        AUTO_DEDUPE_SCAN_ID = await startDedupeScan(tab, { source: "auto-images" });
+        AUTO_DEDUPE_SCAN_ID = dedupeEnabled ? await startDedupeScan(tab, { source: "auto-images" }) : null;
         await sendToContent(tab.id, {
           action: "startAutoScan",
           options: {
@@ -8197,6 +8442,7 @@
               minWidth: minW,
               minHeight: minH,
               types,
+              dedupeEnabled,
               dedupeScanId: AUTO_DEDUPE_SCAN_ID,
               dedupeTabId: tab?.id ?? null,
               dedupePageUrl: tab?.url || ""
@@ -8283,9 +8529,10 @@
         const minW = dims.minWidth;
         const minH = dims.minHeight;
         const types = ["canvas"];
+        const dedupeEnabled = isAutoDedupeEnabled();
         CURRENT_SCAN_ID = ++SCAN_SEQUENCE;
         resetDedupeRuntime();
-        AUTO_DEDUPE_SCAN_ID = await startDedupeScan(tab, { source: "auto-canvas" });
+        AUTO_DEDUPE_SCAN_ID = dedupeEnabled ? await startDedupeScan(tab, { source: "auto-canvas" }) : null;
         await sendToContent(tab.id, {
           action: "startAutoScan",
           options: {
@@ -8295,6 +8542,7 @@
               minWidth: minW,
               minHeight: minH,
               types,
+              dedupeEnabled,
               dedupeScanId: AUTO_DEDUPE_SCAN_ID,
               dedupeTabId: tab?.id ?? null,
               dedupePageUrl: tab?.url || ""
@@ -8660,9 +8908,22 @@
   async function setDedupePreference(value) {
     autoRemoveDuplicates = !!value;
     try { await chrome.storage.sync.set({ [DEDUPE_AUTO_REMOVE_KEY]: autoRemoveDuplicates }); } catch { }
+    if (!autoRemoveDuplicates) {
+      if (ACTIVE_SCAN_SESSION?.dedupeScanId) {
+        await stopDedupeScan(ACTIVE_SCAN_SESSION.dedupeScanId);
+        ACTIVE_SCAN_SESSION.dedupeScanId = null;
+      }
+      if (AUTO_DEDUPE_SCAN_ID) {
+        await stopDedupeScan(AUTO_DEDUPE_SCAN_ID);
+        AUTO_DEDUPE_SCAN_ID = null;
+      }
+    }
+    await syncAutoScanDedupeState();
     updateDedupeManualButton();
     if (autoRemoveDuplicates) {
+      applySourceLinkDedupeToCache();
       removeDuplicatesFromCache();
+      renderGrid();
     }
   }
 
@@ -8936,6 +9197,24 @@
       closeBtn?.focus?.();
     }
 
+    const bookmarksBtn = document.getElementById("openBookmarksBtn");
+    if (bookmarksBtn) {
+      bookmarksBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        close({ returnFocus: false });
+        const targetUrl = chrome.runtime.getURL("bookmarks.html");
+        if (chrome?.tabs?.create) {
+          try {
+            const created = chrome.tabs.create({ url: targetUrl });
+            if (created && typeof created.catch === "function") {
+              created.catch(() => { });
+            }
+          } catch (err) {
+            console.warn("[HK] Failed to open bookmarks", err);
+          }
+        }
+      });
+    }
     const overlay = modal.querySelector(".hk-modal-overlay");
     overlay?.addEventListener("click", () => close());
     closeBtn?.addEventListener("click", () => close());
@@ -8954,23 +9233,24 @@
 
   // Load tip/contact links
   async function loadLinks() {
-    let tipUrl = TIP_LINK_URL;
-    try {
-      const resTip = await fetch(chrome.runtime.getURL("tip_link.txt"));
-      const fileUrl = (await resTip.text()).trim();
-      if (fileUrl) tipUrl = fileUrl;
-    } catch { }
+    const tipUrl = await resolveLinkFromFiles(
+      [TIP_LINK_REMOTE_FILE_URL, runtimeFileUrl("tip_link.txt")],
+      TIP_LINK_URL
+    );
     const tipLink = $("#tipLink");
     if (tipLink && tipUrl) tipLink.href = tipUrl;
 
-    let contactUrl = CONTACT_LINK_URL;
-    try {
-      const resContact = await fetch(chrome.runtime.getURL("contact_link.txt"));
-      const fileUrl = (await resContact.text()).trim();
-      if (fileUrl) contactUrl = fileUrl;
-    } catch { }
+    const contactUrl = await resolveLinkFromFiles(
+      [CONTACT_LINK_REMOTE_FILE_URL, runtimeFileUrl("contact_link.txt")],
+      CONTACT_LINK_URL
+    );
     const contactLink = $("#contactLink");
     if (contactLink && contactUrl) contactLink.href = contactUrl;
+
+    resolvedHelpPageUrl = await resolveLinkFromFiles(
+      [HELP_LINK_REMOTE_FILE_URL, runtimeFileUrl("help_link.txt")],
+      HELP_PAGE_URL
+    );
   }
 
   // Download selected items individually
@@ -9576,6 +9856,7 @@
     revokeAllTracked();
     terminateZipWorker();
     RAW_BLOB_CACHE.clear();
+    Array.from(ACTIVE_DEDUPE_SCANS.keys()).forEach(unregisterActiveDedupeScan);
     stopAutoScanLoop();
     GV_INJECTED_STATE.clear();
     if (autoRestartTimer) {

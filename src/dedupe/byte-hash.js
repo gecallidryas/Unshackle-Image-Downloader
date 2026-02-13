@@ -82,6 +82,64 @@ function isBlobUrl(url) {
     return typeof url === "string" && url.startsWith("blob:");
 }
 
+function createTaggedError(code, message) {
+    const error = new Error(message || code);
+    error.code = code;
+    return error;
+}
+
+function isImageContentType(contentType = "") {
+    const mime = String(contentType || "").toLowerCase().split(";")[0].trim();
+    return mime.startsWith("image/") || mime.includes("svg+xml");
+}
+
+function sniffImageMime(arrayBuffer) {
+    try {
+        const bytes = arrayBuffer instanceof Uint8Array ? arrayBuffer : new Uint8Array(arrayBuffer);
+        if (!bytes.length) return "";
+        const head = bytes.slice(0, Math.min(bytes.length, 512));
+        const startsWith = (...sig) => sig.every((v, i) => head[i] === v);
+        if (startsWith(0x89, 0x50, 0x4e, 0x47)) return "image/png";
+        if (startsWith(0xff, 0xd8, 0xff)) return "image/jpeg";
+        if (startsWith(0x47, 0x49, 0x46, 0x38)) return "image/gif";
+        if (startsWith(0x52, 0x49, 0x46, 0x46) && head[8] === 0x57 && head[9] === 0x45 && head[10] === 0x42 && head[11] === 0x50) return "image/webp";
+        if (startsWith(0x00, 0x00, 0x01, 0x00)) return "image/x-icon";
+        if (startsWith(0x42, 0x4d)) return "image/bmp";
+        const text = new TextDecoder("utf-8", { fatal: false }).decode(head);
+        if (/<svg[\s>]/i.test(text)) return "image/svg+xml";
+    } catch { }
+    return "";
+}
+
+function resolveImageMime(contentType, bytes, url = "") {
+    const type = String(contentType || "").split(";")[0].trim().toLowerCase();
+    if (isImageContentType(type)) {
+        return type || sniffImageMime(bytes);
+    }
+    if (typeof url === "string" && url.startsWith("data:image/")) {
+        return type || sniffImageMime(bytes);
+    }
+    const sniffed = sniffImageMime(bytes);
+    return isImageContentType(sniffed) ? sniffed : "";
+}
+
+async function canDecodeAsImage(bytes, mimeHint = "") {
+    if (typeof createImageBitmap !== "function") {
+        // In environments without createImageBitmap, avoid false negatives.
+        return true;
+    }
+    let bitmap = null;
+    try {
+        const blob = new Blob([bytes], { type: mimeHint || "application/octet-stream" });
+        bitmap = await createImageBitmap(blob);
+        return true;
+    } catch {
+        return false;
+    } finally {
+        try { bitmap?.close?.(); } catch { }
+    }
+}
+
 // ==================== BYTE FETCHING ====================
 
 /**
@@ -170,56 +228,44 @@ async function processL1(params) {
         });
         ensureNotAborted(signal);
 
+        const imageMime = resolveImageMime(contentType, bytes, url);
+        if (!imageMime) {
+            throw createTaggedError("NON_IMAGE_RESOURCE", "Fetched resource is not an image");
+        }
+
         // Compute SHA-256
         const sha256 = await sha256Hex(bytes);
 
-        // Check if canonical exists
-        const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
-
-        if (existing) {
-            if (!existing.representativeImageId && imageId) {
-                await globalThis.DedupeDB.putByteCanonical({
-                    ...existing,
-                    representativeImageId: imageId
-                });
-            }
-            // DUPLICATE - add occurrence
-            await globalThis.DedupeDB.addOccurrence({
-                scanId,
-                sha256,
-                pixelHash: null,
-                imageId: imageId || null,
-                url,
-                pageUrl,
-                tabId,
-                foundAt: Date.now(),
-                context
-            });
-
-            await globalThis.DedupeDB.updateScanStats(scanId, { l1Dup: 1 });
-
-            return {
-                status: "DUP",
-                sha256,
-                canonicalId: sha256,
-                representativeImageId: existing.representativeImageId || imageId || null,
-                byteLength: bytes.byteLength,
-                contentType,
-                bytes // Pass bytes for L2 processing
-            };
-        }
-
-        // NEW - create canonical
         const canonical = {
             sha256,
             byteLength: bytes.byteLength,
-            contentType,
+            contentType: imageMime || contentType || "application/octet-stream",
             firstSeenAt: Date.now(),
             representative: { url, tabId, pageUrl },
             representativeImageId: imageId || null
         };
-
-        await globalThis.DedupeDB.putByteCanonical(canonical);
+        let canonicalState = null;
+        if (typeof globalThis.DedupeDB.ensureByteCanonical === "function") {
+            canonicalState = await globalThis.DedupeDB.ensureByteCanonical({
+                sha256,
+                canonical,
+                representativeImageId: imageId || null
+            });
+        } else {
+            const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
+            if (existing) {
+                if (!existing.representativeImageId && imageId) {
+                    await globalThis.DedupeDB.putByteCanonical({
+                        ...existing,
+                        representativeImageId: imageId
+                    });
+                }
+                canonicalState = { status: "DUP", record: existing };
+            } else {
+                await globalThis.DedupeDB.putByteCanonical(canonical);
+                canonicalState = { status: "NEW", record: canonical };
+            }
+        }
 
         await globalThis.DedupeDB.addOccurrence({
             scanId,
@@ -233,18 +279,18 @@ async function processL1(params) {
             context
         });
 
-        await globalThis.DedupeDB.updateScanStats(scanId, { l1New: 1 });
+        const isDup = canonicalState?.status === "DUP";
+        await globalThis.DedupeDB.updateScanStats(scanId, isDup ? { l1Dup: 1 } : { l1New: 1 });
 
         return {
-            status: "NEW",
+            status: isDup ? "DUP" : "NEW",
             sha256,
             canonicalId: sha256,
-            representativeImageId: imageId || null,
+            representativeImageId: canonicalState?.record?.representativeImageId || imageId || null,
             byteLength: bytes.byteLength,
-            contentType,
+            contentType: imageMime || contentType,
             bytes // Pass bytes for L2 processing
         };
-
     } catch (error) {
         // Handle specific error types
         if (error.message === "BLOB_URL_REQUIRES_CONTENT_SCRIPT") {
@@ -262,6 +308,8 @@ async function processL1(params) {
             errorCode = "HTTP_ERROR";
         } else if (error.name === "AbortError") {
             errorCode = "TIMEOUT";
+        } else if (error?.code === "NON_IMAGE_RESOURCE") {
+            errorCode = "NON_IMAGE_RESOURCE";
         }
 
         return {
@@ -291,54 +339,48 @@ async function processL1Bytes(params) {
 
     try {
         ensureNotAborted(signal);
+        let imageMime = resolveImageMime("", bytes, url);
+        if (!imageMime) {
+            const decodable = await canDecodeAsImage(bytes, "");
+            if (!decodable) {
+                throw createTaggedError("NON_IMAGE_RESOURCE", "Fetched blob bytes are not an image");
+            }
+            // Keep a generic image type when decode succeeds but signature sniffing is unknown.
+            imageMime = "image/*";
+        }
         // Compute SHA-256
         const sha256 = await sha256Hex(bytes);
 
-        // Check if canonical exists
-        const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
-
-        if (existing) {
-            if (!existing.representativeImageId && imageId) {
-                await globalThis.DedupeDB.putByteCanonical({
-                    ...existing,
-                    representativeImageId: imageId
-                });
-            }
-            await globalThis.DedupeDB.addOccurrence({
-                scanId,
-                sha256,
-                pixelHash: null,
-                imageId: imageId || null,
-                url,
-                pageUrl,
-                tabId,
-                foundAt: Date.now(),
-                context
-            });
-
-            await globalThis.DedupeDB.updateScanStats(scanId, { l1Dup: 1 });
-
-            return {
-                status: "DUP",
-                sha256,
-                canonicalId: sha256,
-                representativeImageId: existing.representativeImageId || imageId || null,
-                byteLength: bytes.byteLength,
-                bytes
-            };
-        }
-
-        // NEW
         const canonical = {
             sha256,
             byteLength: bytes.byteLength,
-            contentType: "application/octet-stream",
+            contentType: imageMime || "application/octet-stream",
             firstSeenAt: Date.now(),
             representative: { url, tabId, pageUrl },
             representativeImageId: imageId || null
         };
-
-        await globalThis.DedupeDB.putByteCanonical(canonical);
+        let canonicalState = null;
+        if (typeof globalThis.DedupeDB.ensureByteCanonical === "function") {
+            canonicalState = await globalThis.DedupeDB.ensureByteCanonical({
+                sha256,
+                canonical,
+                representativeImageId: imageId || null
+            });
+        } else {
+            const existing = await globalThis.DedupeDB.getByteCanonical(sha256);
+            if (existing) {
+                if (!existing.representativeImageId && imageId) {
+                    await globalThis.DedupeDB.putByteCanonical({
+                        ...existing,
+                        representativeImageId: imageId
+                    });
+                }
+                canonicalState = { status: "DUP", record: existing };
+            } else {
+                await globalThis.DedupeDB.putByteCanonical(canonical);
+                canonicalState = { status: "NEW", record: canonical };
+            }
+        }
 
         await globalThis.DedupeDB.addOccurrence({
             scanId,
@@ -352,13 +394,14 @@ async function processL1Bytes(params) {
             context
         });
 
-        await globalThis.DedupeDB.updateScanStats(scanId, { l1New: 1 });
+        const isDup = canonicalState?.status === "DUP";
+        await globalThis.DedupeDB.updateScanStats(scanId, isDup ? { l1Dup: 1 } : { l1New: 1 });
 
         return {
-            status: "NEW",
+            status: isDup ? "DUP" : "NEW",
             sha256,
             canonicalId: sha256,
-            representativeImageId: imageId || null,
+            representativeImageId: canonicalState?.record?.representativeImageId || imageId || null,
             byteLength: bytes.byteLength,
             bytes
         };
@@ -369,7 +412,7 @@ async function processL1Bytes(params) {
         return {
             status: "ERROR",
             url,
-            errorCode: "HASH_FAILED",
+            errorCode: error?.code === "NON_IMAGE_RESOURCE" ? "NON_IMAGE_RESOURCE" : "HASH_FAILED",
             error: error.message
         };
     }

@@ -37,8 +37,11 @@ class AsyncQueue {
         /** @type {Set<string>} */
         this.running = new Set();
 
-        /** @type {Map<string, AbortController>} */
-        this.abortControllers = new Map();
+        /** @type {Map<string, QueueJob>} */
+        this.jobs = new Map();
+
+        /** @type {Map<string, {controller: AbortController, timeoutId: ReturnType<typeof setTimeout>|null}>} */
+        this.activeAttempts = new Map();
 
         this.paused = false;
         this.jobCounter = 0;
@@ -67,7 +70,7 @@ class AsyncQueue {
                 reject
             };
 
-            this.abortControllers.set(jobId, abortController);
+            this.jobs.set(jobId, job);
 
             // Insert in priority order (higher priority first)
             const insertIdx = this.pending.findIndex(j => j.priority < priority);
@@ -106,48 +109,70 @@ class AsyncQueue {
      * @param {QueueJob} job
      */
     async _executeJob(job) {
-        const { id, task, abortController, resolve, reject } = job;
+        const { id, task, resolve, reject } = job;
+        const abortController = new AbortController();
+        let timeoutId = null;
+        this.activeAttempts.set(id, { controller: abortController, timeoutId: null });
 
         try {
             // Setup timeout
-            const timeoutId = setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 abortController.abort();
             }, this.timeoutMs);
+            const attempt = this.activeAttempts.get(id);
+            if (attempt) {
+                attempt.timeoutId = timeoutId;
+            }
 
             // Execute task
             const result = await task(abortController.signal);
 
-            clearTimeout(timeoutId);
-            this._finishJob(id);
+            this._finishJob(id, { removeJob: true });
             resolve(result);
 
         } catch (error) {
             // Check if aborted
             if (abortController.signal.aborted) {
-                this._finishJob(id);
-                reject(new Error(`Job ${id} timed out after ${this.timeoutMs}ms`));
+                this._finishJob(id, { removeJob: true });
+                if (job.cancelled) {
+                    reject(new Error(`Job ${id} cancelled`));
+                } else {
+                    reject(new Error(`Job ${id} timed out after ${this.timeoutMs}ms`));
+                }
                 return;
             }
 
             // Check if retries remaining
-            if (job.retries > 0 && this._shouldRetry(error)) {
+            if (!job.cancelled && job.retries > 0 && this._shouldRetry(error)) {
                 job.retries--;
                 const delay = this.baseDelayMs * Math.pow(2, this.maxRetries - job.retries);
 
                 console.log(`[Queue] Retrying job ${id} in ${delay}ms (${job.retries} retries left)`);
 
-                setTimeout(() => {
+                this._finishJob(id, { removeJob: false });
+                job.retryTimer = setTimeout(() => {
+                    job.retryTimer = null;
+                    if (job.cancelled) {
+                        this._finishJob(id, { removeJob: true });
+                        reject(new Error(`Job ${id} cancelled`));
+                        return;
+                    }
                     // Re-add with same priority but at front for this priority level
                     this.pending.unshift(job);
-                    this._finishJob(id);
                     this._processNext();
                 }, delay);
 
                 return;
             }
 
-            this._finishJob(id);
+            this._finishJob(id, { removeJob: true });
             reject(error);
+        } finally {
+            const attempt = this.activeAttempts.get(id);
+            if (attempt?.timeoutId) {
+                clearTimeout(attempt.timeoutId);
+                attempt.timeoutId = null;
+            }
         }
     }
 
@@ -171,9 +196,21 @@ class AsyncQueue {
      * @private
      * @param {string} jobId
      */
-    _finishJob(jobId) {
+    _finishJob(jobId, { removeJob = true } = {}) {
         this.running.delete(jobId);
-        this.abortControllers.delete(jobId);
+        const attempt = this.activeAttempts.get(jobId);
+        if (attempt?.timeoutId) {
+            clearTimeout(attempt.timeoutId);
+        }
+        this.activeAttempts.delete(jobId);
+        if (removeJob) {
+            const job = this.jobs.get(jobId);
+            if (job?.retryTimer) {
+                clearTimeout(job.retryTimer);
+                job.retryTimer = null;
+            }
+            this.jobs.delete(jobId);
+        }
         this._processNext();
     }
 
@@ -187,14 +224,32 @@ class AsyncQueue {
         const pendingIdx = this.pending.findIndex(j => j.id === jobId);
         if (pendingIdx !== -1) {
             const job = this.pending.splice(pendingIdx, 1)[0];
+            job.cancelled = true;
+            this.jobs.delete(jobId);
             job.reject(new Error(`Job ${jobId} cancelled`));
             return true;
         }
 
         // Check running
-        const controller = this.abortControllers.get(jobId);
+        const attempt = this.activeAttempts.get(jobId);
+        const controller = attempt?.controller;
         if (controller) {
+            const job = this.jobs.get(jobId);
+            if (job) {
+                job.cancelled = true;
+            }
             controller.abort();
+            return true;
+        }
+
+        // Check delayed retry window
+        const delayedJob = this.jobs.get(jobId);
+        if (delayedJob?.retryTimer) {
+            clearTimeout(delayedJob.retryTimer);
+            delayedJob.retryTimer = null;
+            delayedJob.cancelled = true;
+            this.jobs.delete(jobId);
+            delayedJob.reject(new Error(`Job ${jobId} cancelled`));
             return true;
         }
 
@@ -207,13 +262,30 @@ class AsyncQueue {
     cancelAll() {
         // Reject all pending
         for (const job of this.pending) {
+            job.cancelled = true;
+            this.jobs.delete(job.id);
             job.reject(new Error("Queue cancelled"));
         }
         this.pending = [];
 
         // Abort all running
-        for (const controller of this.abortControllers.values()) {
-            controller.abort();
+        for (const [jobId, attempt] of this.activeAttempts.entries()) {
+            const job = this.jobs.get(jobId);
+            if (job) {
+                job.cancelled = true;
+            }
+            attempt.controller.abort();
+        }
+
+        // Cancel delayed retries that are not pending/running
+        for (const [jobId, job] of this.jobs.entries()) {
+            if (job?.retryTimer) {
+                clearTimeout(job.retryTimer);
+                job.retryTimer = null;
+                job.cancelled = true;
+                this.jobs.delete(jobId);
+                job.reject(new Error("Queue cancelled"));
+            }
         }
     }
 

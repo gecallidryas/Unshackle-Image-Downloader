@@ -81,10 +81,11 @@ function createBlobBytesMessage({ scanId, url, bytes, context }) {
  * @param {number} [params.byteLength]
  * @returns {Object}
  */
-function createHashResultMessage({ scanId, url, sha256, status, canonicalId, byteLength }) {
+function createHashResultMessage({ scanId, tabId = null, url, sha256, status, canonicalId, byteLength }) {
     return {
         type: DedupeMessageTypes.HASH_RESULT,
         scanId,
+        tabId,
         url,
         sha256,
         status,
@@ -105,10 +106,11 @@ function createHashResultMessage({ scanId, url, sha256, status, canonicalId, byt
  * @param {string} [params.canonicalId]
  * @returns {Object}
  */
-function createPixelHashResultMessage({ scanId, url, pixelHash, width, height, status, canonicalId }) {
+function createPixelHashResultMessage({ scanId, tabId = null, url, pixelHash, width, height, status, canonicalId }) {
     return {
         type: DedupeMessageTypes.PIXEL_HASH_RESULT,
         scanId,
+        tabId,
         url,
         pixelHash,
         width,
@@ -130,10 +132,11 @@ function createPixelHashResultMessage({ scanId, url, pixelHash, width, height, s
  * @param {number} [params.ssimScore]
  * @returns {Object}
  */
-function createPerceptualResultMessage({ scanId, url, imageId, dhash64, status, groupId, ssimScore }) {
+function createPerceptualResultMessage({ scanId, tabId = null, url, imageId, dhash64, status, groupId, ssimScore }) {
     return {
         type: DedupeMessageTypes.PERCEPTUAL_RESULT,
         scanId,
+        tabId,
         url,
         imageId,
         dhash64,
@@ -148,14 +151,15 @@ function createPerceptualResultMessage({ scanId, url, imageId, dhash64, status, 
  * @param {Object} params
  * @param {string} params.scanId
  * @param {string} params.url
- * @param {"FETCH_FAILED"|"HTTP_ERROR"|"TIMEOUT"|"DECODE_FAILED"|"CANVAS_FAILED"} params.errorCode
+ * @param {"FETCH_FAILED"|"HTTP_ERROR"|"TIMEOUT"|"DECODE_FAILED"|"CANVAS_FAILED"|"NON_IMAGE_RESOURCE"|"PERCEPTUAL_FAILED"|"PIPELINE_FAILED"|"SSIM_FAILED"} params.errorCode
  * @param {string} [params.details]
  * @returns {Object}
  */
-function createHashErrorMessage({ scanId, url, errorCode, details }) {
+function createHashErrorMessage({ scanId, tabId = null, url, errorCode, details }) {
     return {
         type: DedupeMessageTypes.HASH_ERROR,
         scanId,
+        tabId,
         url,
         errorCode,
         details
@@ -169,10 +173,11 @@ function createHashErrorMessage({ scanId, url, errorCode, details }) {
  * @param {Object} params.stats
  * @returns {Object}
  */
-function createScanStatsMessage({ scanId, stats }) {
+function createScanStatsMessage({ scanId, tabId = null, stats }) {
     return {
         type: DedupeMessageTypes.SCAN_STATS,
         scanId,
+        tabId,
         stats
     };
 }
@@ -206,7 +211,10 @@ function createGroupUpdateMessage({ groupId, representativeImageId, memberImageI
 async function sendToUI(tabId, message) {
     try {
         // Send to runtime (popup/panel listening)
-        await chrome.runtime.sendMessage(message);
+        await chrome.runtime.sendMessage({
+            ...message,
+            tabId: Number.isInteger(tabId) ? tabId : (message?.tabId ?? null)
+        });
     } catch (e) {
         // Popup may not be open - that's okay
         if (!e.message?.includes("Receiving end does not exist")) {

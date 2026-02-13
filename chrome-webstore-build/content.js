@@ -180,6 +180,31 @@
     return entries;
   }
 
+  function sortSrcsetEntriesByQuality(entries) {
+    if (!Array.isArray(entries) || entries.length <= 1) {
+      return Array.isArray(entries) ? entries : [];
+    }
+    return entries.slice().sort((a, b) => {
+      const aw = Number.isFinite(a?.width) ? a.width : 0;
+      const bw = Number.isFinite(b?.width) ? b.width : 0;
+      if (aw !== bw) return bw - aw;
+      const ad = Number.isFinite(a?.density) ? a.density : 0;
+      const bd = Number.isFinite(b?.density) ? b.density : 0;
+      return bd - ad;
+    });
+  }
+
+  const VIDEO_EXTENSION_RE = /\.(?:mp4|webm|m4v|mov|mkv|avi|wmv|flv|mpeg|mpg|m3u8|ts|gifv)(?:$|[?#])/i;
+
+  function looksLikeVideoAsset(url, typeHint = "") {
+    if (typeof typeHint === "string" && /^video\//i.test(typeHint.trim())) {
+      return true;
+    }
+    if (typeof url !== "string" || !url) return false;
+    if (/^data:video\//i.test(url)) return true;
+    return VIDEO_EXTENSION_RE.test(url);
+  }
+
   function splitCssArgs(value) {
     if (typeof value !== "string" || !value.length) return [];
     const parts = [];
@@ -346,11 +371,30 @@
   };
   const DEDUPE_BLOB_SIZE_LIMIT = 25 * 1024 * 1024;
 
+  function finiteIntOrNull(value) {
+    if (!Number.isFinite(value)) return null;
+    if (value <= 0) return null;
+    return Math.round(value);
+  }
+
   function buildDedupeContext(item) {
     const kind = String(item?.kind || item?.type || "").toLowerCase();
     const domType = kind === "background" ? "css" : "img";
     const selectorHint = typeof item?.sourceId === "string" ? item.sourceId : null;
-    return { domType, selectorHint };
+    const renderedWidth = finiteIntOrNull(item?.renderedWidth);
+    const renderedHeight = finiteIntOrNull(item?.renderedHeight);
+    const intrinsicWidth = finiteIntOrNull(item?.intrinsicWidth);
+    const intrinsicHeight = finiteIntOrNull(item?.intrinsicHeight);
+    const byteHint = finiteIntOrNull(item?.byteHint ?? item?.size);
+    return {
+      domType,
+      selectorHint,
+      renderedWidth,
+      renderedHeight,
+      intrinsicWidth,
+      intrinsicHeight,
+      byteHint
+    };
   }
 
   function getDedupeUrl(item) {
@@ -703,8 +747,55 @@
     DISCOVERY_SEQUENCE = 0;
   }
 
+  function enrichDedupeItemDimensions(item, el) {
+    if (!item || typeof item !== "object") return item;
+    const kind = String(item.kind || item.type || "").toLowerCase();
+    const inferRendered = () => {
+      if (!el || typeof el.getBoundingClientRect !== "function") return null;
+      try {
+        const rect = el.getBoundingClientRect();
+        if (!rect) return null;
+        const w = finiteIntOrNull(rect.width);
+        const h = finiteIntOrNull(rect.height);
+        if (w == null || h == null) return null;
+        return { w, h };
+      } catch {
+        return null;
+      }
+    };
+
+    const rendered = inferRendered();
+    if (rendered) {
+      item.renderedWidth = rendered.w;
+      item.renderedHeight = rendered.h;
+    } else if ((kind === "background" || kind === "svg") && Number.isFinite(item.width) && Number.isFinite(item.height)) {
+      item.renderedWidth = finiteIntOrNull(item.width);
+      item.renderedHeight = finiteIntOrNull(item.height);
+    }
+
+    if (el instanceof HTMLImageElement) {
+      item.intrinsicWidth = finiteIntOrNull(el.naturalWidth || item.width);
+      item.intrinsicHeight = finiteIntOrNull(el.naturalHeight || item.height);
+    } else if (el instanceof HTMLCanvasElement) {
+      item.intrinsicWidth = finiteIntOrNull(el.width || item.width);
+      item.intrinsicHeight = finiteIntOrNull(el.height || item.height);
+    } else if (kind === "img" || kind === "canvas") {
+      item.intrinsicWidth = finiteIntOrNull(item.intrinsicWidth ?? item.width);
+      item.intrinsicHeight = finiteIntOrNull(item.intrinsicHeight ?? item.height);
+    } else if (kind === "svg") {
+      item.intrinsicWidth = finiteIntOrNull(item.intrinsicWidth ?? item.width ?? item.renderedWidth);
+      item.intrinsicHeight = finiteIntOrNull(item.intrinsicHeight ?? item.height ?? item.renderedHeight);
+    }
+
+    if (Number.isFinite(item.size) && !Number.isFinite(item.byteHint)) {
+      item.byteHint = finiteIntOrNull(item.size);
+    }
+    return item;
+  }
+
   function stampDiscoveryMeta(item, el) {
     if (!item || typeof item !== "object") return item;
+    enrichDedupeItemDimensions(item, el);
     const order = getDomOrder(el);
     if (Number.isFinite(order)) item.__domOrder = order;
     item.__discoverySeq = ++DISCOVERY_SEQUENCE;
@@ -1868,8 +1959,78 @@
   const CANVAS_RESULT_KINDS = new Set(["canvas"]);
   const IMAGE_RESULT_KINDS = new Set(["img", "background", "dataUri", "blob"]);
 
-  function getResultDedupKey(item) {
+  function parseResultSourceAndFilename(value) {
+    if (typeof value !== "string" || !value) return null;
+    if (/^(?:data|blob|javascript|about):/i.test(value)) return null;
+    try {
+      const parsed = new URL(value, location.href);
+      const protocol = String(parsed.protocol || "").toLowerCase();
+      if (protocol !== "http:" && protocol !== "https:" && protocol !== "file:") return null;
+      let fullPath = "";
+      if (protocol === "file:") {
+        fullPath = `file://${parsed.pathname || ""}`;
+      } else {
+        fullPath = `${parsed.origin}${parsed.pathname || ""}`;
+      }
+      const slash = fullPath.lastIndexOf("/");
+      const rawSource = slash >= 0 ? fullPath.slice(0, slash) : fullPath;
+      const rawName = slash >= 0 ? fullPath.slice(slash + 1) : "";
+      const sourceLink = String(rawSource || "").replace(/\/+$/, "").toLowerCase();
+      const filename = rawName ? decodeURIComponent(rawName).trim().toLowerCase() : "";
+      if (!sourceLink || !filename) return null;
+      return { sourceLink, filename };
+    } catch {
+      return null;
+    }
+  }
+
+  function getSourceFilenameDedupKey(item) {
     if (!item || typeof item !== "object") return null;
+    const kind = typeof item.kind === "string" ? item.kind : "";
+    if (CANVAS_RESULT_KINDS.has(kind)) return null;
+    const sourceValue = item.rawUrl || item.url;
+    const parsed = parseResultSourceAndFilename(sourceValue);
+    if (!parsed) return null;
+    const fallback = typeof item.filename === "string" ? item.filename.trim().toLowerCase() : "";
+    const filename = parsed.filename || fallback;
+    if (!filename) return null;
+    return `${parsed.sourceLink}::${filename}`;
+  }
+
+  function toResultDedupeInt(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return Math.round(n);
+  }
+
+  function getResultResolutionScore(item) {
+    const width = toResultDedupeInt(item?.intrinsicWidth) || toResultDedupeInt(item?.width) || toResultDedupeInt(item?.renderedWidth);
+    const height = toResultDedupeInt(item?.intrinsicHeight) || toResultDedupeInt(item?.height) || toResultDedupeInt(item?.renderedHeight);
+    const area = width > 0 && height > 0 ? (width * height) : 0;
+    return { width, height, area };
+  }
+
+  function compareResultItemQuality(a, b) {
+    const ra = getResultResolutionScore(a);
+    const rb = getResultResolutionScore(b);
+    if (ra.area !== rb.area) return ra.area - rb.area;
+    if (ra.width !== rb.width) return ra.width - rb.width;
+    if (ra.height !== rb.height) return ra.height - rb.height;
+    const sizeA = toResultDedupeInt(a?.size);
+    const sizeB = toResultDedupeInt(b?.size);
+    if (sizeA !== sizeB) return sizeA - sizeB;
+    return 0;
+  }
+
+  function getResultDedupKey(item, options = {}) {
+    if (!item || typeof item !== "object") return null;
+    const sourceDedupeEnabled = options?.sourceDedupeEnabled !== false;
+    if (sourceDedupeEnabled) {
+      const sourceKey = getSourceFilenameDedupKey(item);
+      if (sourceKey) {
+        return `source:${sourceKey}`;
+      }
+    }
     if (typeof item.contentHash === "string" && item.contentHash.length) {
       return `hash:${item.contentHash}`;
     }
@@ -1901,7 +2062,7 @@
     return null;
   }
 
-  function mergePersistentItems(previous, current, persistentKinds) {
+  function mergePersistentItems(previous, current, persistentKinds, options = {}) {
     const hasPrev = Array.isArray(previous) && previous.length;
     const hasCurr = Array.isArray(current) && current.length;
     const kindSet = persistentKinds instanceof Set
@@ -1919,14 +2080,21 @@
       return [];
     }
     const merged = [];
-    const seen = new Set();
+    const indexByKey = new Map();
     let fallbackCounter = 0;
     const remember = (item) => {
       if (!item) return;
-      let key = getResultDedupKey(item);
+      let key = getResultDedupKey(item, options);
       if (!key) key = `__keyless:${++fallbackCounter}`;
-      if (seen.has(key)) return;
-      seen.add(key);
+      const existingIndex = indexByKey.get(key);
+      if (Number.isInteger(existingIndex)) {
+        const existing = merged[existingIndex];
+        if (compareResultItemQuality(item, existing) > 0) {
+          merged[existingIndex] = item;
+        }
+        return;
+      }
+      indexByKey.set(key, merged.length);
       merged.push(item);
     };
     if (hasCurr) {
@@ -1950,6 +2118,7 @@
     resetDiscoverySequence();
     const minW = options.minWidth || 0;
     const minH = options.minHeight || 0;
+    const sourceDedupeEnabled = options?.dedupeEnabled !== false;
     const types = Array.isArray(options.types) && options.types.length ? options.types : [
       "img", "background", "canvas", "svg", "dataUri", "blob"
     ];
@@ -1965,6 +2134,7 @@
       for (const img of document.images) {
         const raw = img.currentSrc || img.src; if (!raw) continue;
         const abs = toAbsURL(raw); if (!abs) continue;
+        if (looksLikeVideoAsset(abs, img.getAttribute("type") || "")) continue;
         if (img.naturalWidth < minW || img.naturalHeight < minH) continue;
         const kind = (() => {
           if (abs.startsWith("data:")) return "dataUri";
@@ -2008,6 +2178,9 @@
         const appendSrcsetCandidate = (targetEl, candidateUrl, { widthHint = null, namespace = "img:srcset" } = {}) => {
           const abs = toAbsURL(candidateUrl);
           if (!abs) return;
+          if (targetEl instanceof HTMLSourceElement && targetEl.closest("video, audio")) return;
+          const typeHint = targetEl?.getAttribute?.("type") || targetEl?.type || "";
+          if (looksLikeVideoAsset(abs, typeHint)) return;
           const ratio = targetEl instanceof HTMLImageElement ? getRatio(targetEl) : null;
           const width = widthHint || Number(targetEl?.naturalWidth || 0) || 0;
           let height = Number(targetEl?.naturalHeight || 0) || 0;
@@ -2031,7 +2204,7 @@
           found.push(item);
         };
         for (const img of document.querySelectorAll("img[srcset]")) {
-          const entries = parseSrcsetList(img.getAttribute("srcset"));
+          const entries = sortSrcsetEntriesByQuality(parseSrcsetList(img.getAttribute("srcset")));
           for (const entry of entries) {
             if (!entry || !entry.url) continue;
             const widthHint = entry.width ? Math.round(entry.width) : null;
@@ -2043,7 +2216,7 @@
           if (src) appendSrcsetCandidate(source, src, { namespace: "source:src" });
           const srcset = source.getAttribute("srcset");
           if (srcset) {
-            const entries = parseSrcsetList(srcset);
+            const entries = sortSrcsetEntriesByQuality(parseSrcsetList(srcset));
             for (const entry of entries) {
               if (!entry || !entry.url) continue;
               const widthHint = entry.width ? Math.round(entry.width) : null;
@@ -2136,17 +2309,22 @@
     }
 
     // Deduplicate by URL for ordinary images, but keep individual canvas captures even if data matches.
-    const seen = new Set();
+    const keyToIndex = new Map();
     const unique = [];
     let dedupFallback = 0;
     for (const it of augmented) {
-      let key = getResultDedupKey(it);
+      let key = getResultDedupKey(it, { sourceDedupeEnabled });
       const hasStableKey = typeof key === "string" && key.length > 0;
       if (!hasStableKey) key = `__idx:${++dedupFallback}`;
-      if (seen.has(key)) continue;
-      if (hasStableKey && persistentSeen.has(key)) continue;
-      seen.add(key);
-      unique.push(it);
+      const existingIndex = keyToIndex.get(key);
+      if (Number.isInteger(existingIndex)) {
+        if (compareResultItemQuality(it, unique[existingIndex]) > 0) {
+          unique[existingIndex] = it;
+        }
+      } else {
+        keyToIndex.set(key, unique.length);
+        unique.push(it);
+      }
       if (hasStableKey) {
         persistentSeen.add(key);
       }
@@ -2161,7 +2339,9 @@
     });
     unique.sort(compareByDomOrder);
 
-    const finalImages = persistentKinds.size ? mergePersistentItems(STATE.images, unique, persistentKinds) : unique.slice();
+    const finalImages = persistentKinds.size
+      ? mergePersistentItems(STATE.images, unique, persistentKinds, { sourceDedupeEnabled })
+      : unique.slice();
     finalImages.sort(compareByDomOrder);
 
     STATE.images = finalImages;
@@ -2176,6 +2356,7 @@
     const fromDynamic = options.__fromDynamic === true;
     const minW = options.minWidth || 0;
     const minH = options.minHeight || 0;
+    const sourceDedupeEnabled = options?.dedupeEnabled !== false;
     const types = Array.isArray(options.types) && options.types.length ? options.types : [
       "img", "background", "canvas", "svg", "dataUri", "blob"
     ];
@@ -2187,8 +2368,8 @@
     const intervalMs = Number.isFinite(options.intervalMs) ? Math.max(500, options.intervalMs) : 1500;
     const want = (kind) => types.includes(kind);
     const seenCanvasHashes = new Set();
-    const persistentSeen = getPersistentSeenSet();
-    const seenKeys = new Set();
+    const keyToFoundIndex = new Map();
+    const pendingKeyToIndex = new Map();
     let dedupFallback = 0;
     const found = [];
     let pendingChunk = [];
@@ -2196,16 +2377,28 @@
 
     const rememberItem = (item) => {
       if (!item) return false;
-      let key = getResultDedupKey(item);
+      let key = getResultDedupKey(item, { sourceDedupeEnabled });
       const hasStableKey = typeof key === "string" && key.length > 0;
       if (!hasStableKey) key = `__idx:${++dedupFallback}`;
-      if (seenKeys.has(key)) return false;
-      if (hasStableKey && persistentSeen.has(key)) return false;
-      seenKeys.add(key);
-      if (hasStableKey) {
-        persistentSeen.add(key);
+      const existingIndex = keyToFoundIndex.get(key);
+      if (Number.isInteger(existingIndex)) {
+        const existing = found[existingIndex];
+        if (compareResultItemQuality(item, existing) > 0) {
+          found[existingIndex] = item;
+          const pendingIndex = pendingKeyToIndex.get(key);
+          if (Number.isInteger(pendingIndex) && pendingChunk[pendingIndex]) {
+            pendingChunk[pendingIndex] = item;
+          } else {
+            pendingKeyToIndex.set(key, pendingChunk.length);
+            pendingChunk.push(item);
+          }
+          return true;
+        }
+        return false;
       }
+      keyToFoundIndex.set(key, found.length);
       found.push(item);
+      pendingKeyToIndex.set(key, pendingChunk.length);
       pendingChunk.push(item);
       return true;
     };
@@ -2222,12 +2415,14 @@
       }
       lastEmit = now;
       pendingChunk = [];
+      pendingKeyToIndex.clear();
     };
 
     if (want("img") || want("dataUri") || want("blob")) {
       for (const img of document.images) {
         const raw = img.currentSrc || img.src; if (!raw) continue;
         const abs = toAbsURL(raw); if (!abs) continue;
+        if (looksLikeVideoAsset(abs, img.getAttribute("type") || "")) continue;
         if (img.naturalWidth < minW || img.naturalHeight < minH) continue;
         const kind = abs.startsWith("data:") ? "dataUri" : (abs.startsWith("blob:") ? "blob" : "img");
         if (!want(kind)) continue;
@@ -2276,6 +2471,9 @@
       const appendSrcsetCandidate = (targetEl, candidateUrl, { widthHint = null, namespace = "img:srcset" } = {}) => {
         const abs = toAbsURL(candidateUrl);
         if (!abs) return;
+        if (targetEl instanceof HTMLSourceElement && targetEl.closest("video, audio")) return;
+        const typeHint = targetEl?.getAttribute?.("type") || targetEl?.type || "";
+        if (looksLikeVideoAsset(abs, typeHint)) return;
         const ratio = targetEl instanceof HTMLImageElement ? getRatio(targetEl) : null;
         const width = widthHint || Number(targetEl?.naturalWidth || 0) || 0;
         let height = Number(targetEl?.naturalHeight || 0) || 0;
@@ -2301,7 +2499,7 @@
         }
       };
       for (const img of document.querySelectorAll("img[srcset]")) {
-        const entries = parseSrcsetList(img.getAttribute("srcset"));
+        const entries = sortSrcsetEntriesByQuality(parseSrcsetList(img.getAttribute("srcset")));
         for (const entry of entries) {
           if (!entry || !entry.url) continue;
           const widthHint = entry.width ? Math.round(entry.width) : null;
@@ -2313,7 +2511,7 @@
         if (src) appendSrcsetCandidate(source, src, { namespace: "source:src" });
         const srcset = source.getAttribute("srcset");
         if (srcset) {
-          const entries = parseSrcsetList(srcset);
+          const entries = sortSrcsetEntriesByQuality(parseSrcsetList(srcset));
           for (const entry of entries) {
             if (!entry || !entry.url) continue;
             const widthHint = entry.width ? Math.round(entry.width) : null;
@@ -2435,14 +2633,20 @@
 
     // Deduplicate by URL for network resources, but keep distinct canvas captures even if their data matches.
     const finalUnique = [];
-    const finalSeen = new Set();
+    const finalIndexByKey = new Map();
     let finalFallback = 0;
     for (const it of augmented) {
-      let key = getResultDedupKey(it);
+      let key = getResultDedupKey(it, { sourceDedupeEnabled });
       if (!key) key = `__idx:${++finalFallback}`;
-      if (finalSeen.has(key)) continue;
-      finalSeen.add(key);
-      finalUnique.push(it);
+      const existingIndex = finalIndexByKey.get(key);
+      if (Number.isInteger(existingIndex)) {
+        if (compareResultItemQuality(it, finalUnique[existingIndex]) > 0) {
+          finalUnique[existingIndex] = it;
+        }
+      } else {
+        finalIndexByKey.set(key, finalUnique.length);
+        finalUnique.push(it);
+      }
     }
     finalUnique.sort(compareByDomOrder);
 
@@ -2453,7 +2657,9 @@
     if (want("img") || want("background") || want("dataUri") || want("blob")) {
       IMAGE_RESULT_KINDS.forEach((kind) => persistentKinds.add(kind));
     }
-    const finalImages = persistentKinds.size ? mergePersistentItems(STATE.images, finalUnique, persistentKinds) : finalUnique.slice();
+    const finalImages = persistentKinds.size
+      ? mergePersistentItems(STATE.images, finalUnique, persistentKinds, { sourceDedupeEnabled })
+      : finalUnique.slice();
     finalImages.sort(compareByDomOrder);
     STATE.images = finalImages;
     STATE.lastScanAt = Date.now();
@@ -2722,6 +2928,30 @@
           if (AUTO.enabled) {
             disableAutoScan();
           }
+          sendResponse({ ok: true });
+        } else if (msg.action === "updateAutoScanOptions") {
+          const patch = (msg.options && typeof msg.options === "object") ? msg.options : {};
+          if (!AUTO.options || typeof AUTO.options !== "object") {
+            AUTO.options = {};
+          }
+          const scanOptions = AUTO.options.scanOptions && typeof AUTO.options.scanOptions === "object"
+            ? { ...AUTO.options.scanOptions }
+            : {};
+          if (Object.prototype.hasOwnProperty.call(patch, "dedupeEnabled")) {
+            scanOptions.dedupeEnabled = patch.dedupeEnabled !== false;
+          }
+          if (Object.prototype.hasOwnProperty.call(patch, "dedupeScanId")) {
+            scanOptions.dedupeScanId = typeof patch.dedupeScanId === "string" && patch.dedupeScanId
+              ? patch.dedupeScanId
+              : null;
+          }
+          if (Object.prototype.hasOwnProperty.call(patch, "dedupeTabId")) {
+            scanOptions.dedupeTabId = Number.isInteger(patch.dedupeTabId) ? patch.dedupeTabId : null;
+          }
+          if (Object.prototype.hasOwnProperty.call(patch, "dedupePageUrl")) {
+            scanOptions.dedupePageUrl = typeof patch.dedupePageUrl === "string" ? patch.dedupePageUrl : "";
+          }
+          AUTO.options.scanOptions = scanOptions;
           sendResponse({ ok: true });
         } else if (msg.action === "listBlobs") {
           const blobs = [];

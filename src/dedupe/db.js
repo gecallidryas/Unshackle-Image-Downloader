@@ -146,6 +146,43 @@ async function putByteCanonical(canonical) {
     });
 }
 
+/**
+ * Atomically ensure a byte canonical exists.
+ * Returns NEW when inserted, DUP when already present.
+ * @param {object} params
+ * @param {string} params.sha256
+ * @param {object} params.canonical
+ * @param {string|null} [params.representativeImageId]
+ * @returns {Promise<{status:"NEW"|"DUP", record:object}>}
+ */
+async function ensureByteCanonical({ sha256, canonical, representativeImageId = null }) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("byte_canonicals", "readwrite");
+        const store = tx.objectStore("byte_canonicals");
+        const request = store.get(sha256);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            const existing = request.result || null;
+            if (existing) {
+                if (!existing.representativeImageId && representativeImageId) {
+                    const updated = { ...existing, representativeImageId };
+                    const putReq = store.put(updated);
+                    putReq.onerror = () => reject(putReq.error);
+                    putReq.onsuccess = () => resolve({ status: "DUP", record: updated });
+                    return;
+                }
+                resolve({ status: "DUP", record: existing });
+                return;
+            }
+            const toInsert = canonical || { sha256 };
+            const addReq = store.add(toInsert);
+            addReq.onerror = () => reject(addReq.error);
+            addReq.onsuccess = () => resolve({ status: "NEW", record: toInsert });
+        };
+    });
+}
+
 // ==================== PIXEL CANONICALS ====================
 
 /**
@@ -177,6 +214,43 @@ async function putPixelCanonical(canonical) {
         const request = store.put(canonical);
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
+    });
+}
+
+/**
+ * Atomically ensure a pixel canonical exists.
+ * Returns NEW when inserted, DUP when already present.
+ * @param {object} params
+ * @param {string} params.pixelHash
+ * @param {object} params.canonical
+ * @param {string|null} [params.representativeImageId]
+ * @returns {Promise<{status:"NEW"|"DUP", record:object}>}
+ */
+async function ensurePixelCanonical({ pixelHash, canonical, representativeImageId = null }) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("pixel_canonicals", "readwrite");
+        const store = tx.objectStore("pixel_canonicals");
+        const request = store.get(pixelHash);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            const existing = request.result || null;
+            if (existing) {
+                if (!existing.representativeImageId && representativeImageId) {
+                    const updated = { ...existing, representativeImageId };
+                    const putReq = store.put(updated);
+                    putReq.onerror = () => reject(putReq.error);
+                    putReq.onsuccess = () => resolve({ status: "DUP", record: updated });
+                    return;
+                }
+                resolve({ status: "DUP", record: existing });
+                return;
+            }
+            const toInsert = canonical || { pixelHash };
+            const addReq = store.add(toInsert);
+            addReq.onerror = () => reject(addReq.error);
+            addReq.onsuccess = () => resolve({ status: "NEW", record: toInsert });
+        };
     });
 }
 
@@ -387,11 +461,27 @@ async function putBucket(bucket) {
  * @returns {Promise<void>}
  */
 async function addToBucket(bucketKey, imageId) {
-    const bucket = await getBucket(bucketKey) || { bucketKey, imageIds: [] };
-    if (!bucket.imageIds.includes(imageId)) {
-        bucket.imageIds.push(imageId);
-        await putBucket(bucket);
-    }
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("hash_buckets", "readwrite");
+        const store = tx.objectStore("hash_buckets");
+        const request = store.get(bucketKey);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            const bucket = request.result || { bucketKey, imageIds: [] };
+            if (!Array.isArray(bucket.imageIds)) {
+                bucket.imageIds = [];
+            }
+            if (!bucket.imageIds.includes(imageId)) {
+                bucket.imageIds.push(imageId);
+                const putReq = store.put(bucket);
+                putReq.onerror = () => reject(putReq.error);
+                putReq.onsuccess = () => resolve();
+                return;
+            }
+            resolve();
+        };
+    });
 }
 
 // ==================== PAIR CONFIRMS ====================
@@ -537,15 +627,29 @@ async function createScanRun({ tabId, pageUrl, options = {} }) {
  * @returns {Promise<void>}
  */
 async function updateScanStats(scanId, statsDelta) {
-    const scanRun = await getScanRun(scanId);
-    if (!scanRun) return;
-
-    for (const [key, delta] of Object.entries(statsDelta)) {
-        if (key in scanRun.stats) {
-            scanRun.stats[key] += delta;
-        }
-    }
-    await putScanRun(scanRun);
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("scan_runs", "readwrite");
+        const store = tx.objectStore("scan_runs");
+        const request = store.get(scanId);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            const scanRun = request.result || null;
+            if (!scanRun) {
+                resolve();
+                return;
+            }
+            const next = { ...scanRun, stats: { ...(scanRun.stats || {}) } };
+            for (const [key, delta] of Object.entries(statsDelta || {})) {
+                if (key in next.stats && Number.isFinite(delta)) {
+                    next.stats[key] += delta;
+                }
+            }
+            const putReq = store.put(next);
+            putReq.onerror = () => reject(putReq.error);
+            putReq.onsuccess = () => resolve();
+        };
+    });
 }
 
 /**
@@ -604,9 +708,11 @@ if (typeof globalThis !== "undefined") {
         // Byte canonicals
         getByteCanonical,
         putByteCanonical,
+        ensureByteCanonical,
         // Pixel canonicals
         getPixelCanonical,
         putPixelCanonical,
+        ensurePixelCanonical,
         // Images
         getImage,
         putImage,

@@ -15,6 +15,145 @@ function ensureNotAborted(signal) {
     }
 }
 
+const SCAN_TO_TAB = new Map(); // scanId -> tabId
+const TAB_TO_SCANS = new Map(); // tabId -> Set<scanId>
+const SCAN_JOB_IDS = new Map(); // scanId -> Set<jobId>
+const STOPPED_SCANS = new Map(); // scanId -> timestamp
+const STOPPED_SCAN_TTL_MS = 10 * 60 * 1000;
+
+function pruneStoppedScans(now = Date.now()) {
+    for (const [scanId, ts] of STOPPED_SCANS.entries()) {
+        if (!Number.isFinite(ts) || now - ts > STOPPED_SCAN_TTL_MS) {
+            STOPPED_SCANS.delete(scanId);
+        }
+    }
+}
+
+function markScanStopped(scanId) {
+    if (!scanId) return;
+    pruneStoppedScans();
+    STOPPED_SCANS.set(scanId, Date.now());
+}
+
+function isScanStopped(scanId) {
+    if (!scanId) return false;
+    pruneStoppedScans();
+    return STOPPED_SCANS.has(scanId);
+}
+
+function registerScan(scanId, tabId) {
+    if (!scanId || !Number.isInteger(tabId) || tabId < 0) return;
+    STOPPED_SCANS.delete(scanId);
+    SCAN_TO_TAB.set(scanId, tabId);
+    let set = TAB_TO_SCANS.get(tabId);
+    if (!set) {
+        set = new Set();
+        TAB_TO_SCANS.set(tabId, set);
+    }
+    set.add(scanId);
+}
+
+function unregisterScan(scanId) {
+    if (!scanId) return;
+    const tabId = SCAN_TO_TAB.get(scanId);
+    SCAN_TO_TAB.delete(scanId);
+    SCAN_JOB_IDS.delete(scanId);
+    if (Number.isInteger(tabId)) {
+        const set = TAB_TO_SCANS.get(tabId);
+        if (set) {
+            set.delete(scanId);
+            if (!set.size) {
+                TAB_TO_SCANS.delete(tabId);
+            }
+        }
+    }
+}
+
+function trackScanJob(scanId, jobId) {
+    if (!scanId || !jobId) return;
+    let set = SCAN_JOB_IDS.get(scanId);
+    if (!set) {
+        set = new Set();
+        SCAN_JOB_IDS.set(scanId, set);
+    }
+    set.add(jobId);
+}
+
+function untrackScanJob(scanId, jobId) {
+    if (!scanId || !jobId) return;
+    const set = SCAN_JOB_IDS.get(scanId);
+    if (!set) return;
+    set.delete(jobId);
+    if (!set.size) {
+        SCAN_JOB_IDS.delete(scanId);
+    }
+}
+
+function cancelJobAcrossQueues(jobId) {
+    if (!jobId) return;
+    const queues = [
+        globalThis.DedupeQueues?.fetch,
+        globalThis.DedupeQueues?.decode,
+        globalThis.DedupeQueues?.perceptual,
+        globalThis.DedupeQueues?.confirm
+    ];
+    for (const queue of queues) {
+        try { queue?.cancel?.(jobId); } catch { }
+    }
+}
+
+async function resolveTabIdForScan(scanId, fallbackTabId = null) {
+    if (Number.isInteger(fallbackTabId) && fallbackTabId >= 0) {
+        return fallbackTabId;
+    }
+    const mapped = SCAN_TO_TAB.get(scanId);
+    if (Number.isInteger(mapped) && mapped >= 0) {
+        return mapped;
+    }
+    try {
+        const scanRun = await globalThis.DedupeDB.getScanRun(scanId);
+        const tabId = scanRun?.tabId;
+        return Number.isInteger(tabId) && tabId >= 0 ? tabId : null;
+    } catch {
+        return null;
+    }
+}
+
+async function cancelScansForTab(tabId) {
+    if (!Number.isInteger(tabId) || tabId < 0) return [];
+    const scanIds = Array.from(TAB_TO_SCANS.get(tabId) || []);
+    for (const scanId of scanIds) {
+        const jobIds = Array.from(SCAN_JOB_IDS.get(scanId) || []);
+        for (const jobId of jobIds) {
+            cancelJobAcrossQueues(jobId);
+        }
+    }
+    for (const scanId of scanIds) {
+        markScanStopped(scanId);
+        try { await globalThis.DedupeDB.finishScanRun(scanId); } catch { }
+        unregisterScan(scanId);
+    }
+    return scanIds;
+}
+
+function makeQueueJobId(prefix, scanId, unique = "") {
+    const suffix = unique || Math.random().toString(36).slice(2, 10);
+    return `${prefix}_${scanId}_${Date.now().toString(36)}_${suffix}`;
+}
+
+function emitHashError({ scanId, tabId, url, errorCode, details }) {
+    if (!scanId || !url || !errorCode) return;
+    globalThis.DedupeMessages?.sendToUI(tabId,
+        globalThis.DedupeMessages.createHashErrorMessage({
+            scanId,
+            tabId,
+            url,
+            errorCode,
+            details
+        })
+    );
+}
+
 async function upsertImageRecord(partial) {
     if (!partial?.imageId) return null;
     if (typeof globalThis.DedupeDB?.upsertImage === "function") {
@@ -167,6 +306,7 @@ function scheduleSsimConfirmation(params) {
                 globalThis.DedupeMessages?.sendToUI(tabId,
                     globalThis.DedupeMessages.createPerceptualResultMessage({
                         scanId,
+                        tabId,
                         url,
                         imageId,
                         dhash64,
@@ -178,13 +318,27 @@ function scheduleSsimConfirmation(params) {
             }
         } catch (error) {
             console.warn("[Pipeline] SSIM confirmation failed:", error);
+            emitHashError({
+                scanId,
+                tabId,
+                url,
+                errorCode: "SSIM_FAILED",
+                details: error?.message || String(error)
+            });
         } finally {
             try { bitmap.close?.(); } catch { }
         }
     };
 
     if (globalThis.DedupeQueues?.confirm) {
-        globalThis.DedupeQueues.confirm.add((signal) => run(signal)).catch(() => { });
+        const jobId = makeQueueJobId("confirm", scanId, imageId);
+        trackScanJob(scanId, jobId);
+        globalThis.DedupeQueues.confirm
+            .add((signal) => run(signal), { id: jobId })
+            .catch(() => { })
+            .finally(() => {
+                untrackScanJob(scanId, jobId);
+            });
         return;
     }
 
@@ -227,6 +381,13 @@ async function processImage(params) {
 
         // Handle errors
         if (l1Result.status === "ERROR") {
+            emitHashError({
+                scanId,
+                tabId,
+                url,
+                errorCode: l1Result.errorCode || "FETCH_FAILED",
+                details: l1Result.error
+            });
             return {
                 ...results,
                 status: "ERROR",
@@ -242,8 +403,13 @@ async function processImage(params) {
             tabId,
             foundAt: Date.now(),
             byteSha256: l1Result.sha256,
+            byteLength: l1Result.byteLength || null,
             pixelHash: null,
             dhash64: null,
+            renderedWidth: Number.isFinite(context?.renderedWidth) ? Math.round(context.renderedWidth) : null,
+            renderedHeight: Number.isFinite(context?.renderedHeight) ? Math.round(context.renderedHeight) : null,
+            intrinsicWidth: Number.isFinite(context?.intrinsicWidth) ? Math.round(context.intrinsicWidth) : null,
+            intrinsicHeight: Number.isFinite(context?.intrinsicHeight) ? Math.round(context.intrinsicHeight) : null,
             groupId: null
         });
 
@@ -253,6 +419,7 @@ async function processImage(params) {
             globalThis.DedupeMessages?.sendToUI(tabId,
                 globalThis.DedupeMessages.createHashResultMessage({
                     scanId,
+                    tabId,
                     url,
                     sha256: l1Result.sha256,
                     status: "DUP",
@@ -306,6 +473,7 @@ async function processImage(params) {
                 globalThis.DedupeMessages?.sendToUI(tabId,
                     globalThis.DedupeMessages.createPixelHashResultMessage({
                         scanId,
+                        tabId,
                         url,
                         pixelHash: l2Result.pixelHash,
                         width: l2Result.width,
@@ -335,6 +503,13 @@ async function processImage(params) {
             } else if (l2Result.status === "ERROR") {
                 // L2 failed but we have L1 result, continue to L3 if possible
                 console.warn("[Pipeline] L2 failed, attempting L3 fallback");
+                emitHashError({
+                    scanId,
+                    tabId,
+                    url,
+                    errorCode: l2Result.errorCode || "DECODE_FAILED",
+                    details: l2Result.error
+                });
             }
 
             // ===== LAYER 3: Perceptual Hash =====
@@ -345,12 +520,20 @@ async function processImage(params) {
                     sha256: l1Result.sha256,
                     url, scanId, tabId, pageUrl, context,
                     imageId,
+                    byteLength: l1Result.byteLength,
                     signal
                 });
 
                 results.layers.l3 = l3Result;
 
                 if (l3Result.status === "ERROR") {
+                    emitHashError({
+                        scanId,
+                        tabId,
+                        url,
+                        errorCode: l3Result.errorCode || "PERCEPTUAL_FAILED",
+                        details: l3Result.error
+                    });
                     try { l2Result.bitmap?.close?.(); } catch { }
                     return {
                         ...results,
@@ -364,6 +547,7 @@ async function processImage(params) {
                 globalThis.DedupeMessages?.sendToUI(tabId,
                     globalThis.DedupeMessages.createPerceptualResultMessage({
                         scanId,
+                        tabId,
                         url,
                         imageId: l3Result.imageId,
                         dhash64: l3Result.dhash64,
@@ -408,6 +592,7 @@ async function processImage(params) {
         globalThis.DedupeMessages?.sendToUI(tabId,
             globalThis.DedupeMessages.createHashResultMessage({
                 scanId,
+                tabId,
                 url,
                 sha256: l1Result.sha256,
                 status: "NEW",
@@ -425,6 +610,13 @@ async function processImage(params) {
 
     } catch (error) {
         console.error("[Pipeline] Unexpected error:", error);
+        emitHashError({
+            scanId,
+            tabId,
+            url,
+            errorCode: "PIPELINE_FAILED",
+            details: error?.message || String(error)
+        });
         return {
             ...results,
             status: "ERROR",
@@ -459,6 +651,13 @@ async function processBlobBytes(params) {
         results.layers.l1 = l1Result;
 
         if (l1Result.status === "ERROR") {
+            emitHashError({
+                scanId,
+                tabId,
+                url,
+                errorCode: l1Result.errorCode || "HASH_FAILED",
+                details: l1Result.error
+            });
             return {
                 ...results,
                 status: "ERROR",
@@ -474,8 +673,13 @@ async function processBlobBytes(params) {
             tabId,
             foundAt: Date.now(),
             byteSha256: l1Result.sha256,
+            byteLength: l1Result.byteLength || null,
             pixelHash: null,
             dhash64: null,
+            renderedWidth: Number.isFinite(context?.renderedWidth) ? Math.round(context.renderedWidth) : null,
+            renderedHeight: Number.isFinite(context?.renderedHeight) ? Math.round(context.renderedHeight) : null,
+            intrinsicWidth: Number.isFinite(context?.intrinsicWidth) ? Math.round(context.intrinsicWidth) : null,
+            intrinsicHeight: Number.isFinite(context?.intrinsicHeight) ? Math.round(context.intrinsicHeight) : null,
             groupId: null
         });
 
@@ -483,6 +687,7 @@ async function processBlobBytes(params) {
             globalThis.DedupeMessages?.sendToUI(tabId,
                 globalThis.DedupeMessages.createHashResultMessage({
                     scanId,
+                    tabId,
                     url,
                     sha256: l1Result.sha256,
                     status: "DUP",
@@ -526,10 +731,27 @@ async function processBlobBytes(params) {
             });
         }
 
+        if (l2Result.status === "ERROR") {
+            emitHashError({
+                scanId,
+                tabId,
+                url,
+                errorCode: l2Result.errorCode || "DECODE_FAILED",
+                details: l2Result.error
+            });
+            return {
+                ...results,
+                status: "ERROR",
+                errorCode: l2Result.errorCode,
+                error: l2Result.error
+            };
+        }
+
         if (l2Result.status === "DUP") {
             globalThis.DedupeMessages?.sendToUI(tabId,
                 globalThis.DedupeMessages.createPixelHashResultMessage({
                     scanId,
+                    tabId,
                     url,
                     pixelHash: l2Result.pixelHash,
                     width: l2Result.width,
@@ -564,12 +786,20 @@ async function processBlobBytes(params) {
                 pixelHash: l2Result.pixelHash || null,
                 sha256: l1Result.sha256,
                 url, scanId, tabId, pageUrl, context,
-                imageId
+                imageId,
+                byteLength: l1Result.byteLength
             });
 
             results.layers.l3 = l3Result;
 
             if (l3Result.status === "ERROR") {
+                emitHashError({
+                    scanId,
+                    tabId,
+                    url,
+                    errorCode: l3Result.errorCode || "PERCEPTUAL_FAILED",
+                    details: l3Result.error
+                });
                 try { l2Result.bitmap?.close?.(); } catch { }
                 return {
                     ...results,
@@ -582,6 +812,7 @@ async function processBlobBytes(params) {
             globalThis.DedupeMessages?.sendToUI(tabId,
                 globalThis.DedupeMessages.createPerceptualResultMessage({
                     scanId,
+                    tabId,
                     url,
                     imageId: l3Result.imageId,
                     dhash64: l3Result.dhash64,
@@ -631,6 +862,13 @@ async function processBlobBytes(params) {
 
     } catch (error) {
         console.error("[Pipeline] Blob processing error:", error);
+        emitHashError({
+            scanId,
+            tabId,
+            url,
+            errorCode: "PIPELINE_FAILED",
+            details: error?.message || String(error)
+        });
         return {
             ...results,
             status: "ERROR",
@@ -651,6 +889,7 @@ async function processBlobBytes(params) {
  */
 async function processBatch(params) {
     const { scanId, tabId, pageUrl, candidates } = params;
+    registerScan(scanId, tabId);
 
     // Update scan stats
     await globalThis.DedupeDB.updateScanStats(scanId, { candidates: candidates.length });
@@ -689,7 +928,15 @@ async function processBatch(params) {
     };
 
     // Add all to queue
-    const promises = candidates.map(c => queue.add((signal) => processOne(c, signal)));
+    const promises = candidates.map((c, index) => {
+        const jobId = makeQueueJobId("fetch", scanId, `${index}_${Math.random().toString(36).slice(2, 8)}`);
+        trackScanJob(scanId, jobId);
+        return queue
+            .add((signal) => processOne(c, signal), { id: jobId })
+            .finally(() => {
+                untrackScanJob(scanId, jobId);
+            });
+    });
 
     // Wait for all
     await Promise.allSettled(promises);
@@ -700,6 +947,7 @@ async function processBatch(params) {
         globalThis.DedupeMessages?.sendToUI(tabId,
             globalThis.DedupeMessages.createScanStatsMessage({
                 scanId,
+                tabId,
                 stats: scanRun.stats
             })
         );
@@ -724,11 +972,18 @@ async function handleDedupeMessage(message, sender) {
         case DedupeMessageTypes.DEDUPE_SCAN_START: {
             const { tabId, pageUrl, options } = message;
             const scanRun = await globalThis.DedupeDB.createScanRun({ tabId, pageUrl, options });
+            registerScan(scanRun.scanId, tabId);
             return { scanId: scanRun.scanId };
         }
 
         case DedupeMessageTypes.DEDUPE_CANDIDATES: {
             const { scanId, tabId, pageUrl, candidates } = message;
+            if (isScanStopped(scanId)) {
+                return { acknowledged: false, stopped: true, count: 0 };
+            }
+            if (!SCAN_TO_TAB.has(scanId) && Number.isInteger(tabId) && tabId >= 0) {
+                registerScan(scanId, tabId);
+            }
             // Process in background, return immediately
             processBatch({ scanId, tabId, pageUrl, candidates }).catch(console.error);
             return { acknowledged: true, count: candidates.length };
@@ -738,23 +993,47 @@ async function handleDedupeMessage(message, sender) {
             const { scanId, url, bytes, context } = message;
             const tabId = sender.tab?.id;
             const pageUrl = sender.tab?.url || sender.url;
+            if (isScanStopped(scanId)) {
+                return {
+                    status: "ERROR",
+                    errorCode: "SCAN_STOPPED",
+                    error: "Scan already stopped"
+                };
+            }
+            if (!SCAN_TO_TAB.has(scanId) && Number.isInteger(tabId) && tabId >= 0) {
+                registerScan(scanId, tabId);
+            }
             return await processBlobBytes({ bytes, url, scanId, tabId, pageUrl, context });
         }
 
         case DedupeMessageTypes.DEDUPE_SCAN_STOP: {
             const { scanId } = message;
+            const tabId = await resolveTabIdForScan(scanId, SCAN_TO_TAB.get(scanId));
+            if (Number.isInteger(tabId) && tabId >= 0) {
+                const stoppedScanIds = await cancelScansForTab(tabId);
+                if (!stoppedScanIds.length && scanId) {
+                    markScanStopped(scanId);
+                    await globalThis.DedupeDB.finishScanRun(scanId);
+                    unregisterScan(scanId);
+                    stoppedScanIds.push(scanId);
+                }
+                return { stopped: true, tabId, scanIds: stoppedScanIds };
+            }
+            markScanStopped(scanId);
+            const jobIds = Array.from(SCAN_JOB_IDS.get(scanId) || []);
+            for (const jobId of jobIds) {
+                cancelJobAcrossQueues(jobId);
+            }
             await globalThis.DedupeDB.finishScanRun(scanId);
-            // Cancel any pending jobs
-            globalThis.DedupeQueues?.fetch.cancelAll();
-            globalThis.DedupeQueues?.decode.cancelAll();
-            globalThis.DedupeQueues?.perceptual.cancelAll();
-            globalThis.DedupeQueues?.confirm.cancelAll();
-            return { stopped: true };
+            unregisterScan(scanId);
+            return { stopped: true, tabId: null, scanIds: [scanId] };
         }
 
         case DedupeMessageTypes.DEDUPE_SCAN_FINISH: {
             const { scanId } = message;
+            markScanStopped(scanId);
             await globalThis.DedupeDB.finishScanRun(scanId);
+            unregisterScan(scanId);
             return { finished: true };
         }
 
@@ -771,6 +1050,10 @@ async function handleDedupeMessage(message, sender) {
 
         case DedupeMessageTypes.CLEAR_DATA: {
             await globalThis.DedupeDB.clearAllData();
+            SCAN_TO_TAB.clear();
+            TAB_TO_SCANS.clear();
+            SCAN_JOB_IDS.clear();
+            STOPPED_SCANS.clear();
             return { cleared: true };
         }
 
