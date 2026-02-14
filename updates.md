@@ -1,5 +1,9 @@
 # Updates
 
+## 2026-02-14
+- Rewrote root `features.md` into a full top-down feature inventory, covering product surfaces, scanning/capture, canvas/blob pipelines, overlay nuking, network capture, dedupe internals, ZIP/export, manga workflows, and downloader module behaviors (GigaViewer, Speedbinb, BellaCiao, Lezhin, Madara, Mangastream, FoolSlide).
+- Added `chrome-webstore-build/features.md` as a separate Chrome Web Store safe-build feature document, including packaged capabilities and explicit restrictions (hard-disabled manga mode, blocked modal flow, removed cookie-copy control, and manifest/resource constraints).
+
 ## 2026-02-13
 - Added source-link + filename metadata dedupe with resolution-aware preference so higher-resolution variants are kept and lower/same-resolution duplicates are dropped.
 - Ranked `srcset` candidates by descending width/density before ingestion to avoid retaining lower-resolution entries first.
