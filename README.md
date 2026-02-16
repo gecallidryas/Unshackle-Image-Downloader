@@ -15,6 +15,7 @@ This README documents the current architecture in this repository, including det
 - [Feature Overview](#feature-overview)
 - [Install (Unpacked Extension)](#install-unpacked-extension)
 - [Usage](#usage)
+- [Site-Specific Guide](#site-specific-guide)
 - [Configuration and Data Storage](#configuration-and-data-storage)
 - [Development and Debugging](#development-and-debugging)
 - [Repository Map](#repository-map)
@@ -299,6 +300,71 @@ node scripts/hk-smoke.js
 4. List chapters.
 5. Select/download chapters.
 6. Save series bookmark if needed.
+
+## Site-Specific Guide
+### Global tips
+- Load pages first before scanning.
+- If there are more than ~30 canvas pages, turn on canvas scan and scroll from the top.
+
+### Gigaviewer family sites
+All sites below are Gigaviewer/CoreView-like:
+- Use their site-specific module first.
+- For multi-chapter failures, run detection again and choose `coreview` from dropdown.
+- For single chapter pages, module download is usually the most stable route.
+
+Sites:
+- `comic-action.com`
+- `comic-days.com`
+- `comic-earthstar.com`
+- `comic-gardo.com`
+- `comic-ogyaaa.com`
+- `comic-seasons.com`
+- `comic-trail.com`
+- `comic-zenon.com`
+- `comicborder.com`
+- `feelweb.jp`
+- `ichicomi.com`
+- `kuragebunch.com`
+- `magcomi.com`
+- `ourfeel.jp`
+- `shonenjumpplus.com`
+- `tonarinoyj.jp`
+- `viewer.heros-web.com`
+- `www.sunday-webry.com`
+
+### SpeedBinb family sites
+Use SpeedBinb workflows from manga mode (module and connector-aware flows by site).
+
+- `gaugau.futabanet.jp`: extremely tricky. Use connector flow on title page only. Do not expand chapter list. Do not use `delegate.speedbinb`.
+- `kirapo.jp`: per-chapter SpeedBinb module download only; multi-chapter is not available.
+- `michikusacomics.jp`: per-chapter SpeedBinb module download only; multi-chapter is not available.
+- `123hon.com`: SpeedBinb module download or connector multi-chapter flow from title page.
+- `yanmanga.com`: extremely tricky. Connector flow works on title page, but hidden chapters may need manual add:
+  search page source for `mod-episode-link`, copy chapter link, and add manually.
+
+### Bellaciao-like viewer sites
+Viewer code is nearly the same. Use Bellaciao module.
+
+- `ciao.shogakukan.co.jp`
+- `pocket.shonenmagazine.com`
+
+### Works with load/scroll methods (module still needs improvement)
+- `comic-walker.com`: load and click canvas (safe up to ~50 pages), or auto-canvas + scroll.
+- `youngchampion.jp`: auto-canvas + scroll/load and click canvas (not recommended, unstable).
+- `kimicomi` / `comic-valkyrie` / `comic-brise.com`: load and click canvas (safe up to ~50 pages), or auto-canvas + scroll.
+- `kansai.mag-garden.co.jp`: virtualized canvases. Start from top and use auto-canvas + scroll.
+- `flowercomics.jp`: normal scan.
+- `comic-growl.com`: load and click canvas (safe for many pages), or auto-canvas + scroll.
+- `zerosumonline.com`: auto-scan and slide.
+- `www.comicride.jp`: virtualized canvases. Start from top and use auto-canvas + scroll.
+- `firecross.jp`: load and click canvas (safe up to ~50 pages), or auto-canvas + scroll.
+- `comic.pixiv.net`: auto-scan and slide.
+- `takecomic.jp`: load and click canvas (safe for many pages), or auto-canvas + scroll.
+- `ganganonline.com`: auto-scan. Uses virtualized images (not canvases), persistent image capture still needs improvement.
+- `comics.manga-bang.com`: load and click canvas (safe for many pages), or auto-canvas + scroll.
+- `ganma.jp`: normal scan; may double-scan.
+- `comic-fuz.com`: normal scan. Uses basic blobs. Safe for load + scan/auto-scroll.
+- `younganimal.com`: auto-canvas/canvas after loading.
 
 ## Configuration and Data Storage
 ### Settings defaults

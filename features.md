@@ -394,4 +394,5 @@ This document maps Unshackle features from top-level product capabilities down t
 ## 15. Documentation alignment notes
 
 - `README.md` is maintained as the primary architecture + install + detection-flow reference for GitHub.
+- `README.md` now also includes a site-specific operational guide with per-domain handling notes (Gigaviewer/CoreView, SpeedBinb, Bellaciao, and load/scroll/canvas fallback workflows).
 - Placeholder or future scaffolding blocks are intentionally retained in the codebase; docs should call these out explicitly when they are user-visible or likely to be mistaken as active features.

@@ -4,6 +4,7 @@
 - Rewrote root `README.md` into a comprehensive GitHub reference covering runtime architecture, detailed image detection pipeline internals, manga loader/mode architecture (`image/manga` + `auto/runner/manager`), extension installation, repository map, and troubleshooting.
 - Added explicit documentation section for placeholder/future scaffolding and clarified that Lezhin remains integration-in-progress in this branch despite `sites/lezhin/module.js` existing.
 - Updated `features.md` to align with actual wiring state by marking Lezhin as placeholder/not yet fully injected or web-accessible in active runtime paths.
+- Added a new README site-specific guide section with domain-by-domain workflow notes for Gigaviewer/CoreView, SpeedBinb, Bellaciao, and known load/scroll/canvas fallback cases.
 
 ## 2026-02-15
 - Hardened image scan detection for Instagram-style embeds by adding a dedicated `instagramEmbed` collector in both scan paths (`scanForImages` and `scanForImagesConcurrent`).
