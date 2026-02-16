@@ -342,7 +342,7 @@ Use SpeedBinb workflows from manga mode (module and connector-aware flows by sit
 - `yanmanga.com`: extremely tricky. Connector flow works on title page, but hidden chapters may need manual add:
   search page source for `mod-episode-link`, copy chapter link, and add manually.
 
-### Bellaciao-like viewer sites
+### CiaoPlus viewer sites
 Viewer code is nearly the same. Use Bellaciao module.
 
 - `ciao.shogakukan.co.jp`
