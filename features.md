@@ -45,6 +45,8 @@ This document maps Unshackle features from top-level product capabilities down t
 - Scans standard image sources:
 - `<img src>`, `<img srcset>`, `<picture>`, `<source srcset>`.
 - `srcset` parsing and quality-aware ordering (higher width/density first).
+- Instagram embed hardening:
+- Dedicated extraction for Instagram CDN images (`fbcdn.net`/`cdninstagram.com`) from wrapper-heavy markup (including `._aagu`/`._aagv` containers), plus `data-src`/`data-srcset` fallbacks, HTML-escaped URL normalization, and strict exact/subdomain host matching for CDN allowlisting.
 - Multi-kind discovery model:
 - `img`, `background`, `canvas`, `svg`, `dataUri`, `blob`.
 - Session-aware discovery metadata:
@@ -325,11 +327,11 @@ This document maps Unshackle features from top-level product capabilities down t
 - Returns structured page buffers + telemetry + diagnostic flow.
 
 ### 10.5 `lezhin` module
-- Locale-aware support (`en/ja/ko`) with host-specific handling.
-- Uses runtime config + inventory APIs for chapter/page metadata.
-- Handles purchase/access checks with policy options.
-- Applies Lezhin image shuffle descramble algorithm.
-- Supports optional metadata export and telemetry.
+- Implementation file exists at `sites/lezhin/module.js` with:
+- locale-aware handling (`en/ja/ko`), inventory/token requests, purchase checks, and shuffle descramble logic.
+- Current integration state in this branch is placeholder/in-progress:
+- module is not in the active delegate injection lists (`HK_DELEGATE_FILES`, panel `injectGV`, `content_manga.js` queue) and is not declared in `manifest.json` web-accessible module resources.
+- Treat Lezhin support as non-production until end-to-end wiring is completed.
 
 ### 10.6 `madara`, `mangastream`, `foolslide` modules
 - Site-family detectors.
@@ -386,3 +388,10 @@ This document maps Unshackle features from top-level product capabilities down t
 - The Web Store-safe build has its own feature inventory at:
 - `chrome-webstore-build/features.md`
 - It documents the hard-disabled manga behavior and packaging constraints for that distribution.
+
+---
+
+## 15. Documentation alignment notes
+
+- `README.md` is maintained as the primary architecture + install + detection-flow reference for GitHub.
+- Placeholder or future scaffolding blocks are intentionally retained in the codebase; docs should call these out explicitly when they are user-visible or likely to be mistaken as active features.

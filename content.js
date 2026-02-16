@@ -468,6 +468,38 @@
     return hostname.toLowerCase().endsWith("instagram.com");
   }
 
+  function isInstagramCdnHost(hostname) {
+    if (typeof hostname !== "string" || !hostname) return false;
+    const normalized = hostname.toLowerCase();
+    return (
+      normalized === "cdninstagram.com" ||
+      normalized.endsWith(".cdninstagram.com") ||
+      normalized === "fbcdn.net" ||
+      normalized.endsWith(".fbcdn.net")
+    );
+  }
+
+  function normalizeHtmlAttributeUrl(raw) {
+    if (typeof raw !== "string") return "";
+    let value = raw.trim();
+    if (!value) return "";
+    if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1).trim();
+    }
+    if (!value) return "";
+    return value.replace(/&amp;/gi, "&").replace(/&#38;/g, "&");
+  }
+
+  function isInstagramCdnUrl(url) {
+    if (typeof url !== "string" || !url) return false;
+    try {
+      const parsed = new URL(url, location.href);
+      return isInstagramCdnHost(parsed.hostname);
+    } catch {
+      return false;
+    }
+  }
+
   function getInstagramUsernameFromLocation(urlString = null) {
     try {
       const href = typeof urlString === "string" && urlString.length ? urlString : (location?.href || "");
@@ -659,6 +691,103 @@
     item.remoteUrl = abs;
     stampDiscoveryMeta(item, null);
     return [item];
+  }
+
+  async function collectInstagramEmbedImages({ minW = 0, minH = 0, allowImages = true } = {}) {
+    if (!allowImages) return [];
+    const selector = [
+      "img[src*='cdninstagram.com']",
+      "img[src*='fbcdn.net']",
+      "img[srcset*='cdninstagram.com']",
+      "img[srcset*='fbcdn.net']",
+      "img[data-src*='cdninstagram.com']",
+      "img[data-src*='fbcdn.net']",
+      "img[data-srcset*='cdninstagram.com']",
+      "img[data-srcset*='fbcdn.net']",
+      "._aagu img",
+      "._aagv img",
+      ".instagram-media img"
+    ].join(",");
+    let nodes = [];
+    try {
+      nodes = Array.from(document.querySelectorAll(selector));
+    } catch {
+      nodes = [];
+    }
+    if (!nodes.length) return [];
+    const results = [];
+    const dedupe = new Set();
+    const maxNodes = Math.min(nodes.length, 200);
+    for (let i = 0; i < maxNodes; i++) {
+      const img = nodes[i];
+      if (!(img instanceof HTMLImageElement)) continue;
+      const typeHint = img.getAttribute("type") || "";
+      const ratio = (() => {
+        const w = Number(img.naturalWidth || img.width || 0);
+        const h = Number(img.naturalHeight || img.height || 0);
+        return (w > 0 && h > 0) ? (h / w) : null;
+      })();
+      const candidates = new Map();
+      const remember = (raw, widthHint = null) => {
+        const normalized = normalizeHtmlAttributeUrl(raw);
+        if (!normalized) return;
+        const abs = toAbsURL(normalized);
+        if (!abs || !isInstagramCdnUrl(abs)) return;
+        const prev = candidates.get(abs);
+        const numericHint = Number.isFinite(widthHint) && widthHint > 0 ? Math.round(widthHint) : null;
+        if (!prev || (numericHint && (!prev.widthHint || numericHint > prev.widthHint))) {
+          candidates.set(abs, { widthHint: numericHint });
+        }
+      };
+      remember(img.currentSrc || img.src || img.getAttribute("src"), null);
+      remember(img.getAttribute("data-src"), null);
+      remember(img.getAttribute("data-lazy-src"), null);
+      for (const attr of ["srcset", "data-srcset"]) {
+        const raw = img.getAttribute(attr);
+        if (!raw) continue;
+        const entries = sortSrcsetEntriesByQuality(parseSrcsetList(normalizeHtmlAttributeUrl(raw)));
+        for (const entry of entries) {
+          if (!entry || !entry.url) continue;
+          remember(entry.url, entry.width || null);
+        }
+      }
+      for (const [abs, meta] of candidates.entries()) {
+        if (looksLikeVideoAsset(abs, typeHint)) continue;
+        const dedupeKey = abs;
+        if (dedupe.has(dedupeKey)) continue;
+        let width = Number(meta?.widthHint || img.naturalWidth || img.width || img.getAttribute("width") || 0) || 0;
+        let height = Number(img.naturalHeight || img.height || img.getAttribute("height") || 0) || 0;
+        if ((!height || !Number.isFinite(height)) && ratio && width) {
+          height = Math.round(width * ratio);
+        }
+        const needProbe = (minW > 0 && (!width || width < minW)) || (minH > 0 && (!height || height < minH));
+        if (needProbe) {
+          const dims = await probeImageDimensions(abs);
+          if (dims) {
+            width = Number(dims.width || width || 0) || 0;
+            height = Number(dims.height || height || 0) || 0;
+          }
+        }
+        if (minW > 0 && width && width < minW) continue;
+        if (minH > 0 && height && height < minH) continue;
+        if ((minW > 0 && !width) || (minH > 0 && !height)) continue;
+        const item = {
+          kind: "img",
+          type: "instagramEmbed",
+          rawUrl: abs,
+          url: abs,
+          width,
+          height,
+          filename: sanitizeName((img.getAttribute("alt") || img.alt || filenameFromURL(abs)))
+        };
+        const signature = getElementSignature(img, "instagram:embed");
+        if (signature) item.sourceId = signature;
+        stampDiscoveryMeta(item, img);
+        results.push(item);
+        dedupe.add(dedupeKey);
+      }
+    }
+    return results;
   }
 
   async function fetchImageAsDataUrl(resourceUrl, { mimeHint = "image/jpeg" } = {}) {
@@ -2227,6 +2356,15 @@
       }
     }
 
+    if (want("img")) {
+      try {
+        const igEmbed = await collectInstagramEmbedImages({ minW, minH, allowImages: true });
+        if (igEmbed.length) {
+          found.push(...igEmbed);
+        }
+      } catch { }
+    }
+
     // Collect CSS background images cooperatively to avoid long main-thread blocks
     const profile = typeof options.scanProfile === "string" ? options.scanProfile : "default";
     if (want("background") || want("dataUri") || want("blob")) {
@@ -2596,6 +2734,20 @@
         } catch { }
       }
       flushIncremental(true, "[svg] collected");
+    }
+
+    if (want("img")) {
+      try {
+        const igEmbed = await collectInstagramEmbedImages({ minW, minH, allowImages: true });
+        for (const item of igEmbed) {
+          rememberItem(item);
+        }
+        if (igEmbed.length) {
+          flushIncremental(true, "[instagram-embed] collected");
+        }
+      } catch (err) {
+        console.warn("[Scan] instagram embed collection failed", err);
+      }
     }
 
     if (want("img")) {

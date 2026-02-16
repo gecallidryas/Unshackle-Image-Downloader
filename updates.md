@@ -1,5 +1,17 @@
 # Updates
 
+## 2026-02-16
+- Rewrote root `README.md` into a comprehensive GitHub reference covering runtime architecture, detailed image detection pipeline internals, manga loader/mode architecture (`image/manga` + `auto/runner/manager`), extension installation, repository map, and troubleshooting.
+- Added explicit documentation section for placeholder/future scaffolding and clarified that Lezhin remains integration-in-progress in this branch despite `sites/lezhin/module.js` existing.
+- Updated `features.md` to align with actual wiring state by marking Lezhin as placeholder/not yet fully injected or web-accessible in active runtime paths.
+
+## 2026-02-15
+- Hardened image scan detection for Instagram-style embeds by adding a dedicated `instagramEmbed` collector in both scan paths (`scanForImages` and `scanForImagesConcurrent`).
+- Added targeted extraction for `fbcdn.net`/`cdninstagram.com` image URLs from wrapper-heavy markup (including `._aagu`/`._aagv`), plus `data-src`/`data-srcset` fallback parsing.
+- Added HTML-escaped URL normalization (`&amp;`/`&#38;`) before URL resolution to prevent missed detections from attribute-encoded image links.
+- Mirrored the same detector hardening into `chrome-webstore-build/content.js` to keep build behavior aligned.
+- Tightened Instagram CDN host allowlisting to exact domains or true subdomains only (e.g. `*.fbcdn.net`, `*.cdninstagram.com`) to prevent false positives from lookalike hostnames.
+
 ## 2026-02-14
 - Rewrote root `features.md` into a full top-down feature inventory, covering product surfaces, scanning/capture, canvas/blob pipelines, overlay nuking, network capture, dedupe internals, ZIP/export, manga workflows, and downloader module behaviors (GigaViewer, Speedbinb, BellaCiao, Lezhin, Madara, Mangastream, FoolSlide).
 - Added `chrome-webstore-build/features.md` as a separate Chrome Web Store safe-build feature document, including packaged capabilities and explicit restrictions (hard-disabled manga mode, blocked modal flow, removed cookie-copy control, and manifest/resource constraints).
