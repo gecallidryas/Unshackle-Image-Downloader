@@ -1,5 +1,13 @@
 # Updates
 
+## 2026-03-26
+- Extracted shared option-row controls for the nested SOTA image editor toolbar into `apps/web/src/toolbar/controls/ToolOptionButton.tsx`, `ToolOptionToggle.tsx`, and `ToolOptionField.tsx`.
+- Swapped the generic `button`, `dropdown`, `toggle`, and `number-input` item rendering in `apps/web/src/toolbar/ToolOptionsBar.tsx` over to those shared primitives while leaving the specialized tool-family branches intact.
+- Added focused control-level coverage in `apps/web/src/toolbar/controls/toolbarControls.test.tsx` and verified the existing `ToolOptionsBar` reference tests still pass.
+- Extracted the shared left-toolbar tool registry and `ToolId` type seam for the nested SOTA image editor workspace into `apps/web/src/tools/types.ts` and `apps/web/src/tools/toolRegistry.ts`.
+- Kept `LeftToolbar.tsx` on the shared registry while re-exporting `ToolId` for compatibility, and pointed `EditorPage.tsx` at the new shared type module.
+- Added a focused registry contract test so later toolbar-adapter work can depend on a stable id/order/metadata surface.
+
 ## 2026-02-16
 - Rewrote root `README.md` into a comprehensive GitHub reference covering runtime architecture, detailed image detection pipeline internals, manga loader/mode architecture (`image/manga` + `auto/runner/manager`), extension installation, repository map, and troubleshooting.
 - Added explicit documentation section for placeholder/future scaffolding and clarified that Lezhin remains integration-in-progress in this branch despite `sites/lezhin/module.js` existing.

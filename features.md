@@ -218,6 +218,20 @@ This document maps Unshackle features from top-level product capabilities down t
 - Transactional scan stat updates and group/bucket writes.
 
 ### 7.6 Queue/execution control (`queue.js`, `pipeline.js`)
+
+---
+
+## 8. Nested SOTA image editor toolbar
+
+### 8.1 Shared toolbar option controls
+- Shared option-row primitives for the nested image editor toolbar live in `apps/web/src/toolbar/controls/`.
+- `ToolOptionButton` covers the generic button row pattern, including icon-only and active states.
+- `ToolOptionToggle` covers the reusable on/off pill pattern.
+- `ToolOptionField` covers the dropdown and number-input row variants.
+
+### 8.2 Toolbar routing seam
+- `ToolOptionsBar` now delegates the generic `button`, `dropdown`, `toggle`, and `number-input` item types to the shared controls.
+- Specialized branches for brush, shape, genai, selection, and arrange remain in place and continue to own their own behavior.
 - Multi-queue async orchestration with concurrency, retries, timeout aborts.
 - Scan-to-tab routing maps.
 - Tab-scoped stop semantics and scan lifecycle events.
@@ -396,3 +410,11 @@ This document maps Unshackle features from top-level product capabilities down t
 - `README.md` is maintained as the primary architecture + install + detection-flow reference for GitHub.
 - `README.md` now also includes a site-specific operational guide with per-domain handling notes (Gigaviewer/CoreView, SpeedBinb, Bellaciao, and load/scroll/canvas fallback workflows).
 - Placeholder or future scaffolding blocks are intentionally retained in the codebase; docs should call these out explicitly when they are user-visible or likely to be mistaken as active features.
+
+---
+
+## 16. Shared editor toolbar seam
+
+- Shared editor toolbar identifiers and metadata now live in `apps/web/src/tools/types.ts` and `apps/web/src/tools/toolRegistry.ts`.
+- `LeftToolbar.tsx` now renders from the shared registry while still re-exporting `ToolId` for existing consumers.
+- `EditorPage.tsx` consumes the shared `ToolId` type directly so later adapter work can build on a stable state seam.
